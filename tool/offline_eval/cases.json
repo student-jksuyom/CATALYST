@@ -1,0 +1,144 @@
+[
+ {
+  "datasetId": 1,
+  "language": "English",
+  "domain": "Civil",
+  "query": "The landlord evicted us before our lease had ended.",
+  "reviewedRelevantArticleIds": [
+   "civilcode:1654",
+   "civilcode:1673"
+  ],
+  "recordedProcessedQuery": "The landlord evicted us before our lease had ended.",
+  "recordedOutcome": "unchanged"
+ },
+ {
+  "datasetId": 2,
+  "language": "Tagalog",
+  "domain": "Civil",
+  "query": "Ayaw magbayad ng utang ilang buwan na nakakalipas.",
+  "reviewedRelevantArticleIds": [
+   "civilcode:1159",
+   "civilcode:1169",
+   "civilcode:1953"
+  ],
+  "recordedProcessedQuery": "Do not pay debt a few months ago.",
+  "recordedOutcome": "translated"
+ },
+ {
+  "datasetId": 9,
+  "language": "Taglish",
+  "domain": "Civil",
+  "query": "Kapatid ko sold yung lupa naming limang magkakapatid without telling us.",
+  "reviewedRelevantArticleIds": [
+   "civilcode:493"
+  ],
+  "recordedProcessedQuery": "My brother sold our land five siblings without tellout the US.",
+  "recordedOutcome": "translated"
+ },
+ {
+  "datasetId": 25,
+  "language": "Tagalog",
+  "domain": "Consumer",
+  "query": "Bumili ako ng air fryer online. Pagdating sa bahay, pagbukas ko ng box rice cooker ang laman. Nang magreklamo ako, pareho lang naman daw ng gamit sa kusina sabi ng seller.",
+  "reviewedRelevantArticleIds": [
+   "consumeract:50"
+  ],
+  "recordedProcessedQuery": "I bought an air fryer online. When it comes to home, I open a box rice cooker. When I complained, the same as the kitchen using the kitchen says.",
+  "recordedOutcome": "translated"
+ },
+ {
+  "datasetId": 29,
+  "language": "Taglish",
+  "domain": "Consumer",
+  "query": "May sira yung TV na inorder ko pero ayaw na tanggapin at palitan ng seller kahit may video ng pag-unbox.",
+  "reviewedRelevantArticleIds": [
+   "consumeract:97"
+  ],
+  "recordedProcessedQuery": "My tv has defeated but I do not want to accept and exchange the seller even with an unbox video.",
+  "recordedOutcome": "translated"
+ },
+ {
+  "datasetId": 35,
+  "language": "Taglish",
+  "domain": "Consumer",
+  "query": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na. Ayaw tanggapin ng seller nung nirere-return ko kahit may receipt ako.",
+  "reviewedRelevantArticleIds": [
+   "consumeract:68"
+  ],
+  "recordedProcessedQuery": "I bought a portable e-fan done some using just being weak. Seller did not accept me when I returned even if I had a receipt.",
+  "recordedOutcome": "translated"
+ },
+ {
+  "datasetId": 36,
+  "language": "English",
+  "domain": "Consumer",
+  "query": "The app says my parcel was delivered, but I never received it. The seller refuses to refund what I paid.",
+  "reviewedRelevantArticleIds": [
+   "consumeract:68"
+  ],
+  "recordedProcessedQuery": "The app says my parcel was delivered, but I never received it. The seller refuses to refund what I paid.",
+  "recordedOutcome": "unchanged"
+ },
+ {
+  "datasetId": 38,
+  "language": "Tagalog",
+  "domain": "Family",
+  "query": "Naghiwalay kami ng asawa ko pero gusto ko na sa akin lang ang anak ko.",
+  "reviewedRelevantArticleIds": [
+   "familycode:209",
+   "familycode:213"
+  ],
+  "recordedProcessedQuery": "My husband separates me but I want my child to me.",
+  "recordedOutcome": "translated"
+ },
+ {
+  "datasetId": 48,
+  "language": "Tagalog",
+  "domain": "Family",
+  "query": "Kabit yung pinsan ko at may anak sila nung lalaki. May karapatan ba magmana ng ari-arian anak nila?",
+  "reviewedRelevantArticleIds": [
+   "familycode:175",
+   "familycode:176"
+  ],
+  "recordedProcessedQuery": "I cousin and they have a son. Does the property have the right to inherit their child?",
+  "recordedOutcome": "translated"
+ },
+ {
+  "datasetId": 48,
+  "language": "English",
+  "domain": "Family",
+  "query": "My cousin was the mistress, and she and the man have a child. Does their child have the right to inherit property?",
+  "reviewedRelevantArticleIds": [
+   "familycode:175",
+   "familycode:176"
+  ],
+  "recordedProcessedQuery": "My cousin was the mistress, and she and the man have a child. Does their child have the right to inherit property?",
+  "recordedOutcome": "unchanged"
+ },
+ {
+  "datasetId": 50,
+  "language": "Tagalog",
+  "domain": "Family",
+  "query": "Pwede ba akong humingi ng child support kahit hindi kami kasal?",
+  "reviewedRelevantArticleIds": [
+   "familycode:176",
+   "familycode:195"
+  ],
+  "recordedProcessedQuery": "Can I ask for child support even if we are not married?",
+  "recordedOutcome": "translated"
+ },
+ {
+  "datasetId": "regression-coownership",
+  "language": "Tagalog",
+  "domain": "Civil",
+  "query": "May kupa kami na minana naming magkakapatid. Ngayon nalaman ko na binenta na pala ng kuya ko yung buong lupa nang hindi namin alam o pinayagan. pwede ba niyang gawin yon?",
+  "reviewedRelevantArticleIds": [
+   "civilcode:491",
+   "civilcode:493",
+   "civilcode:1620",
+   "civilcode:1623"
+  ],
+  "recordedProcessedQuery": "We have land inherited by us siblings. Now I learned that my brother sold the whole land without our knowledge or permission. Can he do that?",
+  "recordedOutcome": "synthetic-translation"
+ }
+]

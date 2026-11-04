@@ -1,0 +1,840 @@
+{
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "modelSnapshot": "C:\\Users\\john kier suyom\\.cache\\huggingface\\hub\\models--sentence-transformers--paraphrase-multilingual-MiniLM-L12-v2\\snapshots\\e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "dimensions": 384,
+  "maxSequenceLength": 128,
+  "pooling": "attention-mask-aware mean pooling followed by L2 normalization",
+  "runtime": "ONNX Runtime 1.31.0 CPU",
+  "corpusRows": 2700,
+  "corpusEmbeddingDtype": "float32",
+  "fp32": {
+    "orderedTop3MatchesForAllQueries": true,
+    "maxAbsoluteEmbeddingDifference": 1.6298145055770874e-07,
+    "maxTop3ScoreDifference": 2.682209014892578e-07,
+    "medianWarmInferenceMs": 14.67828000022564,
+    "queries": [
+      {
+        "label": "english",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 0.9999999403953552,
+        "convertedEmbeddingNorm": 1.000000238418579,
+        "maxAbsoluteEmbeddingDifference": 1.1920928955078125e-07,
+        "maxTop3ScoreDifference": 1.1920928955078125e-07,
+        "sameOrderedTop3": true,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1606",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.34076571464538574,
+            "scoreRounded": 0.3408,
+            "corpusIndex": 1605
+          },
+          {
+            "law": "CivilCode",
+            "article": "1140",
+            "title": "TITLE V",
+            "chapterTitle": "Prescription of Actions",
+            "score": 0.31686174869537354,
+            "scoreRounded": 0.3169,
+            "corpusIndex": 1139
+          },
+          {
+            "law": "CivilCode",
+            "article": "2205",
+            "title": "TITLE XVIII",
+            "chapterTitle": "Actual or Compensatory Damages",
+            "score": 0.2675294578075409,
+            "scoreRounded": 0.2675,
+            "corpusIndex": 2204
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1606",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.3407658338546753,
+            "scoreRounded": 0.3408,
+            "corpusIndex": 1605
+          },
+          {
+            "law": "CivilCode",
+            "article": "1140",
+            "title": "TITLE V",
+            "chapterTitle": "Prescription of Actions",
+            "score": 0.3168618679046631,
+            "scoreRounded": 0.3169,
+            "corpusIndex": 1139
+          },
+          {
+            "law": "CivilCode",
+            "article": "2205",
+            "title": "TITLE XVIII",
+            "chapterTitle": "Actual or Compensatory Damages",
+            "score": 0.26752954721450806,
+            "scoreRounded": 0.2675,
+            "corpusIndex": 2204
+          }
+        ]
+      },
+      {
+        "label": "tagalog",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 1.0,
+        "convertedEmbeddingNorm": 1.0,
+        "maxAbsoluteEmbeddingDifference": 1.043081283569336e-07,
+        "maxTop3ScoreDifference": 1.4901161193847656e-07,
+        "sameOrderedTop3": true,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1946",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.23213225603103638,
+            "scoreRounded": 0.2321,
+            "corpusIndex": 1945
+          },
+          {
+            "law": "CivilCode",
+            "article": "1939",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.22983349859714508,
+            "scoreRounded": 0.2298,
+            "corpusIndex": 1938
+          },
+          {
+            "law": "CivilCode",
+            "article": "2140",
+            "title": "TITLE XVI",
+            "chapterTitle": "Chattel Mortgage",
+            "score": 0.2174837589263916,
+            "scoreRounded": 0.2175,
+            "corpusIndex": 2139
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1946",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.23213210701942444,
+            "scoreRounded": 0.2321,
+            "corpusIndex": 1945
+          },
+          {
+            "law": "CivilCode",
+            "article": "1939",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.22983336448669434,
+            "scoreRounded": 0.2298,
+            "corpusIndex": 1938
+          },
+          {
+            "law": "CivilCode",
+            "article": "2140",
+            "title": "TITLE XVI",
+            "chapterTitle": "Chattel Mortgage",
+            "score": 0.21748366951942444,
+            "scoreRounded": 0.2175,
+            "corpusIndex": 2139
+          }
+        ]
+      },
+      {
+        "label": "taglish",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 0.9999999403953552,
+        "convertedEmbeddingNorm": 0.9999998211860657,
+        "maxAbsoluteEmbeddingDifference": 1.043081283569336e-07,
+        "maxTop3ScoreDifference": 2.9802322387695312e-08,
+        "sameOrderedTop3": true,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "2018",
+            "title": "TITLE XIII",
+            "chapterTitle": "Gambling",
+            "score": 0.3473684787750244,
+            "scoreRounded": 0.3474,
+            "corpusIndex": 2017
+          },
+          {
+            "law": "CivilCode",
+            "article": "1616",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.3421820402145386,
+            "scoreRounded": 0.3422,
+            "corpusIndex": 1615
+          },
+          {
+            "law": "CivilCode",
+            "article": "1484",
+            "title": "TITLE VI",
+            "chapterTitle": "Nature and Form of the Contract",
+            "score": 0.33222049474716187,
+            "scoreRounded": 0.3322,
+            "corpusIndex": 1483
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "2018",
+            "title": "TITLE XIII",
+            "chapterTitle": "Gambling",
+            "score": 0.3473685085773468,
+            "scoreRounded": 0.3474,
+            "corpusIndex": 2017
+          },
+          {
+            "law": "CivilCode",
+            "article": "1616",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.3421820104122162,
+            "scoreRounded": 0.3422,
+            "corpusIndex": 1615
+          },
+          {
+            "law": "CivilCode",
+            "article": "1484",
+            "title": "TITLE VI",
+            "chapterTitle": "Nature and Form of the Contract",
+            "score": 0.33222049474716187,
+            "scoreRounded": 0.3322,
+            "corpusIndex": 1483
+          }
+        ]
+      },
+      {
+        "label": "defective-phone",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 1.0,
+        "convertedEmbeddingNorm": 0.9999999403953552,
+        "maxAbsoluteEmbeddingDifference": 1.6298145055770874e-07,
+        "maxTop3ScoreDifference": 2.682209014892578e-07,
+        "sameOrderedTop3": true,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "815",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.3177681565284729,
+            "scoreRounded": 0.3178,
+            "corpusIndex": 814
+          },
+          {
+            "law": "CivilCode",
+            "article": "816",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.312847763299942,
+            "scoreRounded": 0.3128,
+            "corpusIndex": 815
+          },
+          {
+            "law": "ConsumerAct",
+            "article": "19",
+            "title": "TITLE II",
+            "chapterTitle": "",
+            "score": 0.30823343992233276,
+            "scoreRounded": 0.3082,
+            "corpusIndex": 2288
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "815",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.3177683353424072,
+            "scoreRounded": 0.3178,
+            "corpusIndex": 814
+          },
+          {
+            "law": "CivilCode",
+            "article": "816",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.3128478527069092,
+            "scoreRounded": 0.3128,
+            "corpusIndex": 815
+          },
+          {
+            "law": "ConsumerAct",
+            "article": "19",
+            "title": "TITLE II",
+            "chapterTitle": "",
+            "score": 0.30823370814323425,
+            "scoreRounded": 0.3082,
+            "corpusIndex": 2288
+          }
+        ]
+      }
+    ]
+  },
+  "dynamicInt8PerChannel": {
+    "orderedTop3MatchesForAllQueries": false,
+    "maxAbsoluteEmbeddingDifference": 0.03732128441333771,
+    "maxTop3ScoreDifference": 0.018548786640167236,
+    "medianWarmInferenceMs": 10.046739999961574,
+    "queries": [
+      {
+        "label": "english",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 0.9999999403953552,
+        "convertedEmbeddingNorm": 1.0,
+        "maxAbsoluteEmbeddingDifference": 0.0197446271777153,
+        "maxTop3ScoreDifference": 0.004432231187820435,
+        "sameOrderedTop3": true,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1606",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.34076571464538574,
+            "scoreRounded": 0.3408,
+            "corpusIndex": 1605
+          },
+          {
+            "law": "CivilCode",
+            "article": "1140",
+            "title": "TITLE V",
+            "chapterTitle": "Prescription of Actions",
+            "score": 0.31686174869537354,
+            "scoreRounded": 0.3169,
+            "corpusIndex": 1139
+          },
+          {
+            "law": "CivilCode",
+            "article": "2205",
+            "title": "TITLE XVIII",
+            "chapterTitle": "Actual or Compensatory Damages",
+            "score": 0.2675294578075409,
+            "scoreRounded": 0.2675,
+            "corpusIndex": 2204
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1606",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.3382968306541443,
+            "scoreRounded": 0.3383,
+            "corpusIndex": 1605
+          },
+          {
+            "law": "CivilCode",
+            "article": "1140",
+            "title": "TITLE V",
+            "chapterTitle": "Prescription of Actions",
+            "score": 0.3185341954231262,
+            "scoreRounded": 0.3185,
+            "corpusIndex": 1139
+          },
+          {
+            "law": "CivilCode",
+            "article": "2205",
+            "title": "TITLE XVIII",
+            "chapterTitle": "Actual or Compensatory Damages",
+            "score": 0.27196168899536133,
+            "scoreRounded": 0.272,
+            "corpusIndex": 2204
+          }
+        ]
+      },
+      {
+        "label": "tagalog",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 1.0,
+        "convertedEmbeddingNorm": 1.0,
+        "maxAbsoluteEmbeddingDifference": 0.02493707463145256,
+        "maxTop3ScoreDifference": 0.015324503183364868,
+        "sameOrderedTop3": true,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1946",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.23213225603103638,
+            "scoreRounded": 0.2321,
+            "corpusIndex": 1945
+          },
+          {
+            "law": "CivilCode",
+            "article": "1939",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.22983349859714508,
+            "scoreRounded": 0.2298,
+            "corpusIndex": 1938
+          },
+          {
+            "law": "CivilCode",
+            "article": "2140",
+            "title": "TITLE XVI",
+            "chapterTitle": "Chattel Mortgage",
+            "score": 0.2174837589263916,
+            "scoreRounded": 0.2175,
+            "corpusIndex": 2139
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1946",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.23067094385623932,
+            "scoreRounded": 0.2307,
+            "corpusIndex": 1945
+          },
+          {
+            "law": "CivilCode",
+            "article": "1939",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.21974769234657288,
+            "scoreRounded": 0.2197,
+            "corpusIndex": 1938
+          },
+          {
+            "law": "CivilCode",
+            "article": "2140",
+            "title": "TITLE XVI",
+            "chapterTitle": "Chattel Mortgage",
+            "score": 0.20215925574302673,
+            "scoreRounded": 0.2022,
+            "corpusIndex": 2139
+          }
+        ]
+      },
+      {
+        "label": "taglish",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 0.9999999403953552,
+        "convertedEmbeddingNorm": 0.9999999403953552,
+        "maxAbsoluteEmbeddingDifference": 0.03732128441333771,
+        "maxTop3ScoreDifference": 0.013323217630386353,
+        "sameOrderedTop3": false,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "2018",
+            "title": "TITLE XIII",
+            "chapterTitle": "Gambling",
+            "score": 0.3473684787750244,
+            "scoreRounded": 0.3474,
+            "corpusIndex": 2017
+          },
+          {
+            "law": "CivilCode",
+            "article": "1616",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.3421820402145386,
+            "scoreRounded": 0.3422,
+            "corpusIndex": 1615
+          },
+          {
+            "law": "CivilCode",
+            "article": "1484",
+            "title": "TITLE VI",
+            "chapterTitle": "Nature and Form of the Contract",
+            "score": 0.33222049474716187,
+            "scoreRounded": 0.3322,
+            "corpusIndex": 1483
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "546",
+            "title": "TITLE V",
+            "chapterTitle": "Effects of Possession",
+            "score": 0.36069169640541077,
+            "scoreRounded": 0.3607,
+            "corpusIndex": 545
+          },
+          {
+            "law": "CivilCode",
+            "article": "1949",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.3546108603477478,
+            "scoreRounded": 0.3546,
+            "corpusIndex": 1948
+          },
+          {
+            "law": "CivilCode",
+            "article": "2018",
+            "title": "TITLE XIII",
+            "chapterTitle": "Gambling",
+            "score": 0.341866672039032,
+            "scoreRounded": 0.3419,
+            "corpusIndex": 2017
+          }
+        ]
+      },
+      {
+        "label": "defective-phone",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 1.0,
+        "convertedEmbeddingNorm": 0.9999997615814209,
+        "maxAbsoluteEmbeddingDifference": 0.031246796250343323,
+        "maxTop3ScoreDifference": 0.018548786640167236,
+        "sameOrderedTop3": false,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "815",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.3177681565284729,
+            "scoreRounded": 0.3178,
+            "corpusIndex": 814
+          },
+          {
+            "law": "CivilCode",
+            "article": "816",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.312847763299942,
+            "scoreRounded": 0.3128,
+            "corpusIndex": 815
+          },
+          {
+            "law": "ConsumerAct",
+            "article": "19",
+            "title": "TITLE II",
+            "chapterTitle": "",
+            "score": 0.30823343992233276,
+            "scoreRounded": 0.3082,
+            "corpusIndex": 2288
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "816",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.3058570623397827,
+            "scoreRounded": 0.3059,
+            "corpusIndex": 815
+          },
+          {
+            "law": "CivilCode",
+            "article": "815",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.3030136823654175,
+            "scoreRounded": 0.303,
+            "corpusIndex": 814
+          },
+          {
+            "law": "ConsumerAct",
+            "article": "19",
+            "title": "TITLE II",
+            "chapterTitle": "",
+            "score": 0.2896846532821655,
+            "scoreRounded": 0.2897,
+            "corpusIndex": 2288
+          }
+        ]
+      }
+    ]
+  },
+  "dynamicInt8PerTensor": {
+    "orderedTop3MatchesForAllQueries": false,
+    "maxAbsoluteEmbeddingDifference": 0.043632954359054565,
+    "maxTop3ScoreDifference": 0.03375345468521118,
+    "medianWarmInferenceMs": 9.904990000359248,
+    "queries": [
+      {
+        "label": "english",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 0.9999999403953552,
+        "convertedEmbeddingNorm": 0.9999998211860657,
+        "maxAbsoluteEmbeddingDifference": 0.02106824517250061,
+        "maxTop3ScoreDifference": 0.019072383642196655,
+        "sameOrderedTop3": false,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1606",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.34076571464538574,
+            "scoreRounded": 0.3408,
+            "corpusIndex": 1605
+          },
+          {
+            "law": "CivilCode",
+            "article": "1140",
+            "title": "TITLE V",
+            "chapterTitle": "Prescription of Actions",
+            "score": 0.31686174869537354,
+            "scoreRounded": 0.3169,
+            "corpusIndex": 1139
+          },
+          {
+            "law": "CivilCode",
+            "article": "2205",
+            "title": "TITLE XVIII",
+            "chapterTitle": "Actual or Compensatory Damages",
+            "score": 0.2675294578075409,
+            "scoreRounded": 0.2675,
+            "corpusIndex": 2204
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1606",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.3538964092731476,
+            "scoreRounded": 0.3539,
+            "corpusIndex": 1605
+          },
+          {
+            "law": "CivilCode",
+            "article": "1140",
+            "title": "TITLE V",
+            "chapterTitle": "Prescription of Actions",
+            "score": 0.32198792695999146,
+            "scoreRounded": 0.322,
+            "corpusIndex": 1139
+          },
+          {
+            "law": "ConsumerAct",
+            "article": "166",
+            "title": "TITLE V",
+            "chapterTitle": "",
+            "score": 0.28660184144973755,
+            "scoreRounded": 0.2866,
+            "corpusIndex": 2435
+          }
+        ]
+      },
+      {
+        "label": "tagalog",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 1.0,
+        "convertedEmbeddingNorm": 1.0000001192092896,
+        "maxAbsoluteEmbeddingDifference": 0.0359344407916069,
+        "maxTop3ScoreDifference": 0.018766745924949646,
+        "sameOrderedTop3": false,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1946",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.23213225603103638,
+            "scoreRounded": 0.2321,
+            "corpusIndex": 1945
+          },
+          {
+            "law": "CivilCode",
+            "article": "1939",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.22983349859714508,
+            "scoreRounded": 0.2298,
+            "corpusIndex": 1938
+          },
+          {
+            "law": "CivilCode",
+            "article": "2140",
+            "title": "TITLE XVI",
+            "chapterTitle": "Chattel Mortgage",
+            "score": 0.2174837589263916,
+            "scoreRounded": 0.2175,
+            "corpusIndex": 2139
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "1946",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.22596214711666107,
+            "scoreRounded": 0.226,
+            "corpusIndex": 1945
+          },
+          {
+            "law": "CivilCode",
+            "article": "2140",
+            "title": "TITLE XVI",
+            "chapterTitle": "Chattel Mortgage",
+            "score": 0.21106675267219543,
+            "scoreRounded": 0.2111,
+            "corpusIndex": 2139
+          },
+          {
+            "law": "CivilCode",
+            "article": "1939",
+            "title": "TITLE XI",
+            "chapterTitle": "Commodatum",
+            "score": 0.20893746614456177,
+            "scoreRounded": 0.2089,
+            "corpusIndex": 1938
+          }
+        ]
+      },
+      {
+        "label": "taglish",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 0.9999999403953552,
+        "convertedEmbeddingNorm": 1.000000238418579,
+        "maxAbsoluteEmbeddingDifference": 0.03017246164381504,
+        "maxTop3ScoreDifference": 0.017307132482528687,
+        "sameOrderedTop3": false,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "2018",
+            "title": "TITLE XIII",
+            "chapterTitle": "Gambling",
+            "score": 0.3473684787750244,
+            "scoreRounded": 0.3474,
+            "corpusIndex": 2017
+          },
+          {
+            "law": "CivilCode",
+            "article": "1616",
+            "title": "TITLE VI",
+            "chapterTitle": "Extinguishment of Sale",
+            "score": 0.3421820402145386,
+            "scoreRounded": 0.3422,
+            "corpusIndex": 1615
+          },
+          {
+            "law": "CivilCode",
+            "article": "1484",
+            "title": "TITLE VI",
+            "chapterTitle": "Nature and Form of the Contract",
+            "score": 0.33222049474716187,
+            "scoreRounded": 0.3322,
+            "corpusIndex": 1483
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "2018",
+            "title": "TITLE XIII",
+            "chapterTitle": "Gambling",
+            "score": 0.35353463888168335,
+            "scoreRounded": 0.3535,
+            "corpusIndex": 2017
+          },
+          {
+            "law": "CivilCode",
+            "article": "2163",
+            "title": "TITLE XVII",
+            "chapterTitle": "Quasi-contracts",
+            "score": 0.3503307104110718,
+            "scoreRounded": 0.3503,
+            "corpusIndex": 2162
+          },
+          {
+            "law": "CivilCode",
+            "article": "546",
+            "title": "TITLE V",
+            "chapterTitle": "Effects of Possession",
+            "score": 0.34952762722969055,
+            "scoreRounded": 0.3495,
+            "corpusIndex": 545
+          }
+        ]
+      },
+      {
+        "label": "defective-phone",
+        "embeddingDimensions": 384,
+        "baselineEmbeddingNorm": 1.0,
+        "convertedEmbeddingNorm": 0.9999999403953552,
+        "maxAbsoluteEmbeddingDifference": 0.043632954359054565,
+        "maxTop3ScoreDifference": 0.03375345468521118,
+        "sameOrderedTop3": false,
+        "pythonTop3": [
+          {
+            "law": "CivilCode",
+            "article": "815",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.3177681565284729,
+            "scoreRounded": 0.3178,
+            "corpusIndex": 814
+          },
+          {
+            "law": "CivilCode",
+            "article": "816",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.312847763299942,
+            "scoreRounded": 0.3128,
+            "corpusIndex": 815
+          },
+          {
+            "law": "ConsumerAct",
+            "article": "19",
+            "title": "TITLE II",
+            "chapterTitle": "",
+            "score": 0.30823343992233276,
+            "scoreRounded": 0.3082,
+            "corpusIndex": 2288
+          }
+        ],
+        "convertedTop3": [
+          {
+            "law": "CivilCode",
+            "article": "816",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.30763381719589233,
+            "scoreRounded": 0.3076,
+            "corpusIndex": 815
+          },
+          {
+            "law": "CivilCode",
+            "article": "815",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.2907715439796448,
+            "scoreRounded": 0.2908,
+            "corpusIndex": 814
+          },
+          {
+            "law": "CivilCode",
+            "article": "829",
+            "title": "TITLE IV",
+            "chapterTitle": "Testamentary Succession",
+            "score": 0.2744799852371216,
+            "scoreRounded": 0.2745,
+            "corpusIndex": 828
+          }
+        ]
+      }
+    ]
+  },
+  "selectedVariant": "fp32",
+  "selectedModelBytes": 470268685
+}

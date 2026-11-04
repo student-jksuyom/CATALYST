@@ -1,0 +1,192 @@
+import 'query_analysis.dart';
+
+/// Languages an explanation can be shown in. [code] is the key used in
+/// `LawMatchResult.explanationVariants`.
+enum ExplanationLanguage {
+  english('en', 'English'),
+  taglish('taglish', 'Taglish'),
+  tagalog('tl', 'Tagalog');
+
+  const ExplanationLanguage(this.code, this.label);
+
+  final String code;
+  final String label;
+
+  static ExplanationLanguage fromCode(String? code) => values.firstWhere(
+    (language) => language.code == code,
+    orElse: () => english,
+  );
+}
+
+const _tagalogWords = {
+  'ako',
+  'ko',
+  'ka',
+  'mo',
+  'siya',
+  'niya',
+  'kami',
+  'namin',
+  'kayo',
+  'nila',
+  'ang',
+  'ng',
+  'sa',
+  'mga',
+  'ay',
+  'na',
+  'at',
+  'o',
+  'pero',
+  'kasi',
+  'dahil',
+  'yung',
+  'iyong',
+  'yong',
+  'itong',
+  'ito',
+  'iyon',
+  'yan',
+  'si',
+  'ni',
+  'kay',
+  'para',
+  'lang',
+  'po',
+  'ba',
+  'din',
+  'rin',
+  'may',
+  'mayroon',
+  'wala',
+  'walang',
+  'hindi',
+  'huwag',
+  'ayaw',
+  'kahit',
+  'pa',
+  'agad',
+  'noong',
+  'nang',
+  'ibalik',
+  'binili',
+  'binenta',
+  'ibinenta',
+  'pinirmahan',
+  'sira',
+  'pera',
+  'kapatid',
+  'lupa',
+  'minana',
+  'asawa',
+  'anak',
+  'kontrata',
+  'utang',
+  'bahay',
+  'pahintulot',
+  'kuya',
+  'ate',
+  'tatay',
+  'nanay',
+  'magulang',
+  'sinabi',
+  'gusto',
+  'bakit',
+  'paano',
+  'ano',
+  'sino',
+  'saan',
+  'kailan',
+  'lahat',
+  'ibang',
+};
+
+const _englishWords = {
+  'i',
+  'my',
+  'me',
+  'we',
+  'our',
+  'you',
+  'your',
+  'he',
+  'she',
+  'his',
+  'her',
+  'they',
+  'their',
+  'the',
+  'a',
+  'an',
+  'is',
+  'was',
+  'are',
+  'were',
+  'be',
+  'been',
+  'and',
+  'or',
+  'but',
+  'of',
+  'to',
+  'in',
+  'on',
+  'at',
+  'for',
+  'with',
+  'without',
+  'from',
+  'by',
+  'that',
+  'this',
+  'it',
+  'its',
+  'not',
+  'no',
+  'did',
+  'does',
+  'do',
+  'have',
+  'has',
+  'had',
+  'will',
+  'would',
+  'can',
+  'could',
+  'should',
+  'after',
+  'because',
+  'when',
+  'what',
+  'who',
+  'how',
+  'why',
+  'if',
+  'then',
+  'than',
+  'sold',
+  'bought',
+  'refuses',
+  'refused',
+  'told',
+  'said',
+  'asked',
+  'never',
+  'all',
+};
+
+/// Classifies the user's narrative as English, Tagalog or Taglish from its
+/// function words, so the explanation can default to the same language.
+ExplanationLanguage detectQueryLanguage(String query) {
+  var tagalog = 0;
+  var english = 0;
+  for (final word in wordTokens(query.toLowerCase())) {
+    if (_tagalogWords.contains(word)) tagalog++;
+    if (_englishWords.contains(word)) english++;
+  }
+  if (tagalog == 0) return ExplanationLanguage.english;
+  if (english == 0) return ExplanationLanguage.tagalog;
+  if (tagalog >= english * 3) return ExplanationLanguage.tagalog;
+  if (english >= tagalog * 3) return ExplanationLanguage.english;
+  return ExplanationLanguage.taglish;
+}
