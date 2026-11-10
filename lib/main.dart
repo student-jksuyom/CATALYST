@@ -7,6 +7,7 @@ import 'history_screen.dart';
 import 'home_screen.dart';
 import 'landing_screen.dart';
 import 'law_details_screen.dart';
+import 'legal_services_screen.dart';
 import 'match_results_screen.dart';
 import 'models/history_entry.dart';
 import 'models/law_match_result.dart';
@@ -65,6 +66,9 @@ class CatalystApp extends StatelessWidget {
             ),
           ),
         ),
+      ),
+      onMap: (homeContext) => Navigator.of(homeContext).push(
+        MaterialPageRoute<void>(builder: (_) => const LegalServicesScreen()),
       ),
       onAbout: (homeContext) => Navigator.of(homeContext)
           .push(MaterialPageRoute<void>(builder: (_) => const AboutScreen())),

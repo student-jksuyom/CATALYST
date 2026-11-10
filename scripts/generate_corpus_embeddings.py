@@ -12,7 +12,9 @@ MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 EMBEDDING_DIMENSIONS = 384
 BATCH_SIZE = 32
 
-# These columns identify and provide the text of each legal provision.
+# The source workbook uses Article_Number; Article remains supported for older copies.
+ARTICLE_COLUMN_CANDIDATES = ("Article_Number", "Article")
+SOURCE_REQUIRED_COLUMNS = ("Law", "Article Text")
 REQUIRED_COLUMNS = ("Law", "Article", "Article Text")
 
 # Headings add useful context when available, but are not present in every corpus.
@@ -76,12 +78,35 @@ def main() -> None:
     except (OSError, ValueError, ImportError) as exc:
         raise SystemExit(f"Could not read the source Excel workbook: {exc}") from exc
 
-    missing_columns = [column for column in REQUIRED_COLUMNS if column not in source.columns]
+    article_column = next(
+        (column for column in ARTICLE_COLUMN_CANDIDATES if column in source.columns),
+        None,
+    )
+    if article_column is None:
+        available = ", ".join(str(column) for column in source.columns) or "(none)"
+        raise SystemExit(
+            "The source workbook is missing Article_Number (or legacy Article). "
+            f"Columns found: {available}"
+        )
+    missing_columns = [
+        column for column in SOURCE_REQUIRED_COLUMNS if column not in source.columns
+    ]
     if missing_columns:
         available = ", ".join(str(column) for column in source.columns) or "(none)"
         raise SystemExit(
             "The source workbook is missing required column(s): "
             f"{', '.join(missing_columns)}. Columns found: {available}"
+        )
+    if "Article" not in source.columns:
+        source = source.copy()
+        source["Article"] = source[article_column]
+    missing_columns = [
+        column for column in REQUIRED_COLUMNS if column not in source.columns
+    ]
+    if missing_columns:
+        raise SystemExit(
+            "The normalized source workbook is missing required column(s): "
+            f"{', '.join(missing_columns)}."
         )
 
     print(f"Source rows: {len(source)}")

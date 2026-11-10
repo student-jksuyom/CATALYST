@@ -8,12 +8,14 @@ class HomeScreen extends StatefulWidget {
     this.onSearch,
     this.onHistory,
     this.onChat,
+    this.onMap,
     this.onAbout,
   });
 
   final Future<bool> Function(BuildContext context, String concern)? onSearch;
   final Future<void> Function(BuildContext context)? onHistory;
   final Future<void> Function(BuildContext context)? onChat;
+  final Future<void> Function(BuildContext context)? onMap;
   final Future<void> Function(BuildContext context)? onAbout;
 
   @override
@@ -272,66 +274,73 @@ class _HomeScreenState extends State<HomeScreen> {
         color: _menuBackground,
         border: Border(left: BorderSide(color: Color(0xFFC4D4EB))),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 14, 16, 0),
-            child: SizedBox(
-              height: 52,
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: _closeMenu,
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints.tightFor(
-                      width: 48,
-                      height: 48,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 14, 16, 0),
+              child: SizedBox(
+                height: 52,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: _closeMenu,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints.tightFor(
+                        width: 48,
+                        height: 48,
+                      ),
+                      icon: const Icon(
+                        Icons.menu_rounded,
+                        color: _menuPurple,
+                        size: 30,
+                      ),
+                      tooltip: 'Close menu',
                     ),
-                    icon: const Icon(
-                      Icons.menu_rounded,
-                      color: _menuPurple,
-                      size: 30,
-                    ),
-                    tooltip: 'Close menu',
-                  ),
-                  const SizedBox(width: 8),
-                  const Expanded(
-                    child: FittedBox(
-                      alignment: Alignment.centerLeft,
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'CATALYST',
-                        style: TextStyle(
-                          fontFamily: 'Fredoka',
-                          fontSize: 27,
-                          fontWeight: FontWeight.w700,
-                          color: _navy,
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: FittedBox(
+                        alignment: Alignment.centerLeft,
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'CATALYST',
+                          style: TextStyle(
+                            fontFamily: 'Fredoka',
+                            fontSize: 27,
+                            fontWeight: FontWeight.w700,
+                            color: _navy,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 27),
-          _MenuItem(
-            label: 'History',
-            asset: 'assets/images/menu_history.png',
-            onTap: () => _selectMenuItem(widget.onHistory),
-          ),
-          _MenuItem(
-            label: 'Chat',
-            asset: 'assets/images/menu_chat.png',
-            onTap: () => _selectMenuItem(widget.onChat),
-          ),
-          _MenuItem(
-            label: 'About',
-            asset: 'assets/images/menu_about.png',
-            onTap: () => _selectMenuItem(widget.onAbout),
-          ),
-        ],
+            const SizedBox(height: 27),
+            _MenuItem(
+              label: 'History',
+              asset: 'assets/images/menu_history.png',
+              onTap: () => _selectMenuItem(widget.onHistory),
+            ),
+            _MenuItem(
+              label: 'Chat',
+              asset: 'assets/images/menu_chat.png',
+              onTap: () => _selectMenuItem(widget.onChat),
+            ),
+            _MenuItem(
+              label: 'Map',
+              icon: Icons.map_outlined,
+              onTap: () => _selectMenuItem(widget.onMap),
+            ),
+            _MenuItem(
+              label: 'About',
+              asset: 'assets/images/menu_about.png',
+              onTap: () => _selectMenuItem(widget.onAbout),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -427,12 +436,14 @@ class _ConcernInput extends StatelessWidget {
 class _MenuItem extends StatelessWidget {
   const _MenuItem({
     required this.label,
-    required this.asset,
+    this.asset,
+    this.icon,
     required this.onTap,
-  });
+  }) : assert((asset == null) != (icon == null));
 
   final String label;
-  final String asset;
+  final String? asset;
+  final IconData? icon;
   final VoidCallback onTap;
 
   @override
@@ -445,7 +456,14 @@ class _MenuItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             children: [
-              Image.asset(asset, width: 43, height: 50, fit: BoxFit.contain),
+              if (asset != null)
+                Image.asset(asset!, width: 43, height: 50, fit: BoxFit.contain)
+              else
+                SizedBox(
+                  width: 43,
+                  height: 50,
+                  child: Icon(icon, size: 36, color: const Color(0xFF3F2381)),
+                ),
               const SizedBox(width: 16),
               Text(
                 label,

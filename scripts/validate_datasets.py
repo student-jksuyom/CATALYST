@@ -1,324 +1,192 @@
-"""Read-only structural checks for the CATALYST legal datasets."""
+"""Validate the prepared CATALYST retrieval splits and article references."""
 
 from __future__ import annotations
 
-import re
-from collections import defaultdict
+from collections import Counter
 from pathlib import Path
+import re
 from typing import Any
 
 
-TRAINING_COLUMNS = (
-    "ID",
-    "Case Title",
-    "Narrative",
-    "Category",
-    "Law",
-    "Applicable Article",
-    "Source",
+DATASET_COLUMNS = (
+    "Narrative_ID",
+    "Sample Narrative",
+    "Language",
+    "Case_Category",
+    "Law_Applied",
+    "Applicable_Article_ID",
+    "Relevance_Label",
 )
-TESTING_COLUMNS = (
-    "ID",
-    "Narratives",
-    "Category",
-    "Law",
-    "Applicable Article",
-)
-CORPUS_COLUMNS = ("Law", "Article", "Article Text")
-ARTICLE_CLAUSE_SEPARATOR = re.compile(r"[;\r\n]+")
-ARTICLE_LIST_SEPARATOR = re.compile(r"\s*(?:,|\band\b|&)\s*", flags=re.IGNORECASE)
-ARTICLE_PREFIX = re.compile(r"^\s*(?:articles?|arts?)\.?\s*", flags=re.IGNORECASE)
-ARTICLE_IDENTIFIER = re.compile(
-    r"\d+(?:\.\d+)*(?:[a-z])?(?:[-–]\d+(?:\.\d+)*(?:[a-z])?)?",
-    flags=re.IGNORECASE,
-)
+CORPUS_COLUMNS = ("Article_ID", "Law", "Article_Number", "Article Text")
+SPLITS = ("Training", "Evaluation", "Testing")
+ARTICLE_ID_SEPARATOR = re.compile(r"\s*,\s*")
 
 
-def _is_blank(value: Any, pandas: Any) -> bool:
-    """Return True for an empty cell or a string containing only whitespace."""
-    if pandas.isna(value):
-        return True
-    return isinstance(value, str) and not value.strip()
+def _read_workbook(path: Path) -> tuple[list[str], list[dict[str, Any]]]:
+    try:
+        from openpyxl import load_workbook
+    except ImportError as exc:
+        raise SystemExit(
+            "Missing Python dependency: openpyxl. Install openpyxl and retry."
+        ) from exc
+
+    try:
+        workbook = load_workbook(path, read_only=True, data_only=True)
+    except (OSError, ValueError) as exc:
+        raise SystemExit(f"Could not read workbook {path}: {exc}") from exc
+
+    worksheet = workbook.active
+    iterator = worksheet.iter_rows(values_only=True)
+    try:
+        header_values = next(iterator)
+    except StopIteration:
+        raise SystemExit(f"Workbook is empty: {path}") from None
+
+    headers = [
+        str(value).strip() if value is not None else ""
+        for value in header_values
+    ]
+    if len(set(header for header in headers if header)) != len(
+        [header for header in headers if header]
+    ):
+        raise SystemExit(f"Workbook has duplicate column names: {path}")
+
+    records = [
+        {
+            header: row[index] if index < len(row) else None
+            for index, header in enumerate(headers)
+            if header
+        }
+        for row in iterator
+        if any(value is not None for value in row)
+    ]
+    workbook.close()
+    return headers, records
 
 
-def _show(value: Any, pandas: Any) -> str:
-    """Show an original cell value clearly, including blanks."""
-    return "<blank>" if _is_blank(value, pandas) else repr(value)
+def _is_blank(value: Any) -> bool:
+    return value is None or (isinstance(value, str) and not value.strip())
 
 
-def _normalise_label(value: Any, pandas: Any) -> str:
-    """Build a comparison key without changing the values in the workbooks."""
-    if _is_blank(value, pandas):
-        return ""
-    return re.sub(r"[^a-z0-9]+", "", str(value).casefold())
-
-
-def _normalise_article(value: Any, pandas: Any) -> str:
-    """Ignore common Article/Art. prefixes and punctuation for comparison."""
-    if _is_blank(value, pandas):
-        return ""
-    without_prefix = ARTICLE_PREFIX.sub("", str(value), count=1)
-    return _normalise_label(without_prefix, pandas)
-
-
-def _parse_article_references(value: Any) -> list[str] | None:
-    """Parse simple article identifiers; return None when the format is uncertain."""
-    references = []
-    clauses = ARTICLE_CLAUSE_SEPARATOR.split(str(value))
-    if not clauses or any(not clause.strip() for clause in clauses):
-        return None
-
-    for clause in clauses:
-        without_prefix = ARTICLE_PREFIX.sub("", clause, count=1).strip()
-        parts = ARTICLE_LIST_SEPARATOR.split(without_prefix)
-        if not parts or any(not part.strip() for part in parts):
-            return None
-        for part in parts:
-            reference = ARTICLE_PREFIX.sub("", part, count=1).strip()
-            if not ARTICLE_IDENTIFIER.fullmatch(reference):
-                return None
-            references.append(reference)
-
-    return references or None
-
-
-def _row_numbers(indices: list[int]) -> str:
-    """Convert zero-based dataframe positions to Excel row numbers."""
-    return ", ".join(str(index + 2) for index in indices)
-
-
-def _report_value_counts(title: str, series: Any, pandas: Any) -> None:
-    print(title)
-    if series.empty:
-        print("  (no rows)")
-        return
-    for value, count in series.value_counts(dropna=False, sort=False).items():
-        print(f"  {_show(value, pandas)}: {count}")
-
-
-def _find_duplicate_values(series: Any, pandas: Any) -> dict[Any, list[int]]:
-    """Return nonblank exact values mapped to their zero-based row positions."""
-    positions: dict[Any, list[int]] = defaultdict(list)
-    for index, value in enumerate(series.tolist()):
-        if not _is_blank(value, pandas):
-            try:
-                positions[value].append(index)
-            except TypeError:
-                # Excel cells are normally scalar; unhashable values cannot be
-                # meaningfully compared as exact narrative duplicates.
-                continue
-    return {value: rows for value, rows in positions.items() if len(rows) > 1}
+def _article_ids(value: Any) -> list[str]:
+    if _is_blank(value):
+        return []
+    return [
+        item.strip().casefold()
+        for item in ARTICLE_ID_SEPARATOR.split(str(value))
+        if item.strip()
+    ]
 
 
 def main() -> None:
-    """Read the three workbooks, report structural issues, and write nothing."""
-    try:
-        import pandas as pd
-    except ImportError as exc:
-        raise SystemExit(
-            f"Missing Python dependency: {exc.name or 'pandas'}. "
-            "Install pandas and openpyxl, then run this validator again."
-        ) from exc
-
     project_root = Path(__file__).resolve().parent.parent
-    file_paths = {
-        "Training": project_root / "DATA" / "Datasets" / "Trainingdataset.xlsx",
-        "Testing": project_root / "DATA" / "Datasets" / "Testingdataset.xlsx",
-        "Corpus": project_root / "DATA" / "Corpus" / "MasterCorpus.xlsx",
-    }
-    required_columns = {
-        "Training": TRAINING_COLUMNS,
-        "Testing": TESTING_COLUMNS,
-        "Corpus": CORPUS_COLUMNS,
-    }
+    dataset_directory = project_root / "DATA" / "Datasets"
+    corpus_path = project_root / "DATA" / "Corpus" / "MasterCorpus.xlsx"
 
-    load_errors: list[str] = []
-    for name, path in file_paths.items():
+    frames: dict[str, list[dict[str, Any]]] = {}
+    for split in SPLITS:
+        path = dataset_directory / f"{split}dataset.xlsx"
         if not path.is_file():
-            load_errors.append(f"{name} file is missing: {path}")
-    if load_errors:
-        raise SystemExit("Cannot validate all datasets:\n  " + "\n  ".join(load_errors))
-
-    frames: dict[str, Any] = {}
-    for name, path in file_paths.items():
-        try:
-            frames[name] = pd.read_excel(path, engine="openpyxl")
-        except Exception as exc:
-            load_errors.append(f"{name} file is unreadable ({path}): {exc}")
-    if load_errors:
-        raise SystemExit("Cannot validate all datasets:\n  " + "\n  ".join(load_errors))
-
-    column_errors = []
-    for name, frame in frames.items():
-        if name == "Testing":
-            print(f"Testing workbook path: {file_paths[name].resolve()}")
-            print(f"Loaded Testing columns: {[repr(column) for column in frame.columns]}")
-            print(f"TESTING_COLUMNS entries: {[repr(column) for column in TESTING_COLUMNS]}")
-        missing = [column for column in required_columns[name] if column not in frame.columns]
-        if name == "Testing":
-            print(f"Testing missing required columns: {missing!r}")
+            raise SystemExit(f"{split} workbook is missing: {path}")
+        headers, rows = _read_workbook(path)
+        missing = [column for column in DATASET_COLUMNS if column not in headers]
         if missing:
-            column_errors.append(
-                f"{name} is missing required column(s): {', '.join(missing)}"
+            raise SystemExit(
+                f"{split} workbook is missing required columns: {', '.join(missing)}"
             )
-    if column_errors:
-        raise SystemExit("Cannot validate all datasets:\n  " + "\n  ".join(column_errors))
+        if not rows:
+            raise SystemExit(f"{split} workbook contains no data rows.")
+        frames[split] = rows
 
-    training = frames["Training"]
-    testing = frames["Testing"]
-    corpus = frames["Corpus"]
-    warnings: list[str] = []
+    if not corpus_path.is_file():
+        raise SystemExit(f"Master corpus workbook is missing: {corpus_path}")
+    corpus_headers, corpus_rows = _read_workbook(corpus_path)
+    missing_corpus_columns = [
+        column for column in CORPUS_COLUMNS if column not in corpus_headers
+    ]
+    if missing_corpus_columns:
+        raise SystemExit(
+            "Master corpus is missing required columns: "
+            + ", ".join(missing_corpus_columns)
+        )
+    if not corpus_rows:
+        raise SystemExit("Master corpus contains no article rows.")
 
-    print("Dataset validation summary")
-    print(f"  Training rows: {len(training)}")
-    print(f"  Testing rows: {len(testing)}")
-    print(f"  Master corpus rows: {len(corpus)}")
-    _report_value_counts("Training counts by Law:", training["Law"], pd)
-    _report_value_counts("Training counts by Category:", training["Category"], pd)
-    _report_value_counts("Testing counts by Law:", testing["Law"], pd)
-    _report_value_counts("Testing counts by Category:", testing["Category"], pd)
-    _report_value_counts("Corpus counts by Law:", corpus["Law"], pd)
-
-    for name, frame in frames.items():
-        for column in required_columns[name]:
-            for index, value in enumerate(frame[column].tolist()):
-                if _is_blank(value, pd):
-                    warnings.append(
-                        f"{name} Excel row {index + 2}: required column "
-                        f"{column!r} is blank (original value: {_show(value, pd)})."
-                    )
-
-    narrative_columns = (
-        ("Training", training, "Narrative"),
-        ("Testing", testing, "Narratives"),
-    )
-    for name, frame, narrative_column in narrative_columns:
-        for narrative, indices in _find_duplicate_values(
-            frame[narrative_column], pd
-        ).items():
-            warnings.append(
-                f"{name} has an exact duplicate {narrative_column} in Excel rows "
-                f"{_row_numbers(indices)} (original value: {narrative!r})."
-            )
-
-    training_narratives: dict[Any, list[int]] = defaultdict(list)
-    testing_narratives: dict[Any, list[int]] = defaultdict(list)
-    for index, value in enumerate(training["Narrative"].tolist()):
-        if not _is_blank(value, pd):
-            try:
-                training_narratives[value].append(index)
-            except TypeError:
-                continue
-    for index, value in enumerate(testing["Narratives"].tolist()):
-        if not _is_blank(value, pd):
-            try:
-                testing_narratives[value].append(index)
-            except TypeError:
-                continue
-    for narrative, training_rows in training_narratives.items():
-        testing_rows = testing_narratives.get(narrative)
-        if testing_rows:
-            warnings.append(
-                "An exact narrative appears in both datasets: "
-                f"Training Excel row(s) {_row_numbers(training_rows)}; "
-                f"Testing Excel row(s) {_row_numbers(testing_rows)} "
-                f"(original value: {narrative!r})."
-            )
-
-    corpus_combinations: dict[tuple[str, str], set[tuple[str, str]]] = defaultdict(set)
-    raw_combinations: dict[tuple[Any, Any], list[int]] = defaultdict(list)
-    normalized_combinations: dict[
-        tuple[str, str], list[tuple[int, str, str]]
-    ] = defaultdict(list)
-    for index, row in corpus.iterrows():
-        law = row["Law"]
-        article = row["Article"]
-        key = (_normalise_label(law, pd), _normalise_article(article, pd))
-        if key[0] and key[1]:
-            corpus_combinations[key].add((str(law), str(article)))
-            normalized_combinations[key].append(
-                (int(index), str(law), str(article))
-            )
-        try:
-            raw_combinations[(law, article)].append(int(index))
-        except TypeError:
-            # Unhashable identifiers still participate in normalized matching.
-            pass
-
-    for (law, article), indices in raw_combinations.items():
-        if len(indices) > 1:
-            warnings.append(
-                "Corpus contains a duplicate Law + Article combination in Excel "
-                f"rows {_row_numbers(indices)} "
-                f"(original values: Law={law!r}, Article={article!r}); "
-                "all rows are retained."
-            )
-
-    for (law_key, article_key), entries in normalized_combinations.items():
-        original_pairs = {(law, article) for _, law, article in entries}
-        if len(original_pairs) > 1:
-            indices = [index for index, _, _ in entries]
-            originals = ", ".join(
-                f"Law={law!r}, Article={article!r}"
-                for law, article in sorted(original_pairs)
-            )
-            warnings.append(
-                "Corpus contains a normalized duplicate Law + Article combination "
-                f"in Excel rows {_row_numbers(indices)} "
-                f"(original values: {originals}); all rows are retained."
-            )
-
-    for name, frame in (("Training", training), ("Testing", testing)):
-        for index, row in frame.iterrows():
-            law_value = row["Law"]
-            article_value = row["Applicable Article"]
-            if _is_blank(law_value, pd) or _is_blank(article_value, pd):
-                continue
-
-            law_key = _normalise_label(law_value, pd)
-            article_references = _parse_article_references(article_value)
-            row_number = int(index) + 2
-            if article_references is None:
-                warnings.append(
-                    f"{name} Excel row {row_number}: could not confidently parse "
-                    f"Applicable Article {_show(article_value, pd)} with original "
-                    f"Law {_show(law_value, pd)}; manual review needed."
+    article_ids: set[str] = set()
+    duplicate_ids: list[str] = []
+    for row_number, row in enumerate(corpus_rows, start=2):
+        article_id = str(row["Article_ID"]).strip().casefold()
+        if not article_id:
+            raise SystemExit(f"Master corpus Excel row {row_number} has no Article_ID.")
+        if article_id in article_ids:
+            duplicate_ids.append(article_id)
+        article_ids.add(article_id)
+        for column in ("Law", "Article_Number", "Article Text"):
+            if _is_blank(row[column]):
+                raise SystemExit(
+                    f"Master corpus Excel row {row_number} has a blank {column!r}."
                 )
-                continue
+    if duplicate_ids:
+        raise SystemExit(
+            "Master corpus contains duplicate Article_ID values: "
+            + ", ".join(sorted(set(duplicate_ids))[:10])
+        )
 
-            for reference in article_references:
-                reference_key = (law_key, _normalise_article(reference, pd))
-                matches = corpus_combinations.get(reference_key, set())
-                if len(matches) > 1:
-                    candidates = ", ".join(
-                        f"Law={matched_law!r}, Article={matched_article!r}"
-                        for matched_law, matched_article in sorted(matches)
-                    )
-                    warnings.append(
-                        f"{name} Excel row {row_number}: article reference "
-                        f"{reference!r} with original Law {_show(law_value, pd)} "
-                        f"has multiple normalized corpus matches ({candidates}); "
-                        "manual review needed."
-                    )
-                elif not matches:
-                    warnings.append(
-                        f"{name} Excel row {row_number}: article reference "
-                        f"{reference!r} from original Applicable Article "
-                        f"{_show(article_value, pd)} and Law "
-                        f"{_show(law_value, pd)} has no normalized Law + Article "
-                        "match in the corpus; manual review needed, not assumed invalid."
+    narrative_sets: dict[str, set[str]] = {}
+    for split, rows in frames.items():
+        narrative_sets[split] = set()
+        invalid_labels: list[str] = []
+        missing_references: list[str] = []
+        for row_number, row in enumerate(rows, start=2):
+            for column in DATASET_COLUMNS:
+                if _is_blank(row[column]):
+                    raise SystemExit(
+                        f"{split} Excel row {row_number} has a blank {column!r}."
                     )
 
-    print(f"\nActionable warnings: {len(warnings)}")
-    if warnings:
-        for warning in warnings:
-            print(f"  - {warning}")
-    else:
-        print("  None found.")
-    print(
-        "\nThese checks assess structure and references only; they do not determine "
-        "whether an article is legally relevant."
-    )
+            narrative = str(row["Sample Narrative"]).strip().casefold()
+            narrative_sets[split].add(narrative)
+
+            label = row["Relevance_Label"]
+            if label not in (0, 0.0, 1, 1.0):
+                invalid_labels.append(f"row {row_number}: {label!r}")
+
+            for article_id in _article_ids(row["Applicable_Article_ID"]):
+                if article_id not in article_ids:
+                    missing_references.append(
+                        f"row {row_number}: {article_id}"
+                    )
+
+        if invalid_labels:
+            raise SystemExit(
+                f"{split} has invalid relevance labels: "
+                + ", ".join(invalid_labels[:10])
+            )
+        if missing_references:
+            raise SystemExit(
+                f"{split} references unknown corpus article IDs: "
+                + ", ".join(missing_references[:10])
+            )
+
+    for index, first in enumerate(SPLITS):
+        for second in SPLITS[index + 1 :]:
+            overlap = narrative_sets[first] & narrative_sets[second]
+            if overlap:
+                raise SystemExit(
+                    f"Narrative leakage between {first} and {second}: "
+                    f"{len(overlap)} exact normalized narrative(s)."
+                )
+
+    print("Prepared retrieval data validation passed.")
+    for split in SPLITS:
+        rows = frames[split]
+        label_counts = Counter(int(row["Relevance_Label"]) for row in rows)
+        print(
+            f"  {split}: {len(rows)} rows, {len(narrative_sets[split])} unique "
+            f"narratives, {label_counts[1]} relevant / {label_counts[0]} "
+            "non-relevant pairs"
+        )
+    print(f"  Corpus: {len(corpus_rows)} articles, {len(article_ids)} unique IDs")
 
 
 if __name__ == "__main__":

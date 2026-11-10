@@ -6,6 +6,7 @@ import 'package:catol/history_screen.dart';
 import 'package:catol/home_screen.dart';
 import 'package:catol/landing_screen.dart';
 import 'package:catol/law_details_screen.dart';
+import 'package:catol/legal_services_screen.dart';
 import 'package:catol/main.dart';
 import 'package:catol/match_results_screen.dart';
 import 'package:catol/models/law_match_result.dart';
@@ -115,6 +116,15 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(LawDetailsScreen), findsOneWidget);
     expect(find.text('Family Code of the Philippines'), findsOneWidget);
+  });
+
+  testWidgets('menu opens the legal services screen', (tester) async {
+    await openHome(tester);
+    await openMenu(tester);
+    await tester.tap(find.text('Map'));
+    await tester.pumpAndSettle();
+    expect(find.byType(LegalServicesScreen), findsOneWidget);
+    expect(find.text('Find Legal Services'), findsOneWidget);
   });
 
   testWidgets('Home search opens Processing then local Match Results', (
