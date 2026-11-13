@@ -32,7 +32,6 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
   static const _blue = Color(0xFF3E86F8);
   static const _purple = Color(0xFF8254F2);
 
-  final _questionController = TextEditingController();
   late bool _isBookmarked;
   var _savingBookmark = false;
 
@@ -72,7 +71,6 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
 
   @override
   void dispose() {
-    _questionController.dispose();
     super.dispose();
   }
 
@@ -204,81 +202,24 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
   Widget _buildQuestionInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(32, 10, 32, 24),
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 68, maxHeight: 140),
-        padding: const EdgeInsets.fromLTRB(16, 8, 14, 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: const Color(0xFFD8D8D8)),
-          borderRadius: BorderRadius.circular(36),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x10000000),
-              blurRadius: 16,
-              offset: Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Image.asset(
-              'assets/images/details_chat_bubble.png',
-              width: 28,
-              height: 28,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: TextField(
-                controller: _questionController,
-                keyboardType: TextInputType.multiline,
-                textInputAction: TextInputAction.newline,
-                minLines: 1,
-                maxLines: 4,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  color: _navy,
-                ),
-                decoration: const InputDecoration(
-                  hintText: 'Ask a follow-up question?',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 14,
-                    color: Color(0xFFA3A3A3),
-                  ),
-                  border: InputBorder.none,
-                  isCollapsed: true,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            SizedBox(
-              width: 44,
-              height: 44,
-              child: IconButton.filled(
-                onPressed: _openXaiChat,
-                padding: EdgeInsets.zero,
-                style: IconButton.styleFrom(
-                  backgroundColor: const Color(0xFF8E63F5),
-                  foregroundColor: Colors.white,
-                ),
-                icon: const Icon(Icons.send_rounded, size: 23),
-                tooltip: 'Send question',
-              ),
-            ),
-          ],
+      child: Align(
+        alignment: Alignment.center,
+        child: SizedBox(
+          width: 64,
+          height: 64,
+          child: FloatingActionButton(
+            onPressed: _openXaiChat,
+            backgroundColor: const Color(0xFF8E63F5),
+            foregroundColor: Colors.white,
+            tooltip: 'Ask a follow-up question',
+            child: const Icon(Icons.chat_bubble, size: 32),
+          ),
         ),
       ),
     );
   }
 
   Future<void> _openXaiChat() async {
-    final question = _questionController.text.trim();
-    if (question.isEmpty) {
-      return;
-    }
-
     final conversation = widget.conversation;
     if (conversation?.usesOnlineFollowUp ?? false) {
       final confirmed = await showDialog<bool>(
@@ -308,14 +249,13 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
       MaterialPageRoute<void>(
         builder: (context) => XaiChatbotScreen(
           result: widget.result,
-          initialUserMessage: question,
+          initialUserMessage: '',
           conversation: conversation,
         ),
       ),
     );
-    // A real conversation answers the typed question immediately.
+    // Focus on this result for the conversation
     conversation?.focusOn(widget.result);
-    conversation?.send(question);
   }
 }
 
