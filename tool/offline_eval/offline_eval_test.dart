@@ -15,36 +15,56 @@ import 'package:catol/services/legal_query_preprocessor.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const _mode = String.fromEnvironment('MODE', defaultValue: 'eval');
-const _dir = 'tool/offline_eval';
+const _evaluationKind = String.fromEnvironment(
+  'EVALUATION_KIND',
+  defaultValue: 'paired',
+);
+const _isHeldout = _evaluationKind == 'heldout';
+const _dir = String.fromEnvironment(
+  'OUTPUT_DIR',
+  defaultValue: 'tool/offline_eval/out',
+);
+const _casesPath = String.fromEnvironment(
+  'CASES_FILE',
+  defaultValue: 'tool/offline_eval/cases.json',
+);
+const _defaultCases = _casesPath == 'tool/offline_eval/cases.json';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('offline paired evaluation ($_mode)', () async {
-    final cases = (jsonDecode(File('$_dir/cases.json').readAsStringSync())
-            as List)
+    final cases = (jsonDecode(File(_casesPath).readAsStringSync()) as List)
         .cast<Map<String, dynamic>>();
     final vectors = _mode == 'eval'
-        ? (jsonDecode(File('$_dir/out/vectors.json').readAsStringSync())
-                  as Map<String, dynamic>)
-              .map(
-                (key, value) => MapEntry(
-                  key,
-                  (value as List).map((e) => (e as num).toDouble()).toList(),
-                ),
-              )
+        ? (jsonDecode(
+            File('$_dir/vectors.json').readAsStringSync(),
+          ) as Map<String, dynamic>).map(
+            (key, value) => MapEntry(
+              key,
+              (value as List).map((e) => (e as num).toDouble()).toList(),
+            ),
+          )
         : <String, List<double>>{};
     final seen = <String, List<int>>{};
     final encoder = _Encoder(_mode == 'dump', vectors, seen);
 
     final report = <Map<String, dynamic>>[];
-    for (final strategy in CatalystRetrievalStrategy.values) {
+    final strategies = _isHeldout
+        ? [CatalystRetrievalStrategy.hybrid]
+        : CatalystRetrievalStrategy.values;
+    for (final strategy in strategies) {
       for (final c in cases) {
         final query = c['query'] as String;
         final relevant = (c['reviewedRelevantArticleIds'] as List)
             .cast<String>()
             .toSet();
-        for (final translated in [false, true]) {
+        final confirmedIrrelevant =
+            (c['confirmedIrrelevantArticleIds'] as List? ?? const [])
+                .cast<String>()
+                .toSet();
+        final translatedModes = _isHeldout ? [false] : [false, true];
+        for (final translated in translatedModes) {
           final service = LocalSemanticRetrievalService(
             queryEncoder: encoder,
             queryPreprocessor: translated
@@ -59,12 +79,35 @@ void main() {
             if (!ids.contains(id)) ids.add(id);
           }
           final top3 = ids.take(3).toList();
+          final firstRelevantRank = ids.indexWhere(relevant.contains);
+          final noCatalogueMatch =
+              c['catalogueCoverage'] == 'NO_MATCH' && relevant.isEmpty;
           report.add({
             'strategy': strategy.name,
             'mode': translated ? 'translation' : 'baseline',
             'datasetId': c['datasetId'],
             'language': c['language'],
             'domain': c['domain'],
+            if (_isHeldout) ...{
+              'intendedCorpusScope': c['intendedCorpusScope'],
+              'catalogueCoverage': c['catalogueCoverage'],
+              'applicabilityJudgment': c['applicabilityJudgment'],
+              'reviewStatus': c['reviewStatus'],
+              'datasetHash': c['datasetHash'],
+              'noCatalogueMatch': noCatalogueMatch,
+              'falsePositiveNoMatch': noCatalogueMatch && ids.isNotEmpty,
+              'confirmedIrrelevantArticleIds':
+                  confirmedIrrelevant.toList()..sort(),
+              'confirmedNegativeHits': ids
+                  .where(confirmedIrrelevant.contains)
+                  .toList(growable: false),
+              'rank': firstRelevantRank < 0 ? null : firstRelevantRank + 1,
+              'reciprocalRank': firstRelevantRank < 0
+                  ? null
+                  : 1 / (firstRelevantRank + 1),
+              'hit1': firstRelevantRank == 0,
+              'hit15': firstRelevantRank >= 0 && firstRelevantRank < 15,
+            },
             'query': query,
             'processedQuery': response.processedQuery,
             'top3': top3,
@@ -74,7 +117,9 @@ void main() {
             'hit3': top3.any(relevant.contains),
             'hitAll': ids.any(relevant.contains),
             'hits': top3.where(relevant.contains).length,
-            'recall3': top3.where(relevant.contains).length / relevant.length,
+            'recall3': relevant.isEmpty
+                ? null
+                : top3.where(relevant.contains).length / relevant.length,
           });
         }
       }
@@ -100,6 +145,23 @@ void main() {
         'returned': response.results.length + response.otherCandidates.length,
         'clarifying': response.clarifyingQuestion != null,
       });
+    }
+    if (_mode == 'eval' && _defaultCases) {
+      expect(offTopic.map((result) => result['returned']), everyElement(0));
+      final custodyCase = report.firstWhere(
+        (entry) =>
+            entry['strategy'] == 'hybrid' &&
+            entry['mode'] == 'baseline' &&
+            entry['datasetId'].toString() == '38',
+      );
+      expect(custodyCase['hit3'], isTrue);
+      final leaseCase = report.firstWhere(
+        (entry) =>
+            entry['strategy'] == 'hybrid' &&
+            entry['mode'] == 'baseline' &&
+            entry['datasetId'].toString() == '1',
+      );
+      expect(leaseCase['hitAll'], isTrue);
     }
 
     // Unlabelled demonstration queries: inspected by hand, not scored.
@@ -127,19 +189,16 @@ void main() {
     }
 
     if (_mode == 'dump') {
-      Directory('$_dir/out').createSync(recursive: true);
-      File('$_dir/out/ids.json').writeAsStringSync(jsonEncode(seen));
+      Directory(_dir).createSync(recursive: true);
+      File('$_dir/ids.json').writeAsStringSync(jsonEncode(seen));
       return;
     }
-    File('$_dir/out/report.json').writeAsStringSync(
-      const JsonEncoder.withIndent(' ').convert(report),
-    );
-    File('$_dir/out/offtopic.json').writeAsStringSync(
-      const JsonEncoder.withIndent(' ').convert(offTopic),
-    );
-    File('$_dir/out/demo.json').writeAsStringSync(
-      const JsonEncoder.withIndent(' ').convert(demo),
-    );
+    File('$_dir/report.json')
+        .writeAsStringSync(const JsonEncoder.withIndent(' ').convert(report));
+    File('$_dir/offtopic.json')
+        .writeAsStringSync(const JsonEncoder.withIndent(' ').convert(offTopic));
+    File('$_dir/demo.json')
+        .writeAsStringSync(const JsonEncoder.withIndent(' ').convert(demo));
   }, timeout: const Timeout(Duration(minutes: 20)));
 }
 

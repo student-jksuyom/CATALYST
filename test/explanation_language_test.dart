@@ -83,9 +83,12 @@ void main() {
     test('each language is written in that language', () {
       expect(
         variants['tl']!.points.first,
-        startsWith('Lumabas ang artikulong'),
+        startsWith('Nakakita ang on-device search'),
       );
-      expect(variants['en']!.points.first, startsWith('This article came up'));
+      expect(
+        variants['en']!.points.first,
+        startsWith('On-device search found'),
+      );
     });
   });
 

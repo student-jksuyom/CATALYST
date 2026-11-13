@@ -9,7 +9,9 @@ void main() {
   testWidgets('favorite entries show a ribbon and non-favorites do not', (
     tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     final favoriteRibbon = find.byKey(
       const ValueKey('favorite-ribbon-Hiwalayan ang asawa'),
@@ -37,7 +39,9 @@ void main() {
   testWidgets('All and Favorites tabs display their corresponding entries', (
     tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     expect(find.text('Hiwalayan ang asawa'), findsOneWidget);
     expect(find.text('Defective na phone'), findsOneWidget);
@@ -56,7 +60,9 @@ void main() {
   testWidgets('tabs are compact and entry content has readable hierarchy', (
     tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     expect(
       tester.getSize(find.byKey(const ValueKey('history-tab-all'))).height,
@@ -102,7 +108,9 @@ void main() {
   });
 
   testWidgets('Clear All cancellation preserves every entry', (tester) async {
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     await tester.tap(find.byTooltip('Clear All'));
     await tester.pumpAndSettle();
@@ -123,7 +131,9 @@ void main() {
   });
 
   testWidgets('Clear All deletes only non-favorite entries', (tester) async {
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     await tester.tap(find.byTooltip('Clear All'));
     await tester.pumpAndSettle();
@@ -171,7 +181,9 @@ void main() {
   testWidgets('individual deletion can be canceled without changing entry', (
     tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     await tester.tap(find.byTooltip('Delete Hiwalayan ang asawa'));
     await tester.pumpAndSettle();
@@ -189,7 +201,9 @@ void main() {
   testWidgets('individual deletion removes a favorite from both tabs', (
     tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     await tester.tap(find.byTooltip('Delete Hiwalayan ang asawa'));
     await tester.pumpAndSettle();
@@ -206,7 +220,9 @@ void main() {
   testWidgets('individual deletion removes a non-favorite entry', (
     tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     await tester.tap(find.byTooltip('Delete Defective na phone'));
     await tester.pumpAndSettle();
@@ -265,6 +281,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: HistoryScreen(
+          entries: mockHistoryEntries,
           onEntrySelected: (entry) async {
             await Navigator.of(tester.element(find.byType(HistoryScreen))).push(
               MaterialPageRoute<void>(
@@ -303,6 +320,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: HistoryScreen(
+          entries: mockHistoryEntries,
           onEntrySelected: (entry) async {
             await Navigator.of(tester.element(find.byType(HistoryScreen))).push(
               MaterialPageRoute<void>(
@@ -401,6 +419,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: HistoryScreen(
+          entries: mockHistoryEntries,
           onEntrySelected: (entry) async {
             selectedEntry = entry;
           },
@@ -423,7 +442,9 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    await tester.pumpWidget(const MaterialApp(home: HistoryScreen()));
+    await tester.pumpWidget(
+      MaterialApp(home: HistoryScreen(entries: mockHistoryEntries)),
+    );
 
     final card = find.byKey(const ValueKey('history-card-Hiwalayan ang asawa'));
     expect(tester.getSize(card).width, lessThan(320));

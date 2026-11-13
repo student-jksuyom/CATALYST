@@ -120,6 +120,14 @@ def _parse_manual_label_overrides(values: list[str]) -> dict[tuple[str, str], fl
     return overrides
 
 
+def _starting_model_retired_test(model_path: Path) -> bool:
+    report_path = model_path.parent / "evaluation_report.json"
+    if not report_path.is_file():
+        return False
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    return bool(report.get("previous_testing_split_retired", False))
+
+
 def _load_manual_review_pairs(
     path: Path,
     articles: dict[str, str],
@@ -181,7 +189,11 @@ def _load_manual_review_pairs(
         if label_text in {"U", "UNCERTAIN"}:
             uncertain_rows += 1
             continue
+        if label_text == "IRRELEVANT":
+            label_text = "0"
         if label_text not in {"0", "1"}:
+            if key in overrides:
+                continue
             raise ValueError(
                 f"{path.name} row {row_number} has unsupported relevance "
                 f"label {raw_label!r}; use 0, 1, or U."
@@ -313,7 +325,10 @@ def _retrieval_metrics(
     article_positions = {article_id: i for i, article_id in enumerate(article_ids)}
     positive_groups = [group for group in groups if group["relevant"]]
     hits = {1: 0, 3: 0, 5: 0, 10: 0}
+    precision_sums = {1: 0.0, 3: 0.0}
+    recall_sums = {1: 0.0, 3: 0.0}
     reciprocal_rank_sum = 0.0
+    reciprocal_rank_sum_at_15 = 0.0
     for query_vector, group in zip(query_vectors, groups):
         scores = article_vectors @ query_vector
         ranking = np.argsort(-scores, kind="stable")
@@ -322,6 +337,10 @@ def _retrieval_metrics(
         }
         if not relevant:
             continue
+        for cutoff in precision_sums:
+            found = len(set(ranking[:cutoff]) & relevant)
+            precision_sums[cutoff] += found / cutoff
+            recall_sums[cutoff] += found / len(relevant)
         first_rank = next(
             (rank for rank, position in enumerate(ranking, start=1) if position in relevant),
             None,
@@ -331,16 +350,27 @@ def _retrieval_metrics(
                 hits[cutoff] += first_rank <= cutoff
             if first_rank <= 10:
                 reciprocal_rank_sum += 1.0 / first_rank
+            if first_rank <= 15:
+                reciprocal_rank_sum_at_15 += 1.0 / first_rank
 
     denominator = len(positive_groups)
     metrics: dict[str, Any] = {
         "positive_query_count": denominator,
         "negative_only_query_count": len(groups) - denominator,
+        "top1_accuracy": hits[1] / denominator if denominator else 0.0,
+        "top3_accuracy": hits[3] / denominator if denominator else 0.0,
         "hit_at_1": hits[1] / denominator if denominator else 0.0,
         "hit_at_3": hits[3] / denominator if denominator else 0.0,
         "hit_at_5": hits[5] / denominator if denominator else 0.0,
         "hit_at_10": hits[10] / denominator if denominator else 0.0,
+        "precision_at_1": precision_sums[1] / denominator if denominator else 0.0,
+        "precision_at_3": precision_sums[3] / denominator if denominator else 0.0,
+        "recall_at_1": recall_sums[1] / denominator if denominator else 0.0,
+        "recall_at_3": recall_sums[3] / denominator if denominator else 0.0,
         "mrr_at_10": reciprocal_rank_sum / denominator if denominator else 0.0,
+        "mrr_at_15": (
+            reciprocal_rank_sum_at_15 / denominator if denominator else 0.0
+        ),
     }
 
     positive_scores: list[float] = []
@@ -364,6 +394,43 @@ def _retrieval_metrics(
         float(np.mean(negative_scores)) if negative_scores else None
     )
     return metrics
+
+
+def _pair_loss(
+    model: Any,
+    loss: Any,
+    pairs: list[tuple[str, str, float]],
+    batch_size: int,
+) -> float:
+    import torch
+    from sentence_transformers import InputExample
+    from torch.utils.data import DataLoader
+
+    examples = [
+        InputExample(texts=[query, article], label=label)
+        for query, article, label in pairs
+    ]
+    loader = DataLoader(
+        examples,
+        shuffle=False,
+        batch_size=batch_size,
+        collate_fn=model.smart_batching_collate,
+    )
+    was_training = model.training
+    model.eval()
+    total_loss = 0.0
+    total_examples = 0
+    try:
+        with torch.no_grad():
+            for features, labels in loader:
+                labels = labels.to(model.device)
+                batch_count = labels.shape[0]
+                total_loss += float(loss(features, labels).detach().cpu()) * batch_count
+                total_examples += batch_count
+    finally:
+        if was_training:
+            model.train()
+    return total_loss / total_examples
 
 
 def _score_key(metrics: dict[str, Any]) -> tuple[float, float, float, float]:
@@ -396,7 +463,10 @@ def _cached_model_path() -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config-file", type=Path, default=None)
+    parser.add_argument("--experiment-name", type=str, default="sbert-finetune")
     parser.add_argument("--epochs", type=int, default=3)
+    parser.add_argument("--validation-retrieval-every", type=int, default=1)
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--learning-rate", type=float, default=2e-5)
     parser.add_argument("--seed", type=int, default=42)
@@ -421,8 +491,33 @@ def main() -> None:
         help="Required when manual review narratives came from the prior test split.",
     )
     args = parser.parse_args()
+    if args.config_file is not None:
+        config = json.loads(args.config_file.read_text(encoding="utf-8"))
+        if not isinstance(config, dict):
+            parser.error("The experiment config must contain a JSON object.")
+        allowed_config_keys = {
+            "experiment_name",
+            "epochs",
+            "validation_retrieval_every",
+            "batch_size",
+            "learning_rate",
+            "seed",
+            "output_root",
+        }
+        unknown_config_keys = set(config) - allowed_config_keys
+        if unknown_config_keys:
+            parser.error(
+                "Unsupported experiment config key(s): "
+                + ", ".join(sorted(unknown_config_keys))
+            )
+        for key, value in config.items():
+            setattr(args, key, Path(value) if key == "output_root" else value)
     if args.epochs < 1 or args.batch_size < 1 or args.learning_rate <= 0:
         parser.error("epochs, batch-size, and learning-rate must be positive.")
+    if args.validation_retrieval_every < 1:
+        parser.error("validation-retrieval-every must be positive.")
+    if not args.experiment_name.strip() or Path(args.experiment_name).name != args.experiment_name:
+        parser.error("experiment-name must be a non-empty directory name.")
     if args.manual_review is None and args.manual_review_label_override:
         parser.error("--manual-review-label-override requires --manual-review.")
 
@@ -484,6 +579,12 @@ def main() -> None:
         article_texts.append(text)
 
     pairs = _load_training_pairs(training_rows, articles, training_path)
+    evaluation_pairs = _load_training_pairs(
+        evaluation_rows, articles, evaluation_path
+    )
+    training_groups = _load_relevance_groups(
+        training_rows, articles, training_path
+    )
     evaluation_groups = _load_relevance_groups(
         evaluation_rows, articles, evaluation_path
     )
@@ -540,6 +641,7 @@ def main() -> None:
     model_path = args.model_path or base_model_path
     if not model_path.exists():
         raise SystemExit(f"SentenceTransformer model path does not exist: {model_path}")
+    inherited_test_retirement = _starting_model_retired_test(model_path)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = SentenceTransformer(str(model_path), device=device)
     baseline_vectors = model.encode(
@@ -565,8 +667,19 @@ def main() -> None:
         article_texts,
         corpus_vectors=baseline_vectors,
     )
+    starting_training_metrics = _retrieval_metrics(
+        model,
+        training_groups,
+        article_ids,
+        article_texts,
+        corpus_vectors=baseline_vectors,
+    )
 
-    run_directory = args.output_root / datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_directory = (
+        args.output_root
+        / args.experiment_name
+        / datetime.now().strftime("%Y%m%d_%H%M%S")
+    )
     run_directory.mkdir(parents=True, exist_ok=False)
     examples = [
         InputExample(texts=[query, article], label=label)
@@ -593,15 +706,27 @@ def main() -> None:
         generator=generator,
     )
     loss = losses.CosineSimilarityLoss(model)
+    initial_training_loss = _pair_loss(
+        model, loss, pairs, args.batch_size
+    )
+    initial_validation_loss = _pair_loss(
+        model, loss, evaluation_pairs, args.batch_size
+    )
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate)
     total_steps = len(loader) * args.epochs
+    warmup_steps = max(1, int(total_steps * 0.1))
     scheduler = get_linear_schedule_with_warmup(
         optimizer,
-        num_warmup_steps=max(1, int(total_steps * 0.1)),
+        num_warmup_steps=warmup_steps,
         num_training_steps=total_steps,
     )
 
-    epoch_losses: list[float] = []
+    epoch_history: list[dict[str, Any]] = []
+    best_score: tuple[float, float, float, float] | None = None
+    best_state: dict[str, Any] | None = None
+    best_epoch = 0
+    best_validation_metrics: dict[str, Any] | None = None
+    best_corpus_vectors: Any | None = None
     device_value = model.device
     for epoch in range(1, args.epochs + 1):
         model.train()
@@ -617,16 +742,95 @@ def main() -> None:
             loss_total += float(loss_value.detach().cpu())
 
         mean_loss = loss_total / len(loader)
-        epoch_losses.append(mean_loss)
-        print(f"Epoch {epoch}/{args.epochs}: loss={mean_loss:.4f}")
+        validation_loss = _pair_loss(
+            model, loss, evaluation_pairs, args.batch_size
+        )
+        evaluate_retrieval = (
+            epoch % args.validation_retrieval_every == 0 or epoch == args.epochs
+        )
+        validation_vectors = None
+        validation_metrics = None
+        if evaluate_retrieval:
+            validation_vectors = np.asarray(
+                model.encode(
+                    article_texts,
+                    batch_size=32,
+                    convert_to_numpy=True,
+                    normalize_embeddings=True,
+                    show_progress_bar=False,
+                ),
+                dtype=np.float32,
+            )
+            validation_metrics = _retrieval_metrics(
+                model,
+                evaluation_groups,
+                article_ids,
+                article_texts,
+                corpus_vectors=validation_vectors,
+            )
+        epoch_history.append(
+            {
+                "epoch": epoch,
+                "mean_training_loss": mean_loss,
+                "validation_loss": validation_loss,
+                "validation_retrieval": validation_metrics,
+            }
+        )
+        result_summary = (
+            (
+                f"validation_hit3={validation_metrics['hit_at_3']:.4f}, "
+                f"validation_mrr10={validation_metrics['mrr_at_10']:.4f}"
+            )
+            if validation_metrics is not None
+            else "retrieval checkpoint skipped"
+        )
+        print(
+            f"Epoch {epoch}/{args.epochs}: "
+            f"train_loss={mean_loss:.4f}, validation_loss={validation_loss:.4f}, "
+            f"{result_summary}"
+        )
+        if validation_metrics is not None:
+            score = _score_key(validation_metrics)
+            if best_score is None or score > best_score:
+                best_score = score
+                best_epoch = epoch
+                best_state = {
+                    name: value.detach().cpu().clone()
+                    for name, value in model.state_dict().items()
+                }
+                best_validation_metrics = validation_metrics
+                best_corpus_vectors = validation_vectors
 
-    candidate_metrics = _retrieval_metrics(
-        model, evaluation_groups, article_ids, article_texts
+    if (
+        best_state is None
+        or best_validation_metrics is None
+        or best_corpus_vectors is None
+    ):
+        raise RuntimeError("Training completed without a validation checkpoint.")
+    model.load_state_dict(best_state)
+    selected_training_metrics = _retrieval_metrics(
+        model,
+        training_groups,
+        article_ids,
+        article_texts,
+        corpus_vectors=best_corpus_vectors,
     )
     candidate_path = run_directory / "candidate_model"
     model.save(str(candidate_path))
 
     report = {
+        "experiment_name": args.experiment_name,
+        "configuration_file": (
+            str(args.config_file.resolve()) if args.config_file is not None else None
+        ),
+        "configuration": {
+            "epochs": args.epochs,
+            "validation_retrieval_every": args.validation_retrieval_every,
+            "batch_size": args.batch_size,
+            "learning_rate": args.learning_rate,
+            "seed": args.seed,
+            "output_root": str(args.output_root),
+        },
         "base_model": BASE_MODEL_ID,
         "base_model_path": str(base_model_path),
         "starting_model_path": str(model_path),
@@ -634,24 +838,41 @@ def main() -> None:
         "device": device,
         "seed": args.seed,
         "epochs": args.epochs,
+        "validation_retrieval_every": args.validation_retrieval_every,
         "batch_size": args.batch_size,
         "learning_rate": args.learning_rate,
-        "epoch_mean_training_losses": epoch_losses,
+        "warmup_steps": warmup_steps,
+        "scheduler": "linear_with_warmup",
+        "checkpoint_selection": (
+            "validation hit_at_3, then mrr_at_10, hit_at_1, hit_at_10"
+        ),
+        "training_pair_loss_before_training": initial_training_loss,
+        "validation_pair_loss_before_training": initial_validation_loss,
+        "epoch_history": epoch_history,
+        "selected_epoch": best_epoch,
         "training_pairs": len(pairs),
         "training_positive_pairs": positive_count,
         "training_negative_pairs": negative_count,
         "balanced_pair_sampling": sampler is not None,
+        "training_query_groups": len(training_groups),
         "evaluation_rows": len(evaluation_rows),
         "evaluation_query_groups": len(evaluation_groups),
         "corpus_articles": len(article_ids),
+        "starting_model_on_training": starting_training_metrics,
         "starting_model_on_evaluation": baseline,
-        "candidate_cosine_after_final_epoch": candidate_metrics,
+        "selected_model_on_training": selected_training_metrics,
+        "selected_model_on_evaluation": best_validation_metrics,
         "final_candidate_beats_baseline_by_hit3_then_mrr": (
-            _score_key(candidate_metrics) > _score_key(baseline)
+            _score_key(best_validation_metrics) > _score_key(baseline)
         ),
         "testing_split_used": manual_test_overlap_count > 0,
-        "previous_testing_split_retired": manual_test_overlap_count > 0,
-        "final_test_metrics_valid": manual_test_overlap_count == 0,
+        "inherited_test_retirement": inherited_test_retirement,
+        "previous_testing_split_retired": (
+            manual_test_overlap_count > 0 or inherited_test_retirement
+        ),
+        "final_test_metrics_valid": (
+            manual_test_overlap_count == 0 and not inherited_test_retirement
+        ),
         "testing_query_overlap_count": manual_test_overlap_count,
         "manual_review": (
             {
@@ -660,6 +881,7 @@ def main() -> None:
                 "review_queries_overlap_previous_testing_split": (
                     manual_test_overlap_count > 0
                 ),
+                "inherited_test_retirement": inherited_test_retirement,
                 "uncertain_labels_used_for_training": False,
                 "prior_test_results_retired": True,
             }
@@ -674,7 +896,10 @@ def main() -> None:
         encoding="utf-8",
     )
     print(f"\nStarting model on Evaluation: {json.dumps(baseline, sort_keys=True)}")
-    print(f"Final candidate: {json.dumps(candidate_metrics, sort_keys=True)}")
+    print(
+        f"Selected epoch {best_epoch} on Evaluation: "
+        f"{json.dumps(best_validation_metrics, sort_keys=True)}"
+    )
     print(
         "Candidate improves the Hit@3-first evaluation ranking: "
         f"{report['final_candidate_beats_baseline_by_hit3_then_mrr']}"

@@ -2,20 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class UserInputScreen extends StatefulWidget {
-  const UserInputScreen({
-    required this.onProcess,
-    this.onlineReviewAvailable = false,
-    super.key,
-  });
+  const UserInputScreen({required this.onProcess, super.key});
 
   final Future<bool> Function(
     BuildContext context,
     String mainProblem,
     String supportingContext,
-    bool useOnlineReview,
   )
   onProcess;
-  final bool onlineReviewAvailable;
 
   @override
   State<UserInputScreen> createState() => _UserInputScreenState();
@@ -29,7 +23,6 @@ class _UserInputScreenState extends State<UserInputScreen> {
   final _contextController = TextEditingController();
   var _showRequiredError = false;
   var _isSubmitting = false;
-  var _useOnlineReview = false;
 
   bool get _hasMainProblem => _mainController.text.trim().isNotEmpty;
 
@@ -55,7 +48,6 @@ class _UserInputScreenState extends State<UserInputScreen> {
         context,
         mainProblem,
         _contextController.text.trim(),
-        widget.onlineReviewAvailable && _useOnlineReview,
       );
       if (completed && mounted) {
         Navigator.of(context).pop(true);
@@ -184,47 +176,6 @@ class _UserInputScreenState extends State<UserInputScreen> {
                       color: Color(0xFF667085),
                     ),
                   ),
-                  if (widget.onlineReviewAvailable) ...[
-                    const SizedBox(height: 18),
-                    Material(
-                      color: const Color(0xFFF4F7FF),
-                      borderRadius: BorderRadius.circular(14),
-                      clipBehavior: Clip.antiAlias,
-                      child: CheckboxListTile(
-                        key: const ValueKey('online-review-consent'),
-                        value: _useOnlineReview,
-                        onChanged: _isSubmitting
-                            ? null
-                            : (value) => setState(
-                                () => _useOnlineReview = value ?? false,
-                              ),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: const Text(
-                          'Use optional online AI review',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                            color: _navy,
-                          ),
-                        ),
-                        subtitle: const Text(
-                          'When selected, your main problem, supporting context, '
-                          'retrieved article excerpts, and follow-up questions '
-                          'are sent over the internet to the configured '
-                          'CATALYST proxy and Google Gemini for review and '
-                          'grounded answers. External provider processing '
-                          'applies. Leave unchecked for on-device retrieval only.',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 11,
-                            height: 1.35,
-                            color: Color(0xFF596579),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),

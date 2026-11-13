@@ -1,5 +1,6 @@
 import 'package:catol/law_details_screen.dart';
 import 'package:catol/models/law_match_result.dart';
+import 'package:catol/services/history_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,6 +12,26 @@ void main() {
     description: 'A demo-only match description.',
     matchScore: 92,
   );
+
+  testWidgets('a failed bookmark save leaves the bookmark unchanged', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LawDetailsScreen(
+          result: result,
+          onBookmarkSave: (_) async => throw const HistoryStorageException(),
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('Bookmark'));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('Bookmark'), findsOneWidget);
+    expect(
+      find.text('Could not save bookmark on this device.'),
+      findsOneWidget,
+    );
+  });
 
   testWidgets('shows result details and graceful content placeholders', (
     tester,
@@ -60,6 +81,39 @@ void main() {
     expect(
       find.text('Legal text will appear here when available.'),
       findsNothing,
+    );
+  });
+
+  testWidgets('labels the AI-generated explanation as a possible link', (
+    tester,
+  ) async {
+    const explainedResult = LawMatchResult(
+      lawName: 'Civil Code',
+      articleNumber: 'Article 491',
+      title: 'Co-ownership',
+      description: 'Consent is required for alterations.',
+      matchScore: 92,
+      contextualExplanation:
+          'You said your sibling changed jointly owned land without asking.',
+      hasAiExplanation: true,
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(home: LawDetailsScreen(result: explainedResult)),
+    );
+    await tester.drag(find.byType(ListView), const Offset(0, -600));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Why this may relate to your concern'), findsOneWidget);
+    expect(
+      find.text(
+        'You said your sibling changed jointly owned land without asking.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('AI-generated from your concern'),
+      findsOneWidget,
     );
   });
 
@@ -139,7 +193,10 @@ void main() {
       await tester.drag(find.byType(ListView), const Offset(0, -600));
       await tester.pumpAndSettle();
 
-      expect(find.text('Bakit ito may kinalaman sa kaso mo'), findsOneWidget);
+      expect(
+        find.text('Bakit ito posibleng may kaugnayan sa concern mo'),
+        findsOneWidget,
+      );
       expect(find.text('Paliwanag sa Tagalog.'), findsOneWidget);
       expect(find.text('Paalala'), findsOneWidget);
       expect(find.text('Paalala sa Tagalog.'), findsOneWidget);
@@ -148,7 +205,7 @@ void main() {
       await tester.tap(find.text('English'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Why this applies to your case'), findsOneWidget);
+      expect(find.text('Why this may relate to your concern'), findsOneWidget);
       expect(find.text('English plain explanation.'), findsOneWidget);
       expect(find.text('Reminder'), findsOneWidget);
       expect(find.text('English disclaimer.'), findsOneWidget);

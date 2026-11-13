@@ -197,9 +197,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: EdgeInsets.symmetric(
                               horizontal: horizontalPadding,
                             ),
-                            child: _ConcernInput(
-                              controller: _concernController,
-                              onSearch: _submitConcern,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'Searches and results are saved unencrypted on this device. '
+                                  'Manage them in History.',
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 11,
+                                    color: Color(0xFF66758E),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                _ConcernInput(
+                                  controller: _concernController,
+                                  onSearch: _submitConcern,
+                                ),
+                              ],
                             ),
                           ),
                         ],

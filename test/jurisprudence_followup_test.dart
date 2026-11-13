@@ -1,4 +1,5 @@
 import 'package:catol/models/law_match_result.dart';
+import 'package:catol/law_details_screen.dart';
 import 'package:catol/services/case_conversation.dart';
 import 'package:catol/services/catalyst_local_retrieval_service.dart';
 import 'package:catol/services/followup_service.dart';
@@ -71,6 +72,30 @@ CaseConversation _conversation(FollowUpAnswerer? followUp) =>
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('article follow-up discloses online processing before sending', (
+    tester,
+  ) async {
+    final followUp = _Fake(const FollowUpAnswer(text: 'Answer.'));
+    final conversation = _conversation(followUp);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LawDetailsScreen(result: _article, conversation: conversation),
+      ),
+    );
+    await tester.enterText(
+      find.byType(TextField),
+      'Are there Supreme Court cases about this?',
+    );
+    await tester.tap(find.byTooltip('Send question'));
+    await tester.pumpAndSettle();
+    expect(find.text('Online XAI follow-up'), findsOneWidget);
+    expect(followUp.calls, 0);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(followUp.calls, 0);
+    expect(find.text('Law Details'), findsOneWidget);
+  });
 
   group('JurisprudenceIndex', () {
     test('ranks the matching decision and ignores unrelated queries', () {

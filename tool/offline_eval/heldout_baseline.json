@@ -1,0 +1,229 @@
+{
+  "datasetHash": "2b19ad25c0363d2aaffc6b125dbe93f29aff1679d2d7bcc488953aebc70c9bc8",
+  "caseIds": [
+    "HLD-001",
+    "HLD-002",
+    "HLD-003",
+    "HLD-004",
+    "HLD-005",
+    "HLD-006",
+    "HLD-007",
+    "HLD-008",
+    "HLD-009",
+    "HLD-010",
+    "HLD-011",
+    "HLD-012",
+    "HLD-013",
+    "HLD-014",
+    "HLD-015",
+    "HLD-016",
+    "HLD-017",
+    "HLD-018",
+    "HLD-019",
+    "HLD-020",
+    "HLD-021",
+    "HLD-022",
+    "HLD-023",
+    "HLD-024",
+    "HLD-025",
+    "HLD-026",
+    "HLD-027",
+    "HLD-028",
+    "HLD-029",
+    "HLD-030",
+    "HLD-031",
+    "HLD-032",
+    "HLD-033",
+    "HLD-034",
+    "HLD-035",
+    "HLD-036",
+    "HLD-037",
+    "HLD-038",
+    "HLD-039",
+    "HLD-040",
+    "HLD-041",
+    "HLD-042"
+  ],
+  "provisional": true,
+  "reviewStatuses": [
+    "NEEDS_SECOND_REVIEW"
+  ],
+  "counts": {
+    "total": 42,
+    "retrievalPositive": 27,
+    "noCatalogueMatch": 15,
+    "confirmedNegativeArticleLabels": 0,
+    "applicabilityJudgments": {
+      "APPLIES": 3,
+      "INSUFFICIENT_FACTS": 5,
+      "NO_CATALOGUE_MATCH": 15,
+      "POSSIBLY_APPLIES": 19
+    }
+  },
+  "retrieval": {
+    "count": 27,
+    "hit1": 7,
+    "hit3": 11,
+    "hit15": 16,
+    "mrr15": 0.3626984126984127
+  },
+  "noCatalogueMatch": {
+    "count": 15,
+    "falsePositiveCases": 15,
+    "returnedAnyRate": 1.0,
+    "maximumAllowedFalsePositiveCases": 0
+  },
+  "confirmedNegatives": {
+    "labels": 0,
+    "retrievedAt3": 0,
+    "retrievedAt15": 0
+  },
+  "cohorts": {
+    "language": {
+      "English": {
+        "count": 9,
+        "hit1": 4,
+        "hit3": 6,
+        "hit15": 7,
+        "mrr15": 0.5833333333333334
+      },
+      "Tagalog": {
+        "count": 9,
+        "hit1": 2,
+        "hit3": 3,
+        "hit15": 6,
+        "mrr15": 0.31957671957671957
+      },
+      "Taglish": {
+        "count": 9,
+        "hit1": 1,
+        "hit3": 2,
+        "hit15": 3,
+        "mrr15": 0.1851851851851852
+      }
+    },
+    "domain": {
+      "Civil-Agency": {
+        "count": 2,
+        "hit1": 0,
+        "hit3": 0,
+        "hit15": 1,
+        "mrr15": 0.1
+      },
+      "Civil-Co-ownership": {
+        "count": 1,
+        "hit1": 0,
+        "hit3": 0,
+        "hit15": 0,
+        "mrr15": 0.0
+      },
+      "Civil-Contract": {
+        "count": 1,
+        "hit1": 1,
+        "hit3": 1,
+        "hit15": 1,
+        "mrr15": 1.0
+      },
+      "Civil-Deposit": {
+        "count": 1,
+        "hit1": 0,
+        "hit3": 0,
+        "hit15": 0,
+        "mrr15": 0.0
+      },
+      "Civil-Easement": {
+        "count": 2,
+        "hit1": 0,
+        "hit3": 0,
+        "hit15": 0,
+        "mrr15": 0.0
+      },
+      "Civil-Obligation": {
+        "count": 1,
+        "hit1": 0,
+        "hit3": 0,
+        "hit15": 1,
+        "mrr15": 0.14285714285714285
+      },
+      "Civil-Property": {
+        "count": 1,
+        "hit1": 0,
+        "hit3": 0,
+        "hit15": 0,
+        "mrr15": 0.0
+      },
+      "Consumer-Deceptive-Product": {
+        "count": 2,
+        "hit1": 1,
+        "hit3": 1,
+        "hit15": 1,
+        "mrr15": 0.5
+      },
+      "Consumer-Deceptive-Service": {
+        "count": 1,
+        "hit1": 0,
+        "hit3": 0,
+        "hit15": 0,
+        "mrr15": 0.0
+      },
+      "Consumer-Price-Display": {
+        "count": 1,
+        "hit1": 0,
+        "hit3": 0,
+        "hit15": 1,
+        "mrr15": 0.2
+      },
+      "Consumer-Product-Label": {
+        "count": 1,
+        "hit1": 0,
+        "hit3": 1,
+        "hit15": 1,
+        "mrr15": 0.5
+      },
+      "Consumer-Product-Standard": {
+        "count": 1,
+        "hit1": 1,
+        "hit3": 1,
+        "hit15": 1,
+        "mrr15": 1.0
+      },
+      "Consumer-Repair-Service": {
+        "count": 1,
+        "hit1": 0,
+        "hit3": 1,
+        "hit15": 1,
+        "mrr15": 0.3333333333333333
+      },
+      "Consumer-Warranty": {
+        "count": 2,
+        "hit1": 1,
+        "hit3": 1,
+        "hit15": 1,
+        "mrr15": 0.5
+      },
+      "Family-Custody": {
+        "count": 3,
+        "hit1": 1,
+        "hit3": 2,
+        "hit15": 3,
+        "mrr15": 0.5555555555555556
+      },
+      "Family-Obligation": {
+        "count": 3,
+        "hit1": 1,
+        "hit3": 1,
+        "hit15": 2,
+        "mrr15": 0.4166666666666667
+      },
+      "Family-Property": {
+        "count": 3,
+        "hit1": 1,
+        "hit3": 2,
+        "hit15": 2,
+        "mrr15": 0.5
+      }
+    }
+  },
+  "note": "Precision is not reported: unjudged articles are not treated as irrelevant. Unverified Hard_Negative_Article_IDs are excluded.",
+  "qualityGateStatus": "FAIL"
+}

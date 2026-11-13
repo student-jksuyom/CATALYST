@@ -35,9 +35,8 @@ dependencies:
 
   flutter_onnxruntime: ^1.9.0
   dart_sentencepiece_tokenizer: ^1.4.1
-  google_mlkit_translation: ^0.15.1
-  google_mlkit_language_id: ^0.15.1
   geolocator: ^14.1.2
+  path_provider: ^2.1.5
   url_launcher: ^6.3.3
   webview_flutter: ^4.14.1
 
@@ -71,6 +70,8 @@ flutter:
     - assets/data/jurisprudence.json
     - assets/data/chunk_embeddings_e5.f32
     - assets/data/chunk_owners_e5.json
+    - assets/data/training_query_embeddings_e5.f32
+    - assets/data/training_query_labels_e5.json
     - assets/models/catalyst_encoder_e5.onnx
     - assets/models/e5_tokenizer.json
     - assets/images/catalyst_header.png

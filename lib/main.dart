@@ -15,7 +15,8 @@ import 'processing_screen.dart';
 import 'services/case_conversation.dart';
 import 'services/catalyst_local_retrieval_service.dart';
 import 'services/followup_service.dart';
-import 'services/online_retrieval_service.dart';
+import 'services/history_store.dart';
+import 'services/query_analysis.dart';
 import 'xai_chatbot_screen.dart';
 
 void main() {
@@ -27,11 +28,15 @@ class CatalystApp extends StatelessWidget {
     super.key,
     CatalystRetrievalService? retrievalService,
     FollowUpAnswerer? followUp,
-  }) : retrievalService = retrievalService ?? createDefaultRetrievalService(),
-       followUp = followUp ?? createDefaultFollowUpAnswerer();
+    HistoryStore? historyStore,
+  }) : retrievalService =
+           retrievalService ?? const LocalSemanticRetrievalService(),
+       followUp = followUp ?? createDefaultFollowUpAnswerer(),
+       historyStore = historyStore ?? HistoryStore();
 
   final CatalystRetrievalService retrievalService;
   final FollowUpAnswerer? followUp;
+  final HistoryStore historyStore;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +57,7 @@ class CatalystApp extends StatelessWidget {
       onHistory: (homeContext) => Navigator.of(homeContext).push(
         MaterialPageRoute<void>(
           builder: (historyContext) => HistoryScreen(
+            store: historyStore,
             onEntrySelected: (entry) =>
                 _openHistoryEntry(historyContext, entry),
           ),
@@ -87,6 +93,8 @@ class CatalystApp extends StatelessWidget {
                   if (!processingContext.mounted) {
                     return;
                   }
+                  final entry = await historyStore.addSearch(concern, response);
+                  if (!processingContext.mounted) return;
 
                   developer.log(
                     'Navigating to match results',
@@ -108,12 +116,12 @@ class CatalystApp extends StatelessWidget {
                           ],
                           userConcern: concern,
                           retrievalWarning: response.warning,
-                          retrievalMode: response.mode,
                           emptyMessage: response.clarifyingQuestion,
                           onResultSelected: (result) => _openLawResult(
                             resultsContext,
                             result,
                             conversation,
+                            entry,
                           ),
                         ),
                       ),
@@ -142,17 +150,30 @@ class CatalystApp extends StatelessWidget {
     BuildContext context,
     HistoryEntry entry,
   ) async {
+    final response = CatalystMatchResponse(
+      results: entry.results.take(entry.topResultCount).toList(),
+      otherCandidates: entry.results.skip(entry.topResultCount).toList(),
+      originalQuery: entry.concern,
+      processedQuery: entry.processedQuery,
+      warning: entry.warning,
+      clarifyingQuestion: entry.emptyMessage,
+      analysis: analyzeQuery(entry.concern),
+    );
+    final conversation = CaseConversation.forResponse(
+      service: retrievalService,
+      narrative: entry.concern,
+      response: response,
+      followUp: followUp,
+    );
     await Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
-        builder: (_) => LawDetailsScreen(
-          result: entry.result,
-          initialIsBookmarked: entry.isFavorite,
-          onBookmarkChanged: (isBookmarked) => entry.isFavorite = isBookmarked,
-          conversation: CaseConversation.forArticle(
-            service: retrievalService,
-            result: entry.result,
-            followUp: followUp,
-          ),
+        builder: (resultsContext) => MatchResultsScreen(
+          results: entry.results,
+          userConcern: entry.concern,
+          retrievalWarning: entry.warning,
+          emptyMessage: entry.emptyMessage,
+          onResultSelected: (result) =>
+              _openLawResult(resultsContext, result, conversation, entry),
         ),
       ),
     );
@@ -162,11 +183,19 @@ class CatalystApp extends StatelessWidget {
     BuildContext context,
     LawMatchResult result,
     CaseConversation conversation,
+    HistoryEntry entry,
   ) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) =>
-            LawDetailsScreen(result: result, conversation: conversation),
+        builder: (_) => LawDetailsScreen(
+          result: result,
+          conversation: conversation,
+          initialIsBookmarked: entry.isFavorite,
+          onBookmarkSave: (favorite) async {
+            await historyStore.setFavorite(entry.id, favorite);
+            entry.isFavorite = favorite;
+          },
+        ),
       ),
     );
   }

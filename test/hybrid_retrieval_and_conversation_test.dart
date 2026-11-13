@@ -51,6 +51,22 @@ void main() {
       expect(index.search('zzzzqqq'), isEmpty);
     });
 
+    test('matches ordinary rental wording to legal terms in the corpus', () {
+      final legalIndex = Bm25Index.build([
+        'The lessor must maintain the lessee in peaceful enjoyment.',
+      ]);
+      const concern = 'My landlord evicted us.';
+      expect(legalIndex.search(concern), isEmpty);
+      expect(
+        legalIndex
+            .search('$concern ${expandLegalWording(concern).join(' ')}')
+            .single
+            .index,
+        0,
+      );
+      expect(expandLegalWording('a landowner sold property'), isEmpty);
+    });
+
     test('reciprocal rank fusion rewards agreement between lists', () {
       final fused = fuseRankings([
         [5, 1, 2],

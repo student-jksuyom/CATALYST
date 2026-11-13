@@ -1,0 +1,879 @@
+{
+  "status": "PROVISIONAL_SYNTHETIC_LABELS",
+  "productionIntegrated": false,
+  "heldoutWorkbookUsed": false,
+  "encoderRetrained": false,
+  "protocol": "Nested grouped cross-validation. All English, Tagalog, and Taglish variants from an Issue_Family stay in the same outer fold. The 0.5 decision threshold is fixed before evaluation.",
+  "dataset": "DATA/Datasets/Abstention_Development_Dataset.xlsx",
+  "datasetSha256": "00852b5e0b1ac4a41a881d0caa9c53c8b3fe38ebff2c0589da645a069c2aaa58",
+  "caseCount": 75,
+  "issueFamilyCount": 25,
+  "outerFoldCount": 4,
+  "outOfFoldMetrics": {
+    "threshold": 0.5,
+    "inScopeCount": 36,
+    "outOfScopeCount": 39,
+    "falseAbstentions": 9,
+    "falseAbstentionRate": 0.25,
+    "missedAbstentions": 6,
+    "missedAbstentionRate": 0.15384615384615385,
+    "accuracy": 0.8,
+    "balancedAccuracy": 0.7980769230769231,
+    "byLanguage": {
+      "English": {
+        "inScopeCount": 12,
+        "falseAbstentions": 4,
+        "falseAbstentionRate": 0.3333333333333333,
+        "outOfScopeCount": 13,
+        "missedAbstentions": 1,
+        "missedAbstentionRate": 0.07692307692307693
+      },
+      "Tagalog": {
+        "inScopeCount": 12,
+        "falseAbstentions": 3,
+        "falseAbstentionRate": 0.25,
+        "outOfScopeCount": 13,
+        "missedAbstentions": 2,
+        "missedAbstentionRate": 0.15384615384615385
+      },
+      "Taglish": {
+        "inScopeCount": 12,
+        "falseAbstentions": 2,
+        "falseAbstentionRate": 0.16666666666666666,
+        "outOfScopeCount": 13,
+        "missedAbstentions": 3,
+        "missedAbstentionRate": 0.23076923076923078
+      }
+    },
+    "byChallengeType": {
+      "CLEARLY_OUTSIDE_DOMAIN": {
+        "inScopeCount": 0,
+        "falseAbstentions": 0,
+        "falseAbstentionRate": null,
+        "outOfScopeCount": 9,
+        "missedAbstentions": 0,
+        "missedAbstentionRate": 0.0
+      },
+      "DIRECT": {
+        "inScopeCount": 15,
+        "falseAbstentions": 5,
+        "falseAbstentionRate": 0.3333333333333333,
+        "outOfScopeCount": 0,
+        "missedAbstentions": 0,
+        "missedAbstentionRate": null
+      },
+      "IN_SCOPE_PARAPHRASE": {
+        "inScopeCount": 21,
+        "falseAbstentions": 4,
+        "falseAbstentionRate": 0.19047619047619047,
+        "outOfScopeCount": 0,
+        "missedAbstentions": 0,
+        "missedAbstentionRate": null
+      },
+      "SHARED_CORPUS_TERMS": {
+        "inScopeCount": 0,
+        "falseAbstentions": 0,
+        "falseAbstentionRate": null,
+        "outOfScopeCount": 30,
+        "missedAbstentions": 6,
+        "missedAbstentionRate": 0.2
+      }
+    }
+  },
+  "outerFoldSelectedL2": {
+    "0": 0.01,
+    "1": 0.01,
+    "2": 0.01,
+    "3": 0.01
+  },
+  "innerFoldLogLossByOuterFold": {
+    "0": {
+      "0.01": 0.6163507493311148,
+      "0.1": 0.6815630695483059,
+      "1.0": 0.6919260424431565,
+      "10.0": 0.6930244026628687
+    },
+    "1": {
+      "0.01": 0.6356691737537323,
+      "0.1": 0.6868742584692454,
+      "1.0": 0.6942658589545999,
+      "10.0": 0.6950391079489736
+    },
+    "2": {
+      "0.01": 0.5957865212761319,
+      "0.1": 0.6801461307410189,
+      "1.0": 0.6935464964532955,
+      "10.0": 0.6949666758126618
+    },
+    "3": {
+      "0.01": 0.6022618053906538,
+      "0.1": 0.6818405788212144,
+      "1.0": 0.6937352981598307,
+      "10.0": 0.6949857643348262
+    }
+  },
+  "finalModelL2": 0.01,
+  "finalModelSelectionLogLoss": {
+    "0.01": 0.6026622930867895,
+    "0.1": 0.6814526623346673,
+    "1.0": 0.6928613961963037,
+    "10.0": 0.6940542534318858
+  },
+  "predictions": [
+    {
+      "caseId": "ABST-001",
+      "issueFamily": "civil_loan_repayment",
+      "language": "English",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4798755242679896,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-002",
+      "issueFamily": "civil_loan_repayment",
+      "language": "Tagalog",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.46477287049297206,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-003",
+      "issueFamily": "civil_loan_repayment",
+      "language": "Taglish",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.45989977093332496,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-004",
+      "issueFamily": "civil_contract_performance",
+      "language": "English",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5393702860324561,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-005",
+      "issueFamily": "civil_contract_performance",
+      "language": "Tagalog",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4836880019881414,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-006",
+      "issueFamily": "civil_contract_performance",
+      "language": "Taglish",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5605302089155515,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-007",
+      "issueFamily": "civil_lease_and_possession",
+      "language": "English",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.49807377376240836,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-008",
+      "issueFamily": "civil_lease_and_possession",
+      "language": "Tagalog",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5468355658969549,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-009",
+      "issueFamily": "civil_lease_and_possession",
+      "language": "Taglish",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5274411464649131,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-010",
+      "issueFamily": "civil_coownership",
+      "language": "English",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5692182973742645,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-011",
+      "issueFamily": "civil_coownership",
+      "language": "Tagalog",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5962404080984939,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-012",
+      "issueFamily": "civil_coownership",
+      "language": "Taglish",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5681771983907205,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-013",
+      "issueFamily": "civil_negligence_damage",
+      "language": "English",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.492720018214556,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-014",
+      "issueFamily": "civil_negligence_damage",
+      "language": "Tagalog",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4760884751510045,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-015",
+      "issueFamily": "civil_negligence_damage",
+      "language": "Taglish",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5171366028493782,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-016",
+      "issueFamily": "civil_sale_and_delivery",
+      "language": "English",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5408272718121742,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-017",
+      "issueFamily": "civil_sale_and_delivery",
+      "language": "Tagalog",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5733717721947634,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-018",
+      "issueFamily": "civil_sale_and_delivery",
+      "language": "Taglish",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5426514612576502,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-019",
+      "issueFamily": "family_child_support",
+      "language": "English",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.58872454028486,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-020",
+      "issueFamily": "family_child_support",
+      "language": "Tagalog",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5680960671200163,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-021",
+      "issueFamily": "family_child_support",
+      "language": "Taglish",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5906899481229161,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-022",
+      "issueFamily": "family_filiation",
+      "language": "English",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5389884841906128,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-023",
+      "issueFamily": "family_filiation",
+      "language": "Tagalog",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5517950130394215,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-024",
+      "issueFamily": "family_filiation",
+      "language": "Taglish",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5440685590292871,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-025",
+      "issueFamily": "family_parental_authority",
+      "language": "English",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5309243818831447,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-026",
+      "issueFamily": "family_parental_authority",
+      "language": "Tagalog",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5513590458460169,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-027",
+      "issueFamily": "family_parental_authority",
+      "language": "Taglish",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4915212243080007,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-028",
+      "issueFamily": "family_property_regime",
+      "language": "English",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5890038286147563,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-029",
+      "issueFamily": "family_property_regime",
+      "language": "Tagalog",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.6133380886794761,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-030",
+      "issueFamily": "family_property_regime",
+      "language": "Taglish",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5665481027013828,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-031",
+      "issueFamily": "consumer_defective_goods",
+      "language": "English",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4987571360422458,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-032",
+      "issueFamily": "consumer_defective_goods",
+      "language": "Tagalog",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5079622493342568,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-033",
+      "issueFamily": "consumer_defective_goods",
+      "language": "Taglish",
+      "challengeType": "DIRECT",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5221034272703469,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-034",
+      "issueFamily": "consumer_deceptive_advertising",
+      "language": "English",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5194422869115755,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-035",
+      "issueFamily": "consumer_deceptive_advertising",
+      "language": "Tagalog",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5601593727949138,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-036",
+      "issueFamily": "consumer_deceptive_advertising",
+      "language": "Taglish",
+      "challengeType": "IN_SCOPE_PARAPHRASE",
+      "expected": "IN_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5191230848511734,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-037",
+      "issueFamily": "labor_overtime",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4175328248280449,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-038",
+      "issueFamily": "labor_overtime",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4349918351306961,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-039",
+      "issueFamily": "labor_overtime",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.40675817068254505,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-040",
+      "issueFamily": "labor_termination_benefits",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4288937582572023,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-041",
+      "issueFamily": "labor_termination_benefits",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4635023903320317,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-042",
+      "issueFamily": "labor_termination_benefits",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4875814319640006,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-043",
+      "issueFamily": "labor_workplace_injury",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.45834445991098527,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-044",
+      "issueFamily": "labor_workplace_injury",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4888853797188268,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-045",
+      "issueFamily": "labor_workplace_injury",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.45314601785013164,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-046",
+      "issueFamily": "criminal_search_and_seizure",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5103921840875101,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-047",
+      "issueFamily": "criminal_search_and_seizure",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5372713398104573,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-048",
+      "issueFamily": "criminal_search_and_seizure",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5192344322796933,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-049",
+      "issueFamily": "criminal_bail",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.47511640540282907,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-050",
+      "issueFamily": "criminal_bail",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4977060344190069,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-051",
+      "issueFamily": "criminal_bail",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5040247400744756,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-052",
+      "issueFamily": "tax_refund_deadline",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4244599236051367,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-053",
+      "issueFamily": "tax_refund_deadline",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4586824485370651,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-054",
+      "issueFamily": "tax_refund_deadline",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.47214142429967204,
+      "outerFold": "2"
+    },
+    {
+      "caseId": "ABST-055",
+      "issueFamily": "immigration_visa",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.3718663385599308,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-056",
+      "issueFamily": "immigration_visa",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.3844631868317933,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-057",
+      "issueFamily": "immigration_visa",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.39038842324428535,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-058",
+      "issueFamily": "intellectual_property_registration",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.40603004516303237,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-059",
+      "issueFamily": "intellectual_property_registration",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4279898465316634,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-060",
+      "issueFamily": "intellectual_property_registration",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4281049891023279,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-061",
+      "issueFamily": "data_privacy_access",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.3920816597228617,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-062",
+      "issueFamily": "data_privacy_access",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.42098350290824793,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-063",
+      "issueFamily": "data_privacy_access",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.3962541703898258,
+      "outerFold": "3"
+    },
+    {
+      "caseId": "ABST-064",
+      "issueFamily": "traffic_license_suspension",
+      "language": "English",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.36811591211708766,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-065",
+      "issueFamily": "traffic_license_suspension",
+      "language": "Tagalog",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.37905192995913606,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-066",
+      "issueFamily": "traffic_license_suspension",
+      "language": "Taglish",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.43037038395651955,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-067",
+      "issueFamily": "environmental_permit",
+      "language": "English",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4820483295131589,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-068",
+      "issueFamily": "environmental_permit",
+      "language": "Tagalog",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5087813857392616,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-069",
+      "issueFamily": "environmental_permit",
+      "language": "Taglish",
+      "challengeType": "SHARED_CORPUS_TERMS",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "IN_SCOPE",
+      "inScopeProbability": 0.5032271465911153,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-070",
+      "issueFamily": "social_security_benefit",
+      "language": "English",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.396530133340514,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-071",
+      "issueFamily": "social_security_benefit",
+      "language": "Tagalog",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.42307420183995725,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-072",
+      "issueFamily": "social_security_benefit",
+      "language": "Taglish",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.4456739169309229,
+      "outerFold": "0"
+    },
+    {
+      "caseId": "ABST-073",
+      "issueFamily": "election_procedure",
+      "language": "English",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.35610188689728395,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-074",
+      "issueFamily": "election_procedure",
+      "language": "Tagalog",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.37228941071924276,
+      "outerFold": "1"
+    },
+    {
+      "caseId": "ABST-075",
+      "issueFamily": "election_procedure",
+      "language": "Taglish",
+      "challengeType": "CLEARLY_OUTSIDE_DOMAIN",
+      "expected": "OUT_OF_SCOPE",
+      "predicted": "OUT_OF_SCOPE",
+      "inScopeProbability": 0.3945001087028225,
+      "outerFold": "1"
+    }
+  ],
+  "limitations": [
+    "All scope labels are synthetic and unverified; rates are not estimates of real-world legal accuracy.",
+    "Small development set; grouped cross-validation reduces language-variant leakage but does not establish generalization to all legal topics.",
+    "The classifier is a separate experiment and is not connected to production retrieval or result suppression."
+  ]
+}

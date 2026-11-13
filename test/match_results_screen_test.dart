@@ -55,8 +55,11 @@ void main() {
     await tester.tap(find.text('All Results'));
     await tester.pumpAndSettle();
 
-    await tester.drag(find.byType(ListView), const Offset(0, -300));
-    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Fourth description'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('Fourth description'), findsOneWidget);
     expect(find.text('69%'), findsOneWidget);
   });
@@ -67,6 +70,56 @@ void main() {
     );
 
     expect(find.text('No matching results yet.'), findsOneWidget);
+  });
+
+  testWidgets('shows an AI explanation linking a result to the concern', (
+    tester,
+  ) async {
+    const explainedResult = LawMatchResult(
+      lawName: 'Civil Code',
+      articleNumber: 'Article 491',
+      title: 'Co-ownership',
+      description: 'Consent is required for alterations.',
+      matchScore: 92,
+      contextualExplanation: 'You said your sibling changed the jointly owned land without asking you.',
+      hasAiExplanation: true,
+      explanationVariants: {
+        'en': ExplanationVariant(
+          points: [
+            'The article requires consent.',
+            'You described your sibling changing co-owned land without asking; '
+                'Article 491 requires co-owner consent for alterations.',
+            'It depends on whether the property was co-owned.',
+          ],
+        ),
+      },
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(home: MatchResultsScreen(results: [explainedResult])),
+    );
+
+    expect(find.text('Why this may relate'), findsOneWidget);
+    expect(
+      find.text(
+        'You described your sibling changing co-owned land without asking; '
+        'Article 491 requires co-owner consent for alterations.',
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('does not present similarity as an explanation', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: MatchResultsScreen(results: results)),
+    );
+
+    expect(
+      find.textContaining(
+        'Similarity ranking alone does not show that this provision applies.',
+      ),
+      findsWidgets,
+    );
   });
 
   testWidgets('selecting a result invokes the details callback', (

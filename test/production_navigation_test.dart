@@ -9,9 +9,11 @@ import 'package:catol/law_details_screen.dart';
 import 'package:catol/legal_services_screen.dart';
 import 'package:catol/main.dart';
 import 'package:catol/match_results_screen.dart';
+import 'package:catol/models/history_entry.dart';
 import 'package:catol/models/law_match_result.dart';
 import 'package:catol/processing_screen.dart';
 import 'package:catol/services/catalyst_local_retrieval_service.dart';
+import 'package:catol/services/history_store.dart';
 import 'package:catol/xai_chatbot_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,10 +22,12 @@ void main() {
   Future<void> openHome(
     WidgetTester tester, {
     CatalystRetrievalService? retrievalService,
+    HistoryStore? historyStore,
   }) async {
     await tester.pumpWidget(
       CatalystApp(
         retrievalService: retrievalService ?? _successfulRetrievalService(),
+        historyStore: historyStore ?? _MemoryHistoryStore(),
       ),
     );
     expect(find.byType(LandingScreen), findsOneWidget);
@@ -98,7 +102,7 @@ void main() {
     expect(tester.getTopLeft(find.text('Chat')).dx, greaterThan(800));
   });
 
-  testWidgets('menu navigates to About and History details', (tester) async {
+  testWidgets('menu navigates to About and empty History', (tester) async {
     await openHome(tester);
     await openMenu(tester);
     await tester.tap(find.text('About'));
@@ -112,10 +116,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(HistoryScreen), findsOneWidget);
 
-    await tester.tap(find.text('Hiwalayan ang asawa'));
-    await tester.pumpAndSettle();
-    expect(find.byType(LawDetailsScreen), findsOneWidget);
-    expect(find.text('Family Code of the Philippines'), findsOneWidget);
+    expect(find.text('No history entries yet.'), findsOneWidget);
   });
 
   testWidgets('menu opens the legal services screen', (tester) async {
@@ -154,6 +155,110 @@ void main() {
     await tester.tap(find.text('Civil Code of the Philippines').first);
     await tester.pumpAndSettle();
     expect(find.byType(LawDetailsScreen), findsOneWidget);
+  });
+
+  testWidgets('search and bookmark can be reopened and removed from history', (
+    tester,
+  ) async {
+    final store = _MemoryHistoryStore();
+    var searches = 0;
+    await openHome(
+      tester,
+      historyStore: store,
+      retrievalService: _FakeRetrievalService((concern) async {
+        searches++;
+        return _successfulRetrievalService().matchConcern(concern);
+      }),
+    );
+    await tester.enterText(find.byType(TextField), 'My saved concern');
+    await tester.tap(find.byTooltip('Search'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Civil Code of the Philippines').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Bookmark'));
+    await tester.pumpAndSettle();
+    expect(store.entries.single.isFavorite, isTrue);
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+
+    await openMenu(tester);
+    await tester.tap(find.text('History'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Favorites'));
+    await tester.pumpAndSettle();
+    expect(find.text('My saved concern'), findsOneWidget);
+    await tester.tap(find.text('My saved concern'));
+    await tester.pumpAndSettle();
+    expect(find.byType(MatchResultsScreen), findsOneWidget);
+    expect(searches, 1);
+    await tester.tap(find.text('Civil Code of the Philippines').first);
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('Remove bookmark'), findsOneWidget);
+    await tester.tap(find.byTooltip('Remove bookmark'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    expect(find.text('No favorite entries yet.'), findsOneWidget);
+    await tester.tap(find.text('All'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Delete My saved concern'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete'));
+    await tester.pumpAndSettle();
+    expect(store.entries, isEmpty);
+  });
+
+  testWidgets('an empty search can be favorited and reopened', (tester) async {
+    final store = _MemoryHistoryStore();
+    await openHome(
+      tester,
+      historyStore: store,
+      retrievalService: _FakeRetrievalService(
+        (_) async => const CatalystMatchResponse(
+          results: [],
+          clarifyingQuestion: 'Please add more details.',
+        ),
+      ),
+    );
+    await tester.enterText(find.byType(TextField), 'Unclear');
+    await tester.tap(find.byTooltip('Search'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+    expect(find.text('Please add more details.'), findsOneWidget);
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    await openMenu(tester);
+    await tester.tap(find.text('History'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Add favorite'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Favorites'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Unclear'));
+    await tester.pumpAndSettle();
+    expect(find.text('Please add more details.'), findsOneWidget);
+  });
+
+  testWidgets('history save failure is shown instead of claiming success', (
+    tester,
+  ) async {
+    await openHome(tester, historyStore: _FailingHistoryStore());
+    await tester.enterText(find.byType(TextField), 'A concern');
+    await tester.tap(find.byTooltip('Search'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 350));
+    expect(
+      find.text('Could not save this search on your device. Please try again.'),
+      findsOneWidget,
+    );
+    expect(find.byType(MatchResultsScreen), findsNothing);
   });
 
   testWidgets('returning from Processing preserves Home concern', (
@@ -286,7 +391,7 @@ void main() {
     expect(tester.widget<TextField>(concernField).controller!.text, isEmpty);
   });
 
-  testWidgets('returning home after Law Details resets Home concern', (
+  testWidgets('returning home after History resets Home concern', (
     tester,
   ) async {
     await openHome(tester);
@@ -294,10 +399,6 @@ void main() {
     await tester.enterText(concernField, 'Concern before opening History');
     await openMenu(tester);
     await tester.tap(find.text('History'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Hiwalayan ang asawa'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
@@ -439,4 +540,57 @@ class _FakeRetrievalService implements CatalystRetrievalService {
   Future<CatalystMatchResponse> matchConcern(String concern) {
     return _matchConcern(concern);
   }
+}
+
+class _MemoryHistoryStore extends HistoryStore {
+  final entries = <HistoryEntry>[];
+
+  @override
+  Future<List<HistoryEntry>> load() async => List.of(entries);
+
+  @override
+  Future<HistoryEntry> addSearch(
+    String concern,
+    CatalystMatchResponse response,
+  ) async {
+    final entry = HistoryEntry(
+      id: '${entries.length}',
+      concern: concern,
+      concernTitle: concern,
+      concernExcerpt: '“$concern”',
+      matchedLawLabel: response.results.isEmpty
+          ? 'No matching laws'
+          : response.results.first.lawName,
+      createdAt: DateTime.now(),
+      isFavorite: false,
+      results: [...response.results, ...response.otherCandidates],
+      topResultCount: response.results.length,
+      processedQuery: response.processedQuery,
+      warning: response.warning,
+      emptyMessage: response.clarifyingQuestion,
+    );
+    entries.insert(0, entry);
+    return entry;
+  }
+
+  @override
+  Future<void> setFavorite(String id, bool favorite) async {
+    entries.singleWhere((entry) => entry.id == id).isFavorite = favorite;
+  }
+
+  @override
+  Future<void> delete(String id) async =>
+      entries.removeWhere((entry) => entry.id == id);
+
+  @override
+  Future<void> clearNonFavorites() async =>
+      entries.removeWhere((entry) => !entry.isFavorite);
+}
+
+class _FailingHistoryStore extends _MemoryHistoryStore {
+  @override
+  Future<HistoryEntry> addSearch(
+    String concern,
+    CatalystMatchResponse response,
+  ) async => throw const HistoryStorageException();
 }

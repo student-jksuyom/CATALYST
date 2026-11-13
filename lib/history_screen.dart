@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'data/mock_history_entries.dart';
 import 'models/history_entry.dart';
+import 'services/history_store.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key, this.entries, this.onEntrySelected});
+  const HistoryScreen({
+    super.key,
+    this.entries,
+    this.store,
+    this.onEntrySelected,
+  });
 
   final List<HistoryEntry>? entries;
+  final HistoryStore? store;
   final Future<void> Function(HistoryEntry)? onEntrySelected;
 
   @override
@@ -21,18 +27,37 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   late List<HistoryEntry> _entries;
   var _showFavorites = false;
+  var _loading = false;
+  var _loadFailed = false;
+  var _saving = false;
 
   @override
   void initState() {
     super.initState();
-    _entries = List<HistoryEntry>.of(widget.entries ?? mockHistoryEntries);
+    _entries = List<HistoryEntry>.of(widget.entries ?? []);
+    if (widget.store != null) _load();
   }
 
   @override
   void didUpdateWidget(covariant HistoryScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!identical(oldWidget.entries, widget.entries)) {
-      _entries = List<HistoryEntry>.of(widget.entries ?? mockHistoryEntries);
+      _entries = List<HistoryEntry>.of(widget.entries ?? []);
+    }
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _loadFailed = false;
+    });
+    try {
+      final entries = await widget.store!.load();
+      if (mounted) setState(() => _entries = entries);
+    } on HistoryStorageException {
+      if (mounted) setState(() => _loadFailed = true);
+    } finally {
+      if (mounted) setState(() => _loading = false);
     }
   }
 
@@ -61,21 +86,40 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ),
             const SizedBox(height: 18),
             Expanded(
-              child: displayedEntries.isEmpty
+              child: _loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _loadFailed
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Could not load history on this device.'),
+                          TextButton(
+                            onPressed: _load,
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    )
+                  : displayedEntries.isEmpty
                   ? _buildEmptyState()
-                  : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(18, 0, 18, 20),
-                      itemCount: displayedEntries.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final entry = displayedEntries[index];
-                        return _HistoryCard(
-                          entry: entry,
-                          onTap: () => _handleEntryTap(entry),
-                          onDelete: () => _confirmDeleteEntry(entry),
-                        );
-                      },
+                  : IgnorePointer(
+                      ignoring: _saving,
+                      child: ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 20),
+                        itemCount: displayedEntries.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final entry = displayedEntries[index];
+                          return _HistoryCard(
+                            entry: entry,
+                            onTap: () => _handleEntryTap(entry),
+                            onDelete: () => _confirmDeleteEntry(entry),
+                            onFavorite: () => _toggleFavorite(entry),
+                          );
+                        },
+                      ),
                     ),
             ),
           ],
@@ -119,7 +163,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
           Tooltip(
             message: 'Clear All',
             child: InkWell(
-              onTap: _confirmClearAll,
+              onTap: _loading || _loadFailed || _saving
+                  ? null
+                  : _confirmClearAll,
               borderRadius: BorderRadius.circular(10),
               child: SizedBox(
                 width: 52,
@@ -217,9 +263,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
 
     if (shouldClear == true && mounted) {
-      setState(() {
-        _entries.removeWhere((entry) => !entry.isFavorite);
-      });
+      if (_saving) return;
+      setState(() => _saving = true);
+      try {
+        await widget.store?.clearNonFavorites();
+        if (mounted) {
+          setState(() => _entries.removeWhere((entry) => !entry.isFavorite));
+        }
+      } on HistoryStorageException {
+        _showSaveError();
+      } finally {
+        if (mounted) setState(() => _saving = false);
+      }
     }
   }
 
@@ -243,10 +298,38 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
 
     if (shouldDelete == true && mounted) {
-      setState(() {
-        _entries.remove(entry);
-      });
+      if (_saving) return;
+      setState(() => _saving = true);
+      try {
+        await widget.store?.delete(entry.id);
+        if (mounted) setState(() => _entries.remove(entry));
+      } on HistoryStorageException {
+        _showSaveError();
+      } finally {
+        if (mounted) setState(() => _saving = false);
+      }
     }
+  }
+
+  Future<void> _toggleFavorite(HistoryEntry entry) async {
+    if (_saving) return;
+    final favorite = !entry.isFavorite;
+    setState(() => _saving = true);
+    try {
+      await widget.store?.setFavorite(entry.id, favorite);
+      if (mounted) setState(() => entry.isFavorite = favorite);
+    } on HistoryStorageException {
+      _showSaveError();
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  void _showSaveError() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Could not save history on this device.')),
+    );
   }
 
   Future<void> _handleEntryTap(HistoryEntry entry) async {
@@ -315,11 +398,13 @@ class _HistoryCard extends StatelessWidget {
     required this.entry,
     required this.onTap,
     required this.onDelete,
+    required this.onFavorite,
   });
 
   final HistoryEntry entry;
   final VoidCallback onTap;
   final VoidCallback onDelete;
+  final VoidCallback onFavorite;
 
   static const _navy = Color(0xFF1A307F);
 
@@ -436,6 +521,24 @@ class _HistoryCard extends StatelessWidget {
                               ),
                             ),
                             const Spacer(),
+                            IconButton(
+                              onPressed: onFavorite,
+                              tooltip: entry.isFavorite
+                                  ? 'Remove favorite'
+                                  : 'Add favorite',
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints.tightFor(
+                                width: 28,
+                                height: 28,
+                              ),
+                              icon: Icon(
+                                entry.isFavorite
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                                color: const Color(0xFF794BE7),
+                                size: 22,
+                              ),
+                            ),
                             const Icon(
                               Icons.chevron_right_rounded,
                               color: Color(0xFF737373),

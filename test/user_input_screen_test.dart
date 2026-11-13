@@ -7,9 +7,7 @@ void main() {
     'empty required input shows validation and keeps button visible',
     (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: UserInputScreen(onProcess: (_, _, _, _) async => true),
-        ),
+        MaterialApp(home: UserInputScreen(onProcess: (_, _, _) async => true)),
       );
 
       final processButton = find.byKey(
@@ -42,7 +40,6 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       String? submittedMain;
       String? submittedContext;
-      bool? submittedOnline;
       await tester.pumpWidget(
         MaterialApp(
           home: Builder(
@@ -51,11 +48,9 @@ void main() {
                 onPressed: () => Navigator.of(context).push<void>(
                   MaterialPageRoute<void>(
                     builder: (_) => UserInputScreen(
-                      onlineReviewAvailable: true,
-                      onProcess: (_, main, supporting, online) async {
+                      onProcess: (_, main, supporting) async {
                         submittedMain = main;
                         submittedContext = supporting;
-                        submittedOnline = online;
                         return false;
                       },
                     ),
@@ -84,17 +79,11 @@ void main() {
       );
       tester.testTextInput.hide();
       await tester.pumpAndSettle();
-      final onlineConsent = find.byKey(const ValueKey('online-review-consent'));
-      await tester.ensureVisible(onlineConsent);
-      await tester.pumpAndSettle();
-      await tester.tap(onlineConsent);
-      await tester.pump();
       await tester.tap(find.byKey(const ValueKey('process-concern-button')));
       await tester.pumpAndSettle();
 
       expect(submittedMain, 'The seller did not deliver the appliance.');
       expect(submittedContext, 'Nagbayad ako nang hulugan.');
-      expect(submittedOnline, isTrue);
       expect(
         find.text('The seller did not deliver the appliance.'),
         findsOneWidget,

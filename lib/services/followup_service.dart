@@ -5,11 +5,11 @@ import 'dart:io';
 
 import '../models/law_match_result.dart';
 import 'jurisprudence_service.dart';
-import 'online_retrieval_service.dart' show maxResponseBytes;
 
 const String _apiUrl = String.fromEnvironment('CATALYST_API_URL');
 const String _apiToken = String.fromEnvironment('CATALYST_API_TOKEN');
 
+const int maxResponseBytes = 256 * 1024;
 const Duration _followUpTimeout = Duration(seconds: 40);
 
 class FollowUpAnswer {

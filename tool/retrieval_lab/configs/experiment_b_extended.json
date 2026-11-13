@@ -1,0 +1,9 @@
+{
+  "experiment_name": "B-extended",
+  "epochs": 10,
+  "validation_retrieval_every": 5,
+  "batch_size": 8,
+  "learning_rate": 0.00001,
+  "seed": 42,
+  "output_root": "tool/retrieval_lab/out/controlled_experiments"
+}

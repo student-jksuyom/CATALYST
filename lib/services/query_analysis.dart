@@ -176,6 +176,22 @@ const _wordGlossary = <String, List<String>>{
   'sinaktan': ['injury', 'violence'],
 };
 
+const _legalWording = <String, List<String>>{
+  'landlord': ['lessor'],
+  'tenant': ['lessee'],
+  'seller': ['vendor'],
+  'buyer': ['vendee'],
+  'eviction': ['ejectment'],
+  'evicted': ['ejectment'],
+  'defective': ['defect'],
+  'faulty': ['defect'],
+};
+
+/// Equivalent legal vocabulary used only to broaden lexical retrieval.
+List<String> expandLegalWording(String query) =>
+    {for (final token in wordTokens(query)) ...?_legalWording[token]}
+        .toList(growable: false);
+
 const _familyCues = {
   'asawa',
   'kasal',
@@ -296,6 +312,69 @@ const clarifyingQuestionText =
 
 final RegExp _wordPattern = RegExp(r"[A-Za-zÀ-ÿ0-9]+(?:['’-][A-Za-zÀ-ÿ0-9]+)*");
 
+final List<RegExp> _unsupportedLegalAreaPatterns = [
+  RegExp(
+    r'\b(criminal case|criminal charge|criminal procedure|bail|warrantless search|search warrant|arrested|arrest|arraignment|prosecutor|kasong kriminal|piyansa|inaresto|naaresto)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(overtime pay|overtime rate|separation pay|minimum wage|labor arbiter|labor law|wage deduction|workplace compensation|dole)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(vat refund|tax refund|income tax|tax assessment|tax deduction|customs duty|import duty|bir)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(work visa|visa category|visa extension|immigration|work authorization|residency requirement)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(trademark registration|trademark|copyright|patent application|intellectual property)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(data privacy|personal data|data subject|privacy compliance)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r"\b(traffic citation|traffic ticket|demerit points|driver'?s license suspension)\b",
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(environmental permit|environmental clearance|emissions limit|water-quality limit)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(sss contribution|sickness benefit|social security benefit|voter registration|election filing)\b',
+    caseSensitive: false,
+  ),
+];
+
+final List<RegExp> _supportedIssuePatterns = [
+  RegExp(r'\b(loan|debt|borrowed money|utang|pautang)\b', caseSensitive: false),
+  RegExp(
+    r'\b(landlord|tenant|lease|rent|deposit|upa|nangungupahan)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(co-owner|co-owners|co-ownership|coowned|magkakapatid na may-ari)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(child support|child custody|parental authority|filiation|birth certificate|support for (?:my|our) child|sustento|kustodiya)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(defective product|defective appliance|product warranty|written warranty|misleading product|seller.{0,30}refund|refund.{0,30}(?:seller|store|product)|consumer complaint)\b',
+    caseSensitive: false,
+  ),
+  RegExp(
+    r'\b(dining table|washing machine|rice cooker|defective phone|sira ang produkto|depektibo)\b',
+    caseSensitive: false,
+  ),
+];
+
 List<String> wordTokens(String text) => _wordPattern
     .allMatches(text.toLowerCase().replaceAll('’', "'"))
     .map((match) => match.group(0)!)
@@ -316,6 +395,22 @@ String normalizeQueryText(String text) {
           ? word
           : replacement;
     },
+  );
+}
+
+/// Returns true only for explicit legal topics outside the bundled statutes.
+///
+/// Generic unknown wording is not enough to abstain. Clear Civil Code, Family
+/// Code, or Consumer Act facts also keep retrieval available when a query
+/// mentions an unsupported legal area.
+bool isClearlyOutsideCatalystScope(String query) {
+  final normalized = normalizeQueryText(query);
+  final hasUnsupportedTopic = _unsupportedLegalAreaPatterns.any(
+    (pattern) => pattern.hasMatch(normalized),
+  );
+  if (!hasUnsupportedTopic) return false;
+  return !_supportedIssuePatterns.any(
+    (pattern) => pattern.hasMatch(normalized),
   );
 }
 

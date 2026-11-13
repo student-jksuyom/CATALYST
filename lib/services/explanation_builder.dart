@@ -203,6 +203,8 @@ Map<String, ExplanationVariant> buildExplanationVariants({
   required String articleText,
   required Iterable<String> queryTexts,
   required bool hasDuplicateId,
+  String? matchedFact,
+  String? matchedProvision,
 }) {
   final shared = sharedWording(
     queryTexts: queryTexts,
@@ -210,58 +212,82 @@ Map<String, ExplanationVariant> buildExplanationVariants({
   );
   final words = shared.join(', ');
   final cues = analysis.negationCues.join(', ');
+  final hasMatchedEvidence =
+      matchedFact != null &&
+      matchedFact.trim().isNotEmpty &&
+      matchedProvision != null &&
+      matchedProvision.trim().isNotEmpty;
+  final fact = matchedFact?.trim() ?? '';
+  final provision = matchedProvision?.trim() ?? '';
 
   List<String> points(String code) {
     final overlap = shared.isNotEmpty;
     switch (code) {
       case 'en':
         return [
-          overlap
-              ? 'This article came up because your story and the provision use '
-                    'some of the same words: **$words.** Check whether it covers '
-                    'what actually happened to you.'
-              : 'This article came up because its meaning is close to your '
-                    'story, but no words match exactly, so **treat it as a '
-                    'weaker match.**',
+          if (hasMatchedEvidence)
+            'Possible connection found on-device: your concern includes '
+                '“$fact”. Search found this passage similar to the overall '
+                'concern: “$provision”. '
+                'This semantic match does not verify the rule’s requirements '
+                'or establish that it applies.'
+          else
+            'On-device search found a text or meaning similarity; it did not '
+                'analyze whether this legal rule covers your facts. '
+                '**No fact-specific legal explanation is available offline.**',
+          if (!hasMatchedEvidence && overlap)
+            'Words that may have influenced retrieval: **$words.** These are '
+                'search clues, not an explanation of how the rule applies.',
           if (analysis.hasNegation)
             'Your story includes a refusal or a "not" ($cues). **Check whether '
                 'the article\'s conditions fit who did, or did not do, what.**',
-          'The full text of the law is shown above. Connect to the internet '
-              'for a simple-words explanation of how it fits your story.',
+          'Check the full provision’s conditions and exceptions against all '
+              'relevant facts. Similarity alone cannot determine applicability.',
         ];
       case 'tl':
         return [
-          overlap
-              ? 'Lumabas ang artikulong ito dahil may mga salita sa kuwento mo '
-                    'na nakasulat din sa probisyon: **$words.** Tingnan kung '
-                    'sakop nito ang totoong nangyari sa iyo.'
-              : 'Lumabas ang artikulong ito dahil malapit ang kahulugan nito '
-                    'sa kuwento mo, pero walang eksaktong magkaparehong salita, '
-                    'kaya **ituring itong mas mahinang tugma.**',
+          if (hasMatchedEvidence)
+            'Posibleng koneksyon na nakita sa device: kasama sa kuwento mo '
+                'ang “$fact”. Nakita ng paghahanap na kahawig ng buong kuwento '
+                'ang bahaging ito: “$provision”. Hindi nito sinusuri ang lahat ng legal na '
+                'kondisyon o pinatutunayang naaangkop ang artikulo.'
+          else
+            'Nakakita ang on-device search ng pagkakahawig sa teksto o kahulugan; '
+                'hindi nito sinuri kung sakop ng tuntuning ito ang mga detalye mo. '
+                '**Walang paliwanag na iniangkop sa mga pangyayari mo habang offline.**',
+          if (!hasMatchedEvidence && overlap)
+            'Mga salitang maaaring nakaapekto sa resulta: **$words.** Mga clue '
+                'lang ito sa paghahanap, hindi paliwanag kung paano naaangkop '
+                'ang tuntunin.',
           if (analysis.hasNegation)
             'May pagtanggi o "hindi" sa kuwento mo ($cues). **Suriin kung '
                 'tugma ang mga kondisyon ng artikulo kung sino ang gumawa o '
                 'hindi gumawa ng ano.**',
-          'Nasa itaas ang buong teksto ng batas. Kumonekta sa internet para '
-              'makakuha ng paliwanag sa simpleng salita kung paano ito '
-              'konektado sa kuwento mo.',
+          'Suriin ang mga kondisyon at eksepsyon sa buong probisyon laban sa '
+              'mahahalagang detalye. Hindi sapat ang pagkakahawig para matukoy '
+              'kung naaangkop ang artikulo.',
         ];
       default:
         return [
-          overlap
-              ? 'Lumabas ang article na ito kasi may mga salita sa story mo na '
-                    'nasa provision din: **$words.** I-check kung sakop talaga '
-                    'nito ang nangyari sa iyo.'
-              : 'Lumabas ang article na ito kasi malapit ang meaning nito sa '
-                    'story mo, pero walang exact na magkaparehong salita, kaya '
-                    '**mas mahina ang match na ito.**',
+          if (hasMatchedEvidence)
+            'Posibleng koneksyon na nakita offline: kasama sa concern mo ang '
+                '“$fact”. Nakita ng search na similar sa buong concern ang '
+                'passage na ito: “$provision”. Hindi nito chine-check ang lahat ng legal '
+                'requirements o pinapatunayang applicable ang article.'
+          else
+            'Nakakita ang on-device search ng pagkakahawig sa text o meaning; '
+                'hindi nito sinuri kung sakop ng legal rule ang facts mo. '
+                '**Walang fact-specific na paliwanag kapag offline.**',
+          if (!hasMatchedEvidence && overlap)
+            'Mga words na maaaring nakaapekto sa result: **$words.** Search '
+                'clues lang ito, hindi paliwanag kung paano naaangkop ang rule.',
           if (analysis.hasNegation)
             'May pagtanggi o "hindi" sa story mo ($cues). **I-check kung tugma '
                 'ang conditions ng article kung sino ang gumawa o hindi gumawa '
                 'ng ano.**',
-          'Nasa itaas ang buong text ng batas. Mag-connect sa internet para '
-              'makakuha ng explanation sa simpleng salita kung paano ito '
-              'konektado sa story mo.',
+          'I-check ang conditions at exceptions ng buong provision laban sa '
+              'lahat ng importanteng facts. Hindi sapat ang similarity para '
+              'masabing applicable ang article.',
         ];
     }
   }

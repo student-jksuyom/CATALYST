@@ -2,42 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'data/mock_law_match_results.dart';
 import 'models/law_match_result.dart';
-import 'services/catalyst_local_retrieval_service.dart' show RetrievalMode;
+import 'services/explanation_builder.dart';
 
 class _RetrievalSourcePanel extends StatelessWidget {
-  const _RetrievalSourcePanel({required this.mode});
-
-  final RetrievalMode mode;
+  const _RetrievalSourcePanel();
 
   @override
   Widget build(BuildContext context) {
-    final (
-      IconData icon,
-      Color color,
-      String title,
-      String body,
-    ) = switch (mode) {
-      RetrievalMode.online => (
-        Icons.cloud_done_outlined,
-        const Color(0xFF1E8E3E),
-        'Online retrieval',
-        'Reviewed over the internet. Articles come from the local corpus.',
-      ),
-      RetrievalMode.onDeviceFallback => (
-        Icons.cloud_off_outlined,
-        const Color(0xFFC77700),
-        'Offline results (online unavailable)',
-        'Could not reach the online service, so on-device matching was used. '
-            'Check your connection and search again for the online review.',
-      ),
-      RetrievalMode.onDevice => (
-        Icons.phone_android_rounded,
-        const Color(0xFF5F6B85),
-        'Offline retrieval (on-device)',
-        'No internet was used. Connect to the internet for AI review and '
-            'plain-language explanations.',
-      ),
-    };
+    const color = Color(0xFF5F6B85);
+    const title = 'Offline retrieval (on-device)';
+    const body =
+        'Article matching and explanations run on this device. Only Near '
+        'Legal Services and XAI follow-up may use the internet.';
     return Semantics(
       container: true,
       label: '$title. $body',
@@ -52,7 +28,7 @@ class _RetrievalSourcePanel extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 22),
+            Icon(Icons.phone_android_rounded, color: color, size: 22),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -93,13 +69,9 @@ class MatchResultsScreen extends StatefulWidget {
     this.results = mockLawMatchResults,
     this.userConcern = '',
     this.retrievalWarning = 'Similarity is a retrieval signal, not a probability or legal conclusion.',
-    this.retrievalMode,
     this.onResultSelected,
     this.emptyMessage,
   });
-
-  /// When set, a panel tells the user whether the internet was used.
-  final RetrievalMode? retrievalMode;
 
   /// Shown instead of the default text when there are no results.
   final String? emptyMessage;
@@ -162,14 +134,13 @@ class _MatchResultsScreenState extends State<MatchResultsScreen> {
                     padding: EdgeInsets.symmetric(horizontal: horizontalInset),
                     child: _buildInformationBox(),
                   ),
-                  if (widget.retrievalMode != null &&
-                      displayedResults.isNotEmpty) ...[
+                  if (displayedResults.isNotEmpty) ...[
                     const SizedBox(height: 12),
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: horizontalInset,
                       ),
-                      child: _RetrievalSourcePanel(mode: widget.retrievalMode!),
+                      child: const _RetrievalSourcePanel(),
                     ),
                   ],
                   const SizedBox(height: 24),
@@ -472,6 +443,8 @@ class _ResultCard extends StatelessWidget {
                               color: _navy,
                             ),
                           ),
+                          const SizedBox(height: 10),
+                          _buildRelevanceExplanation(result),
                         ],
                       ),
                     ),
@@ -498,6 +471,63 @@ class _ResultCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildRelevanceExplanation(LawMatchResult result) {
+    final explanation = _contextualExplanation(result);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 9),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF3F0FE),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Why this may relate',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: _navy,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            explanation ??
+                'No fact-specific explanation is available. Similarity '
+                    'ranking alone does not show that this provision applies.',
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 11,
+              height: 1.4,
+              color: _navy,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String? _contextualExplanation(LawMatchResult result) {
+    final variants = result.explanationVariants;
+    if (variants != null && variants.isNotEmpty) {
+      final preferred = result.defaultExplanationLanguage;
+      final variant =
+          variants[preferred] ?? variants['en'] ?? variants.values.first;
+      if (variant.points.isNotEmpty) {
+        final index = result.hasAiExplanation && variant.points.length > 1
+            ? 1
+            : 0;
+        return stripEmphasis(variant.points[index]);
+      }
+    }
+
+    if (!result.hasAiExplanation) return null;
+    final reason = result.contextualExplanation?.trim();
+    return reason == null || reason.isEmpty ? null : stripEmphasis(reason);
   }
 }
 

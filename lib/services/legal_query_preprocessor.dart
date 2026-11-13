@@ -1,6 +1,3 @@
-import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
-import 'package:google_mlkit_translation/google_mlkit_translation.dart';
-
 class DetectedQueryLanguage {
   const DetectedQueryLanguage({
     required this.languageTag,
@@ -117,65 +114,12 @@ class TagalogQueryPreprocessor implements LegalQueryPreprocessor {
   }
 }
 
-class MlKitQueryLanguageIdentifier implements QueryLanguageIdentifier {
-  const MlKitQueryLanguageIdentifier();
+class OfflineQueryPreprocessor implements LegalQueryPreprocessor {
+  const OfflineQueryPreprocessor();
 
   @override
-  Future<List<DetectedQueryLanguage>> identifyPossibleLanguages(
-    String query,
-  ) async {
-    final identifier = LanguageIdentifier(confidenceThreshold: 0.01);
-    try {
-      final detected = await identifier.identifyPossibleLanguages(query);
-      return detected
-          .map(
-            (language) => DetectedQueryLanguage(
-              languageTag: language.languageTag,
-              confidence: language.confidence,
-            ),
-          )
-          .toList(growable: false);
-    } finally {
-      await identifier.close();
-    }
-  }
-}
-
-class MlKitTagalogToEnglishTranslator implements TagalogToEnglishTranslator {
-  const MlKitTagalogToEnglishTranslator();
-
-  @override
-  Future<String> translate(String query) async {
-    final modelManager = OnDeviceTranslatorModelManager();
-    for (final language in [
-      TranslateLanguage.tagalog,
-      TranslateLanguage.english,
-    ]) {
-      final downloaded = await modelManager.downloadModel(
-        language.bcpCode,
-        isWifiRequired: true,
-      );
-      if (!downloaded) {
-        throw StateError(
-          'The ${language.bcpCode} translation model was not downloaded.',
-        );
-      }
-    }
-
-    final translator = OnDeviceTranslator(
-      sourceLanguage: TranslateLanguage.tagalog,
-      targetLanguage: TranslateLanguage.english,
-    );
-    try {
-      return await translator.translateText(query);
-    } finally {
-      await translator.close();
-    }
-  }
+  Future<String> preprocess(String query) async => query;
 }
 
 const LegalQueryPreprocessor defaultLegalQueryPreprocessor =
-    TagalogQueryPreprocessor(
-      languageIdentifier: MlKitQueryLanguageIdentifier(),
-      translator: MlKitTagalogToEnglishTranslator(),
-    );
+    OfflineQueryPreprocessor();

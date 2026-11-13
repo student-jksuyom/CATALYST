@@ -16,6 +16,12 @@ void main() {
       ),
       isFalse,
     );
+    expect(
+      isClearlyOutsideCatalystScope(
+        'I was arrested, but the seller also refused to replace a defective phone.',
+      ),
+      isFalse,
+    );
     expect(isClearlyOutsideCatalystScope('asdf qwer zxcv'), isFalse);
   });
 

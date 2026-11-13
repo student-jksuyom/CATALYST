@@ -1,81 +1,11 @@
 // CATALYST proxy: keeps the Gemini API key off the phone.
 // Deploy: see README.md in this folder.
 //
-// POST /  { query: string, candidates: [{law, article, text}], languages?: ['en'|'tl'|'taglish'] }
-// ->      { ranked: [{law, article, relevance, reason, explain?: {en: [..], tl: [..]}}], sources: [{title}] }
+// POST / { mode: 'followup', query, narrative, articles, cases, languages }
+// -> { answer, citedCaseIds, sources, searched }
 
 const MAX_QUERY = 2000;
-const MAX_CANDIDATES = 60;
-const MAX_TEXT = 500;
-const LAWS = ['CivilCode', 'FamilyCode', 'ConsumerAct'];
 const LANGUAGES = { en: 'plain English', tl: 'plain Filipino (Tagalog)', taglish: 'natural Taglish (Tagalog mixed with common English words, as Filipinos speak)' };
-const EXPLAIN_TOP = 3;
-
-export function pickLanguages(value) {
-  const picked = (Array.isArray(value) ? value : []).filter((l, i, a) => LANGUAGES[l] && a.indexOf(l) === i);
-  return picked.length ? picked.slice(0, 2) : ['en'];
-}
-
-export function buildPrompt(query, candidates, languages = ['en']) {
-  const list = candidates
-    .map((c, i) => `${i + 1}. ${c.law} Article ${c.article}: ${c.text}`)
-    .join('\n');
-  const explainShape = `,"explain":{${languages.map((l) => `"${l}":["bullet","bullet","bullet"]`).join(',')}}`;
-  const explainRules = `- For the first ${EXPLAIN_TOP} ranked articles ONLY, add "explain": for each of these languages, ${languages.map((l) => `"${l}" = ${LANGUAGES[l]}`).join('; ')}, write exactly 3 short bullets (max 30 words each) for an ordinary person with no legal training: (1) what the article means in everyday words, WITHOUT quoting or copying its text; (2) how it connects to THIS user's specific facts, naming the facts; (3) what condition, exception or missing fact decides whether it applies. Wrap the single most important phrase of each bullet in ** **. Use only the article text given and the user's facts; never invent facts or give a final legal conclusion. Keep the same meaning in every language.`;
-  return `You are a legal research assistant for Philippine law. The corpus covers only: Civil Code (RA 386) = "CivilCode", Family Code (EO 209) = "FamilyCode", Consumer Act (RA 7394) = "ConsumerAct".
-
-The user's situation (may be Tagalog, English or Taglish):
-"""${query}"""
-
-Rerank the candidate provisions below: list every provision that applies to the user's facts or is closely related, most directly relevant first (at most 15).
-
-Candidate provisions from the app's corpus (preferred source):
-${list || '(none)'}
-
-Rules:
-- Use ONLY provisions from the candidate list. Do not add provisions that are not listed.
-- "direct" = the article addresses the specific issue in the facts. "related" = same topic or a supporting rule. Mention conditions, exceptions, or missing facts in the reason.
-- Do not include provisions that merely share words with the facts.
-- Do not state a final legal conclusion or give legal advice. If the text is not a legal situation, return an empty list.
-${explainRules}
-- Output ONLY JSON, no markdown: {"ranked":[{"law":"CivilCode|FamilyCode|ConsumerAct","article":"493","relevance":"direct|related","reason":"1-2 English sentences linking the article to the facts"${explainShape}}]}`;
-}
-
-function cleanBullets(value) {
-  if (!Array.isArray(value)) return [];
-  return value
-    .map((b) => String(b || '').trim().slice(0, 320))
-    .filter(Boolean)
-    .slice(0, 4)
-    .map((b) => ((b.match(/\*\*/g) || []).length % 2 === 0 ? b : b.replace(/\*\*/g, '')));
-}
-
-export function parseModelJson(text) {
-  const cleaned = String(text).replace(/```json|```/gi, '').trim();
-  const start = cleaned.indexOf('{');
-  const end = cleaned.lastIndexOf('}');
-  if (start < 0 || end <= start) throw new Error('no JSON in model output');
-  const parsed = JSON.parse(cleaned.slice(start, end + 1));
-  const ranked = Array.isArray(parsed.ranked) ? parsed.ranked : [];
-  return ranked
-    .filter((r) => r && LAWS.includes(r.law) && r.article)
-    .slice(0, 15)
-    .map((r) => {
-      const item = {
-        law: r.law,
-        article: String(r.article),
-        relevance: r.relevance === 'direct' ? 'direct' : 'related',
-        reason: String(r.reason || '').slice(0, 400),
-      };
-      const explain = {};
-      for (const lang of Object.keys(LANGUAGES)) {
-        const bullets = cleanBullets(r.explain && r.explain[lang]);
-        if (bullets.length) explain[lang] = bullets;
-      }
-      if (Object.keys(explain).length) item.explain = explain;
-      return item;
-    });
-}
 
 // Reduces a Gemini error body to non-sensitive fields: status, quota metric and retry delay.
 export function summarizeUpstreamError(status, text) {
@@ -105,8 +35,6 @@ export function validate(body) {
   if (!body || typeof body.query !== 'string') return 'query is required';
   const query = body.query.trim();
   if (!query || query.length > MAX_QUERY) return 'query length is invalid';
-  const candidates = Array.isArray(body.candidates) ? body.candidates : [];
-  if (candidates.length > MAX_CANDIDATES) return 'too many candidates';
   return null;
 }
 
@@ -231,74 +159,11 @@ export default {
     } catch {
       return json({ error: 'invalid JSON' }, 400);
     }
+    if (!body || body.mode !== 'followup') {
+      return json({ error: 'only follow-up requests are supported' }, 400);
+    }
     const problem = validate(body);
     if (problem) return json({ error: problem }, 400);
-    if (body.mode === 'followup') return handleFollowup(body, env);
-
-    const candidates = (body.candidates || []).slice(0, MAX_CANDIDATES).map((c) => ({
-      law: String(c.law || '').slice(0, 40),
-      article: String(c.article || '').slice(0, 20),
-      text: String(c.text || '').slice(0, MAX_TEXT),
-    }));
-    const requestBody = JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: buildPrompt(body.query.trim(), candidates, pickLanguages(body.languages)) }] }],
-      ...(env.USE_SEARCH === 'true' ? { tools: [{ google_search: {} }] } : {}),
-      generationConfig: { temperature: 0.2, maxOutputTokens: 8192, responseMimeType: 'application/json' },
-    });
-    // Models are tried in order; busy, over-quota or retired models fall through to the next.
-    const models = String(env.GEMINI_MODEL || '')
-      .split(',')
-      .map(normalizeModel)
-      .filter((m, i, a) => a.indexOf(m) === i);
-    const attempts = [];
-    for (const model of models) {
-      try {
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
-          {
-            signal: AbortSignal.timeout(14000),
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-              'x-goog-api-key': env.GEMINI_API_KEY,
-            },
-            body: requestBody,
-          },
-        );
-        if (res.ok) {
-          const data = await res.json();
-          const candidate = data.candidates && data.candidates[0];
-          const text = ((candidate && candidate.content && candidate.content.parts) || [])
-            .map((p) => p.text || '')
-            .join('');
-          try {
-            const ranked = parseModelJson(text);
-            const chunks = (candidate && candidate.groundingMetadata && candidate.groundingMetadata.groundingChunks) || [];
-            const sources = chunks
-              .map((c) => c.web && c.web.title)
-              .filter(Boolean)
-              .slice(0, 5)
-              .map((title) => ({ title }));
-            return json({ ranked, sources });
-          } catch {
-            attempts.push({ model, status: 200, message: 'unparseable output' });
-            console.error('Gemini output unparseable', {
-              model,
-              finishReason: candidate && candidate.finishReason,
-              length: text.length,
-            });
-            continue;
-          }
-        }
-        // Logs only: model and Google's error text (no key, token or narrative).
-        const errorText = (await res.text()).slice(0, 2000);
-        attempts.push({ model, ...summarizeUpstreamError(res.status, errorText) });
-        console.error('Gemini upstream request failed', { model, status: res.status, error: errorText.slice(0, 600) });
-      } catch (err) {
-        attempts.push({ model, status: 0, message: (err && err.name) || 'fetch failed' });
-        console.error('Gemini request failed', { model, name: err && err.name });
-      }
-    }
-    return json({ error: 'upstream error', attempts }, 502);
+    return handleFollowup(body, env);
   },
 };

@@ -21,6 +21,7 @@ class JurisprudenceCase {
     required this.dispositive,
     required this.articles,
     required this.passages,
+    this.sourceUrl,
   });
 
   factory JurisprudenceCase.fromJson(Map<String, dynamic> json) {
@@ -39,7 +40,21 @@ class JurisprudenceCase {
       dispositive: json['dispositive'] as String? ?? '',
       articles: strings(json['articles']),
       passages: strings(json['passages']),
+      sourceUrl: _trustedSourceUrl(json['sourceUrl']),
     );
+  }
+
+  static Uri? _trustedSourceUrl(Object? value) {
+    if (value is! String || value.trim().isEmpty) return null;
+    final uri = Uri.tryParse(value);
+    if (uri == null ||
+        uri.scheme != 'https' ||
+        uri.host.toLowerCase() != 'elibrary.judiciary.gov.ph' ||
+        uri.port != 443 ||
+        uri.userInfo.isNotEmpty) {
+      return null;
+    }
+    return uri;
   }
 
   final String id;
@@ -57,6 +72,7 @@ class JurisprudenceCase {
   /// Articles of [law] the decision relies on, most cited first.
   final List<String> articles;
   final List<String> passages;
+  final Uri? sourceUrl;
 
   String get citation =>
       [title, if (grNo.isNotEmpty) grNo, if (date.isNotEmpty) date].join(', ');

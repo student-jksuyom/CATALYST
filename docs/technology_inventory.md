@@ -1,5 +1,10 @@
 # CATALYST technology inventory
 
+Historical snapshot: the online article reranker and ML Kit query processing
+described below have since been removed from the active app. Article retrieval
+is on-device; the Worker is used only for XAI follow-up after redeployment.
+See [hybrid_retrieval.md](hybrid_retrieval.md) for current limitations.
+
 Date: 2026-11-04. Versions come from `pubspec.lock`, `wrangler.toml`, the `.venv` and
 the code. Status: **Working** = implemented and tested here; **Working (untested on
 device)** = implemented, no physical-device evidence; **Broken**; **Legacy** = not in the

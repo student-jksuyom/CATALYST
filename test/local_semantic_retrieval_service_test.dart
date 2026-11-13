@@ -1,13 +1,27 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:catol/main.dart';
 import 'package:catol/services/catalyst_local_retrieval_service.dart';
+import 'package:catol/services/explanation_builder.dart';
 import 'package:catol/services/legal_query_preprocessor.dart';
 import 'package:catol/services/local_tokenizer.dart';
 import 'package:catol/services/query_analysis.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  test(
+    'the app defaults to local retrieval regardless of proxy configuration',
+    () {
+      expect(
+        CatalystApp().retrievalService,
+        isA<LocalSemanticRetrievalService>(),
+      );
+    },
+  );
 
   test('ranks corpus articles and maps scores and metadata', () async {
     final encoder = _FixedEncoder(_basisVector());
@@ -36,6 +50,85 @@ void main() {
     expect(scores, orderedEquals([...scores]..sort((a, b) => b.compareTo(a))));
     expect(scores, everyElement(inInclusiveRange(0, 100)));
   });
+
+  test('abstains early for explicit unsupported legal topics', () async {
+    final encoder = _FixedEncoder(_basisVector());
+    final service = LocalSemanticRetrievalService(
+      queryEncoder: encoder,
+      queryPreprocessor: const _PassthroughPreprocessor(),
+    );
+
+    final response = await service.matchConcern(
+      'I was arrested after a police investigation. What criminal charge?',
+    );
+
+    expect(response.results, isEmpty);
+    expect(response.warning, contains('outside CATALYST’s local database'));
+    expect(encoder.lastInputIds, isNull);
+  });
+
+  test(
+    'explains the local semantic link with concern and provision evidence',
+    () async {
+      const concern = 'My landlord did not return my deposit after eviction.';
+      final service = LocalSemanticRetrievalService(
+        queryEncoder: _FixedEncoder(_basisVector()),
+        queryPreprocessor: const _PassthroughPreprocessor(),
+        minimumCosine: -1,
+      );
+
+      final response = await service.matchConcern(concern);
+      final result = response.results.first;
+      final explanation = result.explanationVariants!['en']!.points.first;
+      final quotedPassage = RegExp(
+        r'passage similar to the overall concern: “([^”]+)”',
+      ).firstMatch(explanation)![1]!;
+
+      expect(explanation, contains('Possible connection found on-device'));
+      expect(explanation, contains(concern));
+      expect(
+        result.articleText!.replaceAll(RegExp(r'\s+'), ' '),
+        contains(quotedPassage.replaceAll(RegExp(r'\.\.\.$'), '')),
+      );
+      final corpus = jsonDecode(
+        await rootBundle.loadString('assets/data/legal_articles.json'),
+      ) as List;
+      final articleIndex = corpus.indexWhere(
+        (article) =>
+            article['Law'] == result.lawName &&
+            article['Article'] == result.articleNumber &&
+            article['Article Text'] == result.articleText,
+      );
+      final owners = jsonDecode(
+        await rootBundle.loadString('assets/data/chunk_owners_e5.json'),
+      ) as List;
+      final vectors = await rootBundle.load(
+        'assets/data/chunk_embeddings_e5.f32',
+      );
+      var bestScore = double.negativeInfinity;
+      var bestChunk = 0;
+      var chunkNumber = 0;
+      for (var i = 0; i < owners.length; i++) {
+        if (owners[i] != articleIndex) continue;
+        final score = vectors.getFloat32(i * 384 * 4, Endian.little);
+        if (score > bestScore) {
+          bestScore = score;
+          bestChunk = chunkNumber;
+        }
+        chunkNumber++;
+      }
+      final words = result.articleText!
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .toList();
+      final passage = words.length <= 75
+          ? words.join(' ')
+          : words.skip(bestChunk * 40).take(60).join(' ');
+      expect(quotedPassage, firstStatement(passage, maxLength: 300));
+      expect(explanation, contains('does not verify'));
+      expect(result.hasAiExplanation, isFalse);
+    },
+  );
 
   test('rejects empty and oversized concerns before initialization', () async {
     final encoder = _FixedEncoder(_basisVector());

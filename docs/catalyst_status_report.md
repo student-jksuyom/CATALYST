@@ -1,5 +1,10 @@
 # CATALYST status report
 
+Historical snapshot: the online article reranker described below has since
+been removed from the app. Current article retrieval is on-device, and the
+Worker source is restricted to XAI follow-up. See
+[hybrid_retrieval.md](hybrid_retrieval.md) for updated limitations.
+
 Date: 2026-11-04. Based on the code, assets, tests and runs in this repository (see
 [hybrid_retrieval.md](hybrid_retrieval.md) for the retrieval diagnosis). Items marked
 *unmeasured* have no evidence yet.

@@ -47,13 +47,19 @@ test('summarizeUpstreamError extracts the quota metric and retry delay', () => {
   assert.equal(s.retryDelay, '31s');
 });
 
-test('one user search costs one Gemini call per model while all are over quota', async () => {
+test('article retrieval requests are rejected without contacting Gemini', async () => {
+  globalThis.fetch = async () => assert.fail('must not call Gemini');
+  const res = await worker.default.fetch(request(query), env);
+  assert.equal(res.status, 400);
+});
+
+test('follow-up tries each model when all are over quota', async () => {
   const calls = [];
   globalThis.fetch = async (url) => {
     calls.push(String(url).match(/models\/([^:]+):/)[1]);
     return new Response(quotaBody, { status: 429 });
   };
-  const res = await worker.default.fetch(request(query), env);
+  const res = await worker.default.fetch(request({ mode: 'followup', query: 'what if' }), env);
   assert.equal(res.status, 502);
   const body = await res.json();
   assert.deepEqual(calls, ['m-a', 'm-b', 'm-c']);
@@ -65,12 +71,12 @@ test('falls through an over-quota model to the next one', async () => {
   let n = 0;
   globalThis.fetch = async () => {
     if (n++ === 0) return new Response(quotaBody, { status: 429 });
-    const text = JSON.stringify({ ranked: [{ law: 'CivilCode', article: '1654', relevance: 'direct', reason: 'r' }] });
+    const text = JSON.stringify({ answer: 'The result depends on the facts.', citedCaseIds: [] });
     return Response.json({ candidates: [{ content: { parts: [{ text }] } }] });
   };
-  const res = await worker.default.fetch(request(query), env);
+  const res = await worker.default.fetch(request({ mode: 'followup', query: 'what if' }), env);
   assert.equal(res.status, 200);
-  assert.equal((await res.json()).ranked[0].article, '1654');
+  assert.equal((await res.json()).answer, 'The result depends on the facts.');
   assert.equal(n, 2);
 });
 
@@ -95,4 +101,12 @@ test('wrong token is rejected before any Gemini call', async () => {
     env,
   );
   assert.equal(res.status, 401);
+});
+
+test('follow-up only accepts supplied case IDs', () => {
+  const parsed = worker.parseFollowupJson(
+    '{"answer":"Details matter.","citedCaseIds":["known","unknown"]}',
+    ['known'],
+  );
+  assert.deepEqual(parsed.citedCaseIds, ['known']);
 });

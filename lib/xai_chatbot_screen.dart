@@ -89,11 +89,15 @@ class _XaiChatbotScreenState extends State<XaiChatbotScreen> {
                   result == null
                       ? (conversation == null
                             ? 'General chat preview. AI responses are not connected yet.'
+                            : conversation.usesOnlineFollowUp
+                            ? 'Article retrieval stays on-device. XAI follow-up '
+                                  'may use the online service and jurisprudence '
+                                  'dataset.'
                             : 'Describe your situation in English, Tagalog or '
-                                  'Taglish. Answers come only from the local '
-                                  'legal corpus and are not legal advice.')
-                      : 'Get more context on why a law applies, ask for simpler '
-                            'explanations, or explore related laws.',
+                                  'Taglish. Retrieval and follow-up are on this '
+                                  'device and are not legal advice.')
+                      : 'Article retrieval is on-device. Ask XAI follow-up for '
+                            'jurisprudence context or a simpler explanation.',
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 12,
@@ -103,6 +107,11 @@ class _XaiChatbotScreenState extends State<XaiChatbotScreen> {
                 ),
               ),
             ),
+            if (conversation?.usesOnlineFollowUp ?? false)
+              const Padding(
+                padding: EdgeInsets.fromLTRB(32, 10, 32, 0),
+                child: _OnlineFollowUpNotice(),
+              ),
             Expanded(
               child: Semantics(
                 label: result == null
@@ -384,6 +393,36 @@ class _XaiChatbotScreenState extends State<XaiChatbotScreen> {
   }
 }
 
+class _OnlineFollowUpNotice extends StatelessWidget {
+  const _OnlineFollowUpNotice();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const ValueKey('online-followup-privacy-notice'),
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF7E5),
+        border: Border.all(color: const Color(0xFFE7C878)),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Text(
+        'XAI follow-up may send your question, case narrative, retrieved '
+        'articles and relevant decisions to CATALYST’s proxy and Google '
+        'Gemini. Avoid names and contact details. Article retrieval itself '
+        'stays on-device.',
+        style: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 11,
+          height: 1.35,
+          color: Color(0xFF594A25),
+        ),
+      ),
+    );
+  }
+}
+
 class _UserMessageBubble extends StatelessWidget {
   const _UserMessageBubble({required this.message});
 
@@ -603,15 +642,23 @@ class _LawResultCardState extends State<_LawResultCard> {
   @override
   Widget build(BuildContext context) {
     final result = widget.result;
+    final variant = _selectedVariant(result);
     final explanationPoints =
-        result.caseExplanationPoints
+        (variant?.points ?? result.caseExplanationPoints)
             ?.map((point) => stripEmphasis(point).trim())
             .where((point) => point.isNotEmpty)
             .toList() ??
         [];
-    final summary = explanationPoints.isNotEmpty
-        ? explanationPoints.first
-        : result.description;
+    final summary = result.hasAiExplanation
+        ? ((explanationPoints.length > 1
+                  ? explanationPoints[1]
+                  : explanationPoints.isEmpty
+                  ? null
+                  : explanationPoints.first) ??
+              result.contextualExplanation ??
+              'No fact-specific explanation is available.')
+        : 'No fact-specific explanation is available; retrieval similarity '
+              'does not establish that this provision applies.';
 
     return Material(
       color: const Color(0xFF3E86F8).withValues(alpha: 0.09),
@@ -705,12 +752,17 @@ class _ExpandedLawResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final variant = _selectedVariant(result);
     final points =
-        result.caseExplanationPoints
-            ?.map((point) => stripEmphasis(point).trim())
+        (variant?.points ??
+                [
+                  if (result.hasAiExplanation &&
+                      result.contextualExplanation != null)
+                    result.contextualExplanation!,
+                ])
+            .map((point) => stripEmphasis(point).trim())
             .where((point) => point.isNotEmpty)
-            .toList() ??
-        [];
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -749,7 +801,7 @@ class _ExpandedLawResult extends StatelessWidget {
         if (points.isNotEmpty) ...[
           const SizedBox(height: 10),
           const Text(
-            'Why this applies to your case',
+            'Why this may relate to your concern',
             style: TextStyle(
               fontFamily: 'Inter',
               fontSize: 12,
@@ -798,4 +850,11 @@ class _ExpandedLawResult extends StatelessWidget {
       ],
     );
   }
+}
+
+ExplanationVariant? _selectedVariant(LawMatchResult result) {
+  final variants = result.explanationVariants;
+  if (variants == null || variants.isEmpty) return null;
+  final preferred = result.defaultExplanationLanguage;
+  return variants[preferred] ?? variants['en'] ?? variants.values.first;
 }

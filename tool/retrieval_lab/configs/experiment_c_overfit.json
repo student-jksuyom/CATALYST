@@ -1,0 +1,9 @@
+{
+  "experiment_name": "C-intentional-overfit",
+  "epochs": 30,
+  "validation_retrieval_every": 10,
+  "batch_size": 8,
+  "learning_rate": 0.00001,
+  "seed": 42,
+  "output_root": "tool/retrieval_lab/out/controlled_experiments"
+}

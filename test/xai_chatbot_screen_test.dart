@@ -17,8 +17,8 @@ void main() {
     expect(find.text('Ask CATALYST'), findsOneWidget);
     expect(
       find.text(
-        'Get more context on why a law applies, ask for simpler '
-        'explanations, or explore related laws.',
+        'Article retrieval is on-device. Ask XAI follow-up for '
+        'jurisprudence context or a simpler explanation.',
       ),
       findsOneWidget,
     );
@@ -85,20 +85,23 @@ void main() {
 
     expect(find.text('Article 55 - Grounds for Annulment'), findsOneWidget);
     expect(
-      find.text('Existing evidence-grounded explanation.'),
+      find.textContaining(
+        'No fact-specific explanation is available; retrieval similarity',
+      ),
       findsOneWidget,
     );
     expect(find.text('Existing retrieved provision.'), findsNothing);
 
-    await tester.tap(find.text('Existing evidence-grounded explanation.'));
+    await tester.tap(
+      find.textContaining(
+        'No fact-specific explanation is available; retrieval similarity',
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Existing concise result summary.'), findsOneWidget);
     expect(find.text('Existing retrieved provision.'), findsOneWidget);
-    expect(
-      find.text('Existing evidence-grounded explanation.'),
-      findsOneWidget,
-    );
+    expect(find.text('Existing evidence-grounded explanation.'), findsNothing);
 
     await tester.tap(find.text('Existing retrieved provision.'));
     await tester.pumpAndSettle();

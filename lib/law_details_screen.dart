@@ -4,6 +4,7 @@ import 'models/law_match_result.dart';
 import 'services/case_conversation.dart';
 import 'services/explanation_builder.dart';
 import 'services/explanation_language.dart';
+import 'services/history_store.dart';
 import 'xai_chatbot_screen.dart';
 
 class LawDetailsScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class LawDetailsScreen extends StatefulWidget {
     required this.result,
     this.initialIsBookmarked = false,
     this.onBookmarkChanged,
+    this.onBookmarkSave,
     this.conversation,
     super.key,
   });
@@ -19,6 +21,7 @@ class LawDetailsScreen extends StatefulWidget {
   final LawMatchResult result;
   final bool initialIsBookmarked;
   final ValueChanged<bool>? onBookmarkChanged;
+  final Future<void> Function(bool)? onBookmarkSave;
 
   @override
   State<LawDetailsScreen> createState() => _LawDetailsScreenState();
@@ -31,6 +34,35 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
 
   final _questionController = TextEditingController();
   late bool _isBookmarked;
+  var _savingBookmark = false;
+
+  Future<void> _toggleBookmark() async {
+    final next = !_isBookmarked;
+    final save = widget.onBookmarkSave;
+    if (save == null) {
+      setState(() => _isBookmarked = next);
+      widget.onBookmarkChanged?.call(next);
+      return;
+    }
+    setState(() => _savingBookmark = true);
+    try {
+      await save(next);
+      if (mounted) {
+        setState(() => _isBookmarked = next);
+        widget.onBookmarkChanged?.call(next);
+      }
+    } on HistoryStorageException {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not save bookmark on this device.'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _savingBookmark = false);
+    }
+  }
 
   @override
   void initState() {
@@ -48,73 +80,76 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
   Widget build(BuildContext context) {
     final result = widget.result;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: _buildHeader(context),
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(32, 14, 32, 24),
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      constraints: const BoxConstraints(maxWidth: 320),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFDCECFE),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: Text(
-                        result.lawName,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: _blue,
+    return PopScope(
+      canPop: !_savingBookmark,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: _buildHeader(context),
+              ),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(32, 14, 32, 24),
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 320),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18,
+                          vertical: 10,
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFDCECFE),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
                         child: Text(
-                          _articleHeading(result),
+                          result.lawName,
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 22,
+                            fontFamily: 'Inter',
+                            fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            height: 1.25,
-                            letterSpacing: -0.25,
-                            color: _navy,
+                            color: _blue,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      _ScoreBadge(score: result.matchScore),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  _ArticleText(text: result.articleText),
-                  const SizedBox(height: 52),
-                  _CaseExplanationCard(result: result),
-                ],
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            _articleHeading(result),
+                            style: const TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              height: 1.25,
+                              letterSpacing: -0.25,
+                              color: _navy,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        _ScoreBadge(score: result.matchScore),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    _ArticleText(text: result.articleText),
+                    const SizedBox(height: 52),
+                    _CaseExplanationCard(result: result),
+                  ],
+                ),
               ),
-            ),
-            _buildQuestionInput(),
-          ],
+              _buildQuestionInput(),
+            ],
+          ),
         ),
       ),
     );
@@ -126,11 +161,13 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-              }
-            },
+            onPressed: _savingBookmark
+                ? null
+                : () {
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    }
+                  },
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints.tightFor(width: 48, height: 48),
             icon: const Icon(
@@ -153,10 +190,7 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
           ),
           const Spacer(),
           IconButton(
-            onPressed: () {
-              setState(() => _isBookmarked = !_isBookmarked);
-              widget.onBookmarkChanged?.call(_isBookmarked);
-            },
+            onPressed: _savingBookmark ? null : _toggleBookmark,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints.tightFor(width: 48, height: 48),
             icon: _BookmarkStateIcon(isBookmarked: _isBookmarked),
@@ -239,13 +273,37 @@ class _LawDetailsScreenState extends State<LawDetailsScreen> {
     );
   }
 
-  void _openXaiChat() {
+  Future<void> _openXaiChat() async {
     final question = _questionController.text.trim();
     if (question.isEmpty) {
       return;
     }
 
     final conversation = widget.conversation;
+    if (conversation?.usesOnlineFollowUp ?? false) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Online XAI follow-up'),
+          content: const Text(
+            'Your question, case narrative, retrieved articles and relevant '
+            'decisions may be sent to CATALYST’s proxy and Google Gemini. '
+            'Avoid names and contact details.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Continue'),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true || !mounted) return;
+    }
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => XaiChatbotScreen(
@@ -560,9 +618,9 @@ class _CaseExplanationCardState extends State<_CaseExplanationCard> {
   static const _purple = Color(0xFF8254F2);
   static const _order = ['en', 'taglish', 'tl'];
   static const _headings = {
-    'en': 'Why this applies to your case',
-    'taglish': 'Why this applies sa kaso mo',
-    'tl': 'Bakit ito may kinalaman sa kaso mo',
+    'en': 'Why this may relate to your concern',
+    'taglish': 'Paano ito posibleng may kaugnayan sa concern mo',
+    'tl': 'Bakit ito posibleng may kaugnayan sa concern mo',
   };
   static const _reminderLabels = {
     'en': 'Reminder',
@@ -589,12 +647,19 @@ class _CaseExplanationCardState extends State<_CaseExplanationCard> {
     final variants = _variants;
     final language = _activeLanguage;
     final variant = language == null ? null : variants[language];
-    final explanationPoints =
-        (variant?.points ?? widget.result.caseExplanationPoints)
-            ?.map((point) => point.trim())
-            .where((point) => point.isNotEmpty)
-            .toList() ??
-        [];
+    final explanationPoints = widget.result.hasAiExplanation
+        ? (variant?.points ??
+                  [
+                    if (widget.result.contextualExplanation != null)
+                      widget.result.contextualExplanation!,
+                  ])
+              .map((point) => point.trim())
+              .where((point) => point.isNotEmpty)
+              .toList()
+        : (variant?.points ?? widget.result.caseExplanationPoints ?? const [])
+              .map((point) => point.trim())
+              .where((point) => point.isNotEmpty)
+              .toList();
     final reminders =
         variant?.reminders
             .map((point) => point.trim())
@@ -668,6 +733,18 @@ class _CaseExplanationCardState extends State<_CaseExplanationCard> {
           ),
         ],
         const SizedBox(height: 14),
+        Text(
+          widget.result.hasAiExplanation
+              ? 'AI-generated from your concern and the retrieved article; it describes a possible connection, not a legal conclusion.'
+              : 'On-device retrieval only. Similarity does not establish that this provision applies.',
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 12,
+            height: 1.4,
+            color: Color(0xFF66758E),
+          ),
+        ),
+        const SizedBox(height: 10),
         if (hasExplanation)
           for (final point in explanationPoints) ...[
             _ExplanationBullet(point: point),

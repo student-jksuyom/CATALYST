@@ -32,7 +32,7 @@ const String _queryPrefix = 'query: ';
 // Heuristic for multilingual-e5-small, whose cosines sit in a narrow band:
 // off-topic probes peaked around 0.75-0.80 and the on-topic lab queries
 // started at 0.80. It is a coarse gate, not a relevance guarantee.
-const double _defaultMinimumCosine = 0.79;
+const double _defaultMinimumCosine = 0.80;
 
 // Display calibration: cosine 0.75 (noise level) maps to 0% and 0.90 to 100%.
 const double _displayFloorCosine = 0.75;
@@ -43,7 +43,14 @@ const double _lexicalWeight = 0.15;
 const String _articlesAssetPath = 'assets/data/legal_articles.json';
 const String _chunkEmbeddingsAssetPath = 'assets/data/chunk_embeddings_e5.f32';
 const String _chunkOwnersAssetPath = 'assets/data/chunk_owners_e5.json';
+const String _trainingQueryEmbeddingsAssetPath =
+    'assets/data/training_query_embeddings_e5.f32';
+const String _trainingQueryLabelsAssetPath =
+    'assets/data/training_query_labels_e5.json';
 const String _encoderAssetPath = 'assets/models/catalyst_encoder_e5.onnx';
+const int _trainingNeighborCount = 3;
+const double _minimumTrainingQueryCosine = 0.90;
+const double _trainingSignalWeight = 0.30;
 
 abstract interface class CatalystRetrievalService {
   Future<CatalystMatchResponse> matchConcern(String concern);
@@ -79,16 +86,15 @@ class CatalystRetrievalException implements Exception {
   String toString() => message;
 }
 
-/// How a result list was produced, so the UI can tell the user whether an
-/// internet connection was actually used.
+/// Whether an XAI follow-up answer used the internet.
 enum RetrievalMode {
-  /// On-device only (the app was built without an online service).
+  /// The answer was produced on-device.
   onDevice,
 
-  /// The online reviewer reordered the on-device candidates.
+  /// The configured online follow-up service returned the answer.
   online,
 
-  /// The online service was tried but failed; on-device results are shown.
+  /// Online follow-up failed and the app returned an on-device answer.
   onDeviceFallback,
 }
 
@@ -101,14 +107,12 @@ class CatalystMatchResponse {
     this.clarifyingQuestion,
     this.otherCandidates = const [],
     this.analysis,
-    this.mode = RetrievalMode.onDevice,
   });
 
   final List<LawMatchResult> results;
   final String originalQuery;
   final String processedQuery;
   final String warning;
-  final RetrievalMode mode;
 
   /// Set instead of results when the narrative is too thin to search.
   final String? clarifyingQuestion;
@@ -180,6 +184,8 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     String law,
     String article, {
     double matchScore = 0,
+    String? contextualExplanation,
+    bool hasAiExplanation = false,
     List<String> explanationPoints = const [],
     Map<String, ExplanationVariant>? explanationVariants,
     String? defaultExplanationLanguage,
@@ -196,6 +202,8 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
         description: entry.articleText,
         articleText: entry.articleText,
         matchScore: matchScore.clamp(0, 100).toDouble(),
+        contextualExplanation: contextualExplanation,
+        hasAiExplanation: hasAiExplanation,
         caseExplanationPoints: explanationPoints,
         explanationVariants: explanationVariants,
         defaultExplanationLanguage: defaultExplanationLanguage,
@@ -230,6 +238,19 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
         originalQuery: normalizedConcern,
         processedQuery: normalizedConcern,
         clarifyingQuestion: analysis.clarifyingQuestion,
+        analysis: analysis,
+      );
+    }
+    if (analysis != null && isClearlyOutsideCatalystScope(normalizedConcern)) {
+      return CatalystMatchResponse(
+        results: const [],
+        originalQuery: normalizedConcern,
+        processedQuery: normalizedConcern,
+        warning:
+            'This may need legal rules outside CATALYST’s local database. '
+            'No article was selected. If your concern also involves a loan, '
+            'lease, family matter, or consumer product, add those details so '
+            'relevant provisions can still be considered.',
         analysis: analysis,
       );
     }
@@ -368,9 +389,11 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     final bestCosine = List<double>.filled(articles.length, -1);
     final cosineSum = List<double>.filled(articles.length, 0);
     final denseLists = <List<int>>[];
+    List<double>? primaryVector;
     for (final variant in variants) {
       final vector = await _encodeQuery(resources, variant);
       _validateQueryEmbedding(vector);
+      primaryVector ??= vector;
       final scores = _articleCosines(resources, vector);
       for (var row = 0; row < scores.length; row++) {
         if (scores[row] > bestCosine[row]) bestCosine[row] = scores[row];
@@ -384,10 +407,16 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       denseLists.add(order.take(_candidatePoolSize).toList(growable: false));
     }
 
+    final trainingMatches = _rankTrainingExamples(
+      resources: resources,
+      queryEmbedding: primaryVector!,
+      domain: analysis.domain,
+    );
     final lexicalQuery = [
       originalQuery,
       processedQuery,
       ...analysis.glossaryTerms,
+      ...expandLegalWording(originalQuery),
     ].join(' ');
     final lexical = resources.lexicalIndex.search(
       lexicalQuery,
@@ -396,10 +425,12 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     final fused = fuseRankings([
       ...denseLists,
       if (lexical.isNotEmpty) lexical.map((hit) => hit.index).toList(),
+      if (trainingMatches.rankedIndexes.isNotEmpty)
+        trainingMatches.rankedIndexes,
     ], k: _fusionK);
 
-    // One blended score both orders the results and is shown on the cards:
-    // calibrated dense similarity plus BM25 normalized by the best lexical hit.
+    // Keep the supervised example signal modest so it can improve ranking
+    // without replacing the corpus-grounded dense and lexical matches.
     final maxLexical = lexical.isEmpty ? 0.0 : lexical.first.score;
     final lexicalScore = {for (final hit in lexical) hit.index: hit.score};
     double blendedScore(int index) {
@@ -411,7 +442,11 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       final lexicalPart = maxLexical > 0
           ? (lexicalScore[index] ?? 0) / maxLexical
           : 0.0;
-      return (1 - _lexicalWeight) * dense + _lexicalWeight * lexicalPart;
+      final corpusScore =
+          (1 - _lexicalWeight) * dense + _lexicalWeight * lexicalPart;
+      final trainingPart = trainingMatches.normalizedVotes[index] ?? 0.0;
+      return (1 - _trainingSignalWeight) * corpusScore +
+          _trainingSignalWeight * trainingPart;
     }
 
     final blended = <int, double>{};
@@ -450,6 +485,8 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       analysis: analysis,
       queryTexts: queryTexts,
       blendedSimilarity: blended[index],
+      matchedFact: _firstConcernStatement(originalQuery),
+      matchedProvision: _bestMatchingPassage(resources, index, primaryVector!),
     );
 
     final results = rankedIndexes.take(_topResultCount).map(toResult).toList();
@@ -465,6 +502,136 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
           ? 'No provision in the local corpus was similar enough to your '
                 'description. Try adding more detail.'
           : retrievalWarning,
+    );
+  }
+
+  static String _bestMatchingPassage(
+    _LocalRetrievalResources resources,
+    int articleIndex,
+    List<double> queryEmbedding,
+  ) {
+    final words = resources.articles[articleIndex].articleText
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .toList();
+    var passageNumber = 0;
+    var bestStart = 0;
+    var bestSimilarity = double.negativeInfinity;
+    for (var chunk = 0; chunk < resources.chunkOwners.length; chunk++) {
+      if (resources.chunkOwners[chunk] != articleIndex) continue;
+      var similarity = 0.0;
+      final offset = chunk * _embeddingDimensions;
+      for (var dimension = 0; dimension < _embeddingDimensions; dimension++) {
+        similarity +=
+            resources.chunkEmbeddings[offset + dimension] *
+            queryEmbedding[dimension];
+      }
+      if (similarity > bestSimilarity) {
+        bestSimilarity = similarity;
+        bestStart = passageNumber * 40;
+      }
+      passageNumber++;
+    }
+    if (passageNumber == 0 || bestStart >= words.length) {
+      throw const CatalystRetrievalException(
+        CatalystRetrievalFailure.invalidEmbedding,
+        'The local provision passage index is invalid.',
+      );
+    }
+    final passage = words.length <= 75
+        ? words.join(' ')
+        : words.skip(bestStart).take(60).join(' ');
+    return firstStatement(passage, maxLength: 300);
+  }
+
+  static String _firstConcernStatement(String concern) {
+    final flat = concern.replaceAll(RegExp(r'\s+'), ' ').trim();
+    final sentenceEnd = RegExp(r'[.!?](?=\s|$)').firstMatch(flat)?.end;
+    final statement = sentenceEnd == null
+        ? flat
+        : flat.substring(0, sentenceEnd);
+    if (statement.length <= 200) return statement;
+    final cut = statement.substring(0, 200);
+    final lastSpace = cut.lastIndexOf(' ');
+    return '${cut.substring(0, lastSpace > 120 ? lastSpace : 200)}...';
+  }
+
+  static ({List<int> rankedIndexes, Map<int, double> normalizedVotes})
+  _rankTrainingExamples({
+    required _LocalRetrievalResources resources,
+    required List<double> queryEmbedding,
+    required QueryDomain domain,
+  }) {
+    if (domain == QueryDomain.unknown || resources.trainingExamples.isEmpty) {
+      return (rankedIndexes: const [], normalizedVotes: const {});
+    }
+
+    final matchingExamples = <({int index, double similarity})>[];
+    final vectors = resources.trainingQueryEmbeddings;
+    for (var index = 0; index < resources.trainingExamples.length; index++) {
+      if (resources.trainingExamples[index].domain != domain) continue;
+
+      var similarity = 0.0;
+      final start = index * _embeddingDimensions;
+      for (var dimension = 0; dimension < _embeddingDimensions; dimension++) {
+        similarity += vectors[start + dimension] * queryEmbedding[dimension];
+      }
+      if (similarity.isFinite) {
+        matchingExamples.add((index: index, similarity: similarity));
+      }
+    }
+    matchingExamples.sort((left, right) {
+      final bySimilarity = right.similarity.compareTo(left.similarity);
+      return bySimilarity != 0
+          ? bySimilarity
+          : left.index.compareTo(right.index);
+    });
+
+    if (matchingExamples.isEmpty ||
+        matchingExamples.first.similarity < _minimumTrainingQueryCosine) {
+      return (rankedIndexes: const [], normalizedVotes: const {});
+    }
+
+    final votes = <int, double>{};
+    var neighborRank = 0;
+    for (final match in matchingExamples) {
+      if (neighborRank == _trainingNeighborCount) break;
+      if (match.similarity < _minimumTrainingQueryCosine) break;
+      final similarity = match.similarity.clamp(0.0, 1.0);
+      final weight =
+          math.pow(similarity, 3).toDouble() / math.sqrt(neighborRank + 1);
+      neighborRank++;
+      final example = resources.trainingExamples[match.index];
+      for (final articleIndex in example.positiveArticleIndexes) {
+        votes[articleIndex] = (votes[articleIndex] ?? 0) + weight;
+      }
+      for (final articleIndex in example.negativeArticleIndexes) {
+        votes[articleIndex] = (votes[articleIndex] ?? 0) - weight;
+      }
+    }
+
+    final positiveVotes = <int, double>{
+      for (final entry in votes.entries)
+        if (entry.value > 0) entry.key: entry.value,
+    };
+    if (positiveVotes.isEmpty) {
+      return (rankedIndexes: const [], normalizedVotes: const {});
+    }
+    final maxVote = positiveVotes.values.reduce(math.max);
+    final ranked = positiveVotes.keys.toList()
+      ..sort((left, right) {
+        final byVote = positiveVotes[right]!.compareTo(positiveVotes[left]!);
+        return byVote != 0 ? byVote : left.compareTo(right);
+      });
+    final rankedIndexes = ranked
+        .take(_candidatePoolSize)
+        .toList(growable: false);
+    return (
+      rankedIndexes: rankedIndexes,
+      normalizedVotes: {
+        for (final index in rankedIndexes)
+          index: positiveVotes[index]! / maxVote,
+      },
     );
   }
 
@@ -505,6 +672,8 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     QueryAnalysis? analysis,
     List<String> queryTexts = const [],
     double? blendedSimilarity,
+    String? matchedFact,
+    String? matchedProvision,
   }) {
     final article = resources.articles[index];
     final id = normalizedArticleId(article.law, article.article);
@@ -538,6 +707,8 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
               articleText: article.articleText,
               queryTexts: queryTexts,
               hasDuplicateId: resources.duplicateIds.contains(id),
+              matchedFact: matchedFact,
+              matchedProvision: matchedProvision,
             ),
       defaultExplanationLanguage: queryTexts.isEmpty
           ? null
@@ -621,16 +792,116 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       for (final id in articleIds)
         if (!seen.add(id)) id,
     };
+    final trainingLabels = jsonDecode(
+      await rootBundle.loadString(_trainingQueryLabelsAssetPath),
+    );
+    if (trainingLabels is! Map<String, dynamic> ||
+        trainingLabels['formatVersion'] != 1 ||
+        trainingLabels['articleCount'] != articles.length) {
+      throw const FormatException(
+        'The training query index does not match the local article corpus.',
+      );
+    }
+    final examplesValue = trainingLabels['examples'];
+    if (examplesValue is! List) {
+      throw const FormatException('The training query labels are not a list.');
+    }
+    final trainingExamples = <_TrainingQueryExample>[];
+    for (final value in examplesValue) {
+      if (value is! Map<String, dynamic>) {
+        throw const FormatException('A training query label is not an object.');
+      }
+      final domain = switch (value['domain']) {
+        'civil' => QueryDomain.civil,
+        'consumer' => QueryDomain.consumer,
+        'family' => QueryDomain.family,
+        _ => throw const FormatException(
+          'A training query has an unsupported domain.',
+        ),
+      };
+      final positiveIndexes = _readArticleIndexes(
+        value['positiveArticleIndexes'],
+        articles.length,
+      );
+      final negativeIndexes = _readArticleIndexes(
+        value['negativeArticleIndexes'],
+        articles.length,
+      );
+      if (positiveIndexes
+          .toSet()
+          .intersection(negativeIndexes.toSet())
+          .isNotEmpty) {
+        throw const FormatException(
+          'A training query labels an article both relevant and non-relevant.',
+        );
+      }
+      trainingExamples.add(
+        _TrainingQueryExample(
+          domain: domain,
+          positiveArticleIndexes: positiveIndexes,
+          negativeArticleIndexes: negativeIndexes,
+        ),
+      );
+    }
+    if (trainingLabels['embeddingCount'] != trainingExamples.length) {
+      throw const FormatException(
+        'The training query label and embedding counts do not match.',
+      );
+    }
+
+    final trainingEmbeddingData = await rootBundle.load(
+      _trainingQueryEmbeddingsAssetPath,
+    );
+    final expectedTrainingBytes =
+        trainingExamples.length * _embeddingDimensions * 4;
+    if (trainingEmbeddingData.lengthInBytes != expectedTrainingBytes) {
+      throw FormatException(
+        'The training query embedding matrix has '
+        '${trainingEmbeddingData.lengthInBytes} bytes; '
+        '$expectedTrainingBytes bytes were expected.',
+      );
+    }
+    final alignedTrainingBytes = Uint8List.fromList(
+      trainingEmbeddingData.buffer.asUint8List(
+        trainingEmbeddingData.offsetInBytes,
+        trainingEmbeddingData.lengthInBytes,
+      ),
+    );
+    final trainingQueryEmbeddings = Float32List.view(
+      alignedTrainingBytes.buffer,
+    );
+    _validateCorpusEmbeddings(trainingQueryEmbeddings, trainingExamples.length);
+
     return _LocalRetrievalResources(
       tokenizer: tokenizer,
       articles: articles,
       chunkEmbeddings: embeddings,
       chunkOwners: chunkOwners,
+      trainingQueryEmbeddings: trainingQueryEmbeddings,
+      trainingExamples: trainingExamples,
       lexicalIndex: Bm25Index.build([
         for (final article in articles) article.articleText,
       ]),
       duplicateIds: duplicates,
     );
+  }
+
+  static List<int> _readArticleIndexes(Object? value, int articleCount) {
+    if (value is! List) {
+      throw const FormatException(
+        'A training query article list is not a list.',
+      );
+    }
+    final indexes = <int>[];
+    for (final index in value) {
+      if (index is! int || index < 0 || index >= articleCount) {
+        throw const FormatException(
+          'A training query references an invalid article index.',
+        );
+      }
+      indexes.add(index);
+    }
+    return indexes;
   }
 
   static void _validateCorpusEmbeddings(Float32List embeddings, int rowCount) {
@@ -821,12 +1092,26 @@ void _validateQueryEmbedding(List<double> queryEmbedding) {
   }
 }
 
+class _TrainingQueryExample {
+  const _TrainingQueryExample({
+    required this.domain,
+    required this.positiveArticleIndexes,
+    required this.negativeArticleIndexes,
+  });
+
+  final QueryDomain domain;
+  final List<int> positiveArticleIndexes;
+  final List<int> negativeArticleIndexes;
+}
+
 class _LocalRetrievalResources {
   const _LocalRetrievalResources({
     required this.tokenizer,
     required this.articles,
     required this.chunkEmbeddings,
     required this.chunkOwners,
+    required this.trainingQueryEmbeddings,
+    required this.trainingExamples,
     required this.lexicalIndex,
     required this.duplicateIds,
   });
@@ -835,6 +1120,8 @@ class _LocalRetrievalResources {
   final List<CatalystLegalArticle> articles;
   final Float32List chunkEmbeddings;
   final List<int> chunkOwners;
+  final Float32List trainingQueryEmbeddings;
+  final List<_TrainingQueryExample> trainingExamples;
   final Bm25Index lexicalIndex;
   final Set<String> duplicateIds;
 }

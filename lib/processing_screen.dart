@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'services/catalyst_local_retrieval_service.dart';
+import 'services/history_store.dart';
 
 class ProcessingScreen extends StatefulWidget {
   const ProcessingScreen({
@@ -49,6 +50,13 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
     developer.log('Processing started', name: 'catol.processing');
     try {
       await onProcessingComplete();
+    } on HistoryStorageException {
+      if (mounted) {
+        setState(() {
+          _errorMessage =
+              'Could not save this search on your device. Please try again.';
+        });
+      }
     } on CatalystRetrievalException catch (error) {
       developer.log(
         'Processing failed: ${error.failure.name}',

@@ -187,6 +187,7 @@ class CaseConversation extends ChangeNotifier {
   List<String> get newFacts => List.unmodifiable(_newFacts);
   String? get narrative => _narrative;
   bool get isBusy => _isBusy;
+  bool get usesOnlineFollowUp => _followUp != null;
 
   /// The provision the user is currently asking about.
   void focusOn(LawMatchResult? result) => _focus = result;
@@ -469,7 +470,7 @@ class CaseConversation extends ChangeNotifier {
     isNewCase = isNewCase || !hasNarrative;
     final combined = isNewCase ? text : '${_narrative!} $text';
     final response = await _service.matchConcern(combined);
-    _answerMode = response.mode;
+    _answerMode = RetrievalMode.onDevice;
 
     if (response.clarifyingQuestion != null) {
       return response.clarifyingQuestion!;
