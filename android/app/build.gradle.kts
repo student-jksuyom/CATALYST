@@ -29,6 +29,10 @@ android {
         versionName = flutter.versionName
     }
 
+    lint {
+        disable.add("DependencyMetadataVersionCheck")
+    }
+
     buildTypes {
         release {
             proguardFiles(

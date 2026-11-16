@@ -63,5 +63,4 @@ tool/retrieval_lab/e5/
 tool/retrieval_lab/out/
 tool/offline_eval/out/
 tool/jurisprudence/out/
-# Large exported ONNX model
-assets/models/catalyst_encoder_e5.onnx
+

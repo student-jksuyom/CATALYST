@@ -3,6 +3,10 @@
 CATALYST is a Flutter application for retrieving Philippine legal articles
 related to a user's concern.
 
+For the current engineering assessment—including capabilities, measured
+retrieval results, validation status, problems, and release limitations—see
+[the overall status report](docs/catalyst_status_report.md).
+
 ## Search history
 
 Completed searches, their returned matches and bookmarks are stored on the
