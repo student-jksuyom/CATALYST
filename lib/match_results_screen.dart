@@ -547,22 +547,32 @@ class _ScoreBadge extends StatelessWidget {
     };
     final foreground = rank <= 2 ? Colors.white : const Color(0xFF3E86F8);
 
-    return Container(
-      width: 44,
-      height: 19,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Text(
-        '${score.round()}%',
-        style: TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          height: 1,
-          color: foreground,
+    return Tooltip(
+      message: 'Relevance score',
+      excludeFromSemantics: true,
+      child: Semantics(
+        container: true,
+        label: 'Relevance score: ${score.round()}%',
+        child: ExcludeSemantics(
+          child: Container(
+            width: 44,
+            height: 19,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: background,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              '${score.round()}%',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                height: 1,
+                color: foreground,
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -174,18 +174,22 @@ def _encode_examples(examples: list[dict[str, Any]]) -> np.ndarray:
     return np.asarray(vectors, dtype="<f4")
 
 
+def _index_articles(articles: list[dict[str, Any]]) -> dict[str, int]:
+    indices: dict[str, int] = {}
+    for index, article in enumerate(articles):
+        article_id = _article_id(f"{article['Law']}:{article['Article']}")
+        if article_id in indices:
+            raise ValueError(f"Duplicate normalized article ID: {article_id}")
+        indices[article_id] = index
+    return indices
+
+
 def main() -> None:
     articles = json.loads(ARTICLES_PATH.read_text(encoding="utf-8"))
     if not isinstance(articles, list) or not articles:
         raise ValueError("The bundled article corpus is empty or invalid.")
 
-    article_indices: dict[str, int] = {}
-    for index, article in enumerate(articles):
-        article_indices.setdefault(
-            _article_id(f"{article['Law']}:{article['Article']}"),
-            index,
-        )
-
+    article_indices = _index_articles(articles)
     examples = _load_training_examples(article_indices)
     vectors = _encode_examples(examples)
     metadata = {

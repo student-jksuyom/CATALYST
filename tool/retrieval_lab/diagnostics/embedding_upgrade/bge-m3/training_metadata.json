@@ -1,0 +1,8 @@
+{
+  "signature": "f4a1bf94e75d511e5ad8462ec09f808dcc64bf3fac98ff29b35c615c872abcc2",
+  "model": "BAAI/bge-m3",
+  "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+  "count": 182,
+  "encodingSeconds": 65.18649580000783,
+  "peakRssBytes": 2094694400
+}

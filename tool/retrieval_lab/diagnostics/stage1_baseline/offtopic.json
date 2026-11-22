@@ -1,0 +1,32 @@
+[
+ {
+  "query": "What is the best recipe for chicken adobo?",
+  "returned": 0,
+  "clarifying": false
+ },
+ {
+  "query": "Who won the basketball game last night?",
+  "returned": 0,
+  "clarifying": false
+ },
+ {
+  "query": "asdf qwer zxcv uiop",
+  "returned": 0,
+  "clarifying": false
+ },
+ {
+  "query": "How do I install a graphics driver on my laptop?",
+  "returned": 0,
+  "clarifying": false
+ },
+ {
+  "query": "Ano ang magandang lugar para mag-bakasyon sa Palawan?",
+  "returned": 0,
+  "clarifying": false
+ },
+ {
+  "query": "Anong oras magbubukas ang mall bukas?",
+  "returned": 0,
+  "clarifying": false
+ }
+]

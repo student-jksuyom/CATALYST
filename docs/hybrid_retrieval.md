@@ -17,12 +17,21 @@ landlord provision moved from outside the first 15 to rank 8. For original
 queries, Hit@3 stayed at 4/12 and Hit@15 rose from 5/12 to 6/12. The six
 existing off-topic probes returned no articles.
 
-On the project's Evaluation Dataset, the production Flutter ranking found a
+On the 46-query development set, the original production ranking found a
 labeled provision at rank 1 for 11/46 positive query groups, within rank 3
-for 16/46, and within rank 15 for 20/46. These numbers were unchanged by
-the wording expansion. One negative-only group was excluded. Labels are
-sparse: an unlisted article is not necessarily irrelevant. Both datasets
-have been used during development and are not independent final tests.
+for 16/46, and within rank 15 for 20/46. A 256-configuration ranking
+experiment selected domain-independent training-query matching, BM25 weight
+0.15, training-query weight 0.30, RRF constant 20, and calibrated-score
+ranking. It returned relevant articles for 13/46 at rank 1, 17/46 within rank
+3, and 21/46 within rank 15. Precision@3 increased from 11.59% to 12.32%.
+The unconstrained metric winner (15/46, 17/46, 23/46) was not selected
+because it failed the existing co-ownership ranking regression. The selected
+configuration passed that check, matched the experiment's ordered Top 15 for
+all 46 development queries, and returned no articles on the six available
+negative probes (the original also returned none). These probes are only a
+limited safety check. Labels are sparse: an unlisted article is not
+necessarily irrelevant. The development set was used for selection and is
+not an independent final test.
 Similarity and these metrics do not establish that a provision applies to
 the narrative; a fresh held-out evaluation with lawyer-reviewed relevance and
 applicability judgments is needed.
@@ -75,12 +84,10 @@ provisional and cannot establish legal accuracy.
 
 ### Controlled MiniLM training experiments (development only)
 
-Three controlled fine-tuning experiments compared the existing MiniLM trainer
-with extended training and an intentional overfit diagnostic. The 10-epoch
-candidate had the best MiniLM Evaluation Hit@3 (8/46), but trailed production
+Controlled fine-tuning and overfit experiments found that a fresh C run
+stopped at 10 epochs matched B (8/46 Evaluation Hit@3), but trailed production
 E5 hybrid retrieval (16/46). In the 30-epoch diagnostic, training loss kept
-falling while the final sampled Hit@3 dropped to 5/46; the selected epoch-10
-checkpoint did not establish reliable memorization. No candidate was deployed.
+falling while final sampled Hit@3 dropped to 5/46. No candidate was deployed.
 
 See the [controlled training report](./retrieval_training_experiments.md) for
 the audit, configurations, validation comparisons, limits, and best
@@ -229,6 +236,13 @@ endpoint; "not verified" means it needs a Gemini key or a device.
 | **Connection explanation** (online only) | For the first three results, Gemini must explain the provision's rule, connect a named fact from the concern to a specific requirement in the article, and identify a condition or missing fact. The article text is sent up to 2,000 characters per candidate. | Worker |
 | Verification | `OnlineRetrievalService._buildResponse` re-reads every returned article from the local corpus; unknown ids are dropped. Online scores are rank-derived (96, 91, 86...), not similarities | on device |
 | Fallback | `OnlineRetrievalService.matchConcern` catches every proxy failure and returns the local ranking with `RetrievalMode.onDeviceFallback` | on device |
+
+`LawMatchResult.matchScore` is the final retrieval relevance score scaled to
+0–100: it stores the hybrid score when reranking is disabled or fails, and the
+hybrid/cross-encoder blend used for ordering when reranking succeeds.
+`rawCosineScore` separately retains the dense semantic cosine when available.
+The UI labels `matchScore` as “Relevance score”; it is a retrieval signal, not
+a confidence value or probability. Older saved results may have no raw cosine.
 
 Modes: no `CATALYST_API_URL` -> `RetrievalMode.onDevice` (local only). With a URL ->
 `online` (local retrieval, Gemini rerank) or `onDeviceFallback`.

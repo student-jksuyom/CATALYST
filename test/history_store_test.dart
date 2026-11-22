@@ -24,6 +24,7 @@ void main() {
     title: 'Title',
     description: 'Description',
     matchScore: 42.5,
+    rawCosineScore: 0.8123,
     detailsReference: 'ref',
     chapterTitle: 'Chapter',
     articleText: 'Provision',
@@ -68,6 +69,10 @@ void main() {
     expect(saved.warning, 'warning');
     expect(saved.results.length, 2);
     expect(saved.result.toJson(), result.toJson());
+    expect(saved.result.rawCosineScore, 0.8123);
+
+    final legacyJson = result.toJson()..remove('rawCosineScore');
+    expect(LawMatchResult.fromJson(legacyJson).rawCosineScore, isNull);
 
     await reopened.clearNonFavorites();
     entries = await store.load();

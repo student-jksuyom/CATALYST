@@ -192,6 +192,30 @@ List<String> expandLegalWording(String query) =>
     {for (final token in wordTokens(query)) ...?_legalWording[token]}
         .toList(growable: false);
 
+// Experimental synonyms broaden search only; they do not establish that a
+// legal concept applies to the concern.
+const _experimentalLegalConcepts = <String, List<String>>{
+  'agreement': ['contract', 'consent'],
+  'contract': ['agreement', 'obligation'],
+  'breach': ['nonperformance', 'obligation'],
+  'borrowed': ['loan', 'debtor', 'creditor'],
+  'lent': ['loan', 'debtor', 'creditor'],
+  'debt': ['debtor', 'creditor', 'obligation'],
+  'landlord': ['lessor', 'lease'],
+  'tenant': ['lessee', 'lease'],
+  'lease': ['lessor', 'lessee'],
+  'seller': ['vendor', 'sale'],
+  'buyer': ['vendee', 'sale'],
+  'inheritance': ['succession', 'estate', 'heir'],
+  'negligence': ['fault', 'damage'],
+  'donation': ['donor', 'donee'],
+  'mortgage': ['mortgagor', 'mortgagee'],
+};
+
+List<String> expandExperimentalLegalConcepts(String query) => {
+  for (final token in wordTokens(query)) ...?_experimentalLegalConcepts[token],
+}.toList(growable: false);
+
 const _familyCues = {
   'asawa',
   'kasal',

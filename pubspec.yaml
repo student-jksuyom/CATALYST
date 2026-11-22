@@ -74,6 +74,10 @@ flutter:
     - assets/data/training_query_labels_e5.json
     - assets/models/catalyst_encoder_e5.onnx
     - assets/models/e5_tokenizer.json
+    - assets/models/catalyst_cross_encoder_qint8_arm64.onnx
+    - assets/models/catalyst_cross_encoder_quint8_avx2.onnx
+    - assets/models/catalyst_cross_encoder_tokenizer.json
+    - integration_test/fixtures/reranker_dev46.json
     - assets/images/catalyst_header.png
     - assets/images/catalyst_scales.png
     - assets/images/menu_history.png

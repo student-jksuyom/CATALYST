@@ -39,10 +39,8 @@ E5_MODEL_PATH = PROJECT_ROOT / "tool" / "retrieval_lab" / "e5" / "model.onnx"
 E5_TOKENIZER_PATH = (
     PROJECT_ROOT / "tool" / "retrieval_lab" / "e5" / "tokenizer.json"
 )
-E5_CHUNKS_PATH = PROJECT_ROOT / "tool" / "retrieval_lab" / "out" / "chunks_e5.npy"
-E5_OWNERS_PATH = (
-    PROJECT_ROOT / "tool" / "retrieval_lab" / "out" / "chunk_owner.json"
-)
+E5_CHUNKS_PATH = PROJECT_ROOT / "assets" / "data" / "chunk_embeddings_e5.f32"
+E5_OWNERS_PATH = PROJECT_ROOT / "assets" / "data" / "chunk_owners_e5.json"
 ARTICLES_PATH = PROJECT_ROOT / "assets" / "data" / "legal_articles.json"
 CLASSIFICATION_THRESHOLD = 0.5
 
@@ -67,6 +65,23 @@ def _load_corpus() -> tuple[list[str], list[str]]:
         ids.append(str(row["Article_ID"]).strip().casefold())
         texts.append(_article_embedding_text(row))
     return ids, texts
+
+
+def _corpus_articles(texts: list[str]) -> list[dict[str, Any]]:
+    articles = []
+    for text in texts:
+        header, _, body = text.partition("Legal provision:\n")
+        fields = dict(
+            line.split(": ", maxsplit=1) for line in header.splitlines() if ": " in line
+        )
+        articles.append(
+            {
+                "Law": fields.get("Law", "Unknown law"),
+                "Article": fields.get("Article", "?"),
+                "Article Text": body,
+            }
+        )
+    return articles
 
 
 def _load_groups(
@@ -317,34 +332,36 @@ class ActiveE5Hybrid:
         )
         self.tokenizer = Tokenizer.from_file(str(E5_TOKENIZER_PATH))
         self.tokenizer.enable_truncation(max_length=128)
-        self.chunks = np.load(E5_CHUNKS_PATH, mmap_mode="r")
         self.owners = np.asarray(
             json.loads(E5_OWNERS_PATH.read_text(encoding="utf-8")),
             dtype=np.int64,
         )
-        self.ids = ids
-        self.articles = articles
-        if len(self.owners) != len(self.chunks):
+        raw = np.fromfile(E5_CHUNKS_PATH, dtype=np.float32)
+        if len(self.owners) == 0 or raw.size % len(self.owners) != 0:
             raise ValueError("E5 chunk owner count does not match the embedding matrix.")
-        if len(self.articles) != len(ids):
-            raise ValueError("Bundled articles do not match the source corpus length.")
-        for index, article in enumerate(self.articles):
-            asset_law = re.sub(r"[^a-z0-9]+", "", str(article["Law"]).casefold())
-            corpus_law = ids[index].split(":", maxsplit=1)[0]
-            if asset_law != corpus_law:
-                raise ValueError("Bundled article law order differs from the corpus.")
-            if (
-                str(article["Article"]).strip().casefold()
-                != str(texts[index].splitlines()[1].removeprefix("Article: "))
-                .strip()
-                .casefold()
-            ):
-                raise ValueError("Bundled article number order differs from the corpus.")
-            if article["Article Text"] != texts[index].split(
-                "Legal provision:\n", maxsplit=1
-            )[-1]:
-                raise ValueError("Bundled article text differs from the prepared corpus.")
+        self.chunks = raw.reshape(len(self.owners), -1)
+        # The shipped app assets are the model under test. They were repaired
+        # after the source workbook, so rankings are indexed by bundled article
+        # and translated to workbook indices by normalized citation.
+        self.articles = articles
+        if self.owners.min() < 0 or self.owners.max() >= len(articles):
+            raise ValueError("E5 chunk owners point outside the bundled articles.")
+        self.ids = [
+            re.sub(r"[^a-z0-9]+", "", str(article["Law"]).casefold())
+            + ":"
+            + str(article["Article"]).strip().casefold()
+            for article in articles
+        ]
+        corpus_index = {article_id: index for index, article_id in enumerate(ids)}
+        self.corpus_indices = [corpus_index.get(article_id) for article_id in self.ids]
         self.bm25 = BM25Index([str(article["Article Text"]) for article in articles])
+
+    def to_corpus(self, ranking: list[int]) -> list[int]:
+        return [
+            corpus_index
+            for index in ranking
+            if (corpus_index := self.corpus_indices[index]) is not None
+        ]
 
     def _encode_query(self, query: str) -> np.ndarray:
         encoded = self.tokenizer.encode(f"query: {query}")
@@ -469,19 +486,20 @@ def _print_article_results(
 def _show_known_test_labels(
     query: str,
     known_relevant: dict[str, set[str]],
-    rankings: dict[str, list[int]],
-    ids: list[str],
+    rankings: dict[str, tuple[list[int], list[str]]],
 ) -> None:
     relevant = known_relevant.get(query.casefold())
     if not relevant:
         return
     print("\nHeld-out labels for this exact test query:")
     print("  " + ", ".join(sorted(relevant)))
-    for label, ranking in rankings.items():
+    for label, (ranking, ids) in rankings.items():
+        positions = {index: rank for rank, index in enumerate(ranking, start=1)}
+        id_index = {article_id: index for index, article_id in enumerate(ids)}
         ranks = {
-            article_id: ranking.index(index) + 1
+            article_id: positions[id_index[article_id]]
             for article_id in relevant
-            if (index := ids.index(article_id)) in ranking
+            if id_index.get(article_id) in positions
         }
         rendered = ", ".join(
             f"{article_id} at #{rank}" for article_id, rank in sorted(ranks.items())
@@ -531,6 +549,7 @@ def _evaluation_report(
             candidate_model, group["query"], candidate_vectors
         )
         e5_ranking, _ = e5.rank(group["query"])
+        e5_ranking = e5.to_corpus(e5_ranking)
         base_rankings.append(base_ranking)
         candidate_rankings.append(candidate_ranking)
         e5_rankings.append(e5_ranking)
@@ -724,6 +743,7 @@ def main() -> None:
     if len(ids) != int(training_report["corpus_articles"]):
         raise SystemExit("Current corpus size differs from the fine-tuned model report.")
     bundled_articles = json.loads(ARTICLES_PATH.read_text(encoding="utf-8"))
+    corpus_articles = _corpus_articles(texts)
 
     if args.evaluate:
         _evaluation_report(
@@ -805,14 +825,14 @@ def main() -> None:
             "Base MiniLM cosine",
             base_ranking,
             base_scores,
-            bundled_articles,
+            corpus_articles,
             args.top,
         )
         _print_article_results(
             "Fine-tuned SBERT cosine",
             candidate_ranking,
             candidate_scores,
-            bundled_articles,
+            corpus_articles,
             args.top,
         )
         _print_article_results(
@@ -826,11 +846,10 @@ def main() -> None:
             query,
             known_relevant,
             {
-                "Base MiniLM": base_ranking,
-                "Fine-tuned SBERT": candidate_ranking,
-                "Current E5 hybrid": e5_ranking,
+                "Base MiniLM": (base_ranking, ids),
+                "Fine-tuned SBERT": (candidate_ranking, ids),
+                "Current E5 hybrid": (e5_ranking, e5.ids),
             },
-            ids,
         )
         if not interactive:
             return

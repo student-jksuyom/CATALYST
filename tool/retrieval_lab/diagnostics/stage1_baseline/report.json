@@ -1,0 +1,6090 @@
+[
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-001",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are we both liable to follow this contract?",
+  "processedQuery": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are we both liable to follow this contract?",
+  "top3": [
+   "familycode:80",
+   "civilcode:2139",
+   "civilcode:1723"
+  ],
+  "all": [
+   "familycode:80",
+   "civilcode:2139",
+   "civilcode:1723"
+  ],
+  "relevant": [
+   "civilcode:1305"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-001",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are we both liable to follow this contract?",
+  "processedQuery": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are we both liable to follow this contract?",
+  "top3": [
+   "familycode:80",
+   "civilcode:2139",
+   "civilcode:1723"
+  ],
+  "all": [
+   "familycode:80",
+   "civilcode:2139",
+   "civilcode:1723"
+  ],
+  "relevant": [
+   "civilcode:1305"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-002",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are both liable to follow this contract?",
+  "processedQuery": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are both liable to follow this contract?",
+  "top3": [
+   "familycode:80",
+   "civilcode:65",
+   "civilcode:1858"
+  ],
+  "all": [
+   "familycode:80",
+   "civilcode:65",
+   "civilcode:1858"
+  ],
+  "relevant": [
+   "civilcode:1159",
+   "civilcode:1308"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-002",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are both liable to follow this contract?",
+  "processedQuery": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are both liable to follow this contract?",
+  "top3": [
+   "familycode:80",
+   "civilcode:65",
+   "civilcode:1858"
+  ],
+  "all": [
+   "familycode:80",
+   "civilcode:65",
+   "civilcode:1858"
+  ],
+  "relevant": [
+   "civilcode:1159",
+   "civilcode:1308"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-004",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Pwede ko bang bawiin ang pag sangayon ko sa isang kontratang napag usapan na?",
+  "processedQuery": "Pwede ko bang bawiin ang pag sangayon ko sa isang kontratang napag usapan na?",
+  "top3": [
+   "civilcode:1560",
+   "civilcode:1813",
+   "civilcode:1359"
+  ],
+  "all": [
+   "civilcode:1560",
+   "civilcode:1813",
+   "civilcode:1359"
+  ],
+  "relevant": [
+   "civilcode:1191"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-004",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Pwede ko bang bawiin ang pag sangayon ko sa isang kontratang napag usapan na?",
+  "processedQuery": "Pwede ko bang bawiin ang pag sangayon ko sa isang kontratang napag usapan na?",
+  "top3": [
+   "civilcode:1560",
+   "civilcode:1813",
+   "civilcode:1359"
+  ],
+  "all": [
+   "civilcode:1560",
+   "civilcode:1813",
+   "civilcode:1359"
+  ],
+  "relevant": [
+   "civilcode:1191"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-005",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "May nanghiram sa akin ng pera with an agreement na monthly ang payment, pero ilang buwan na siyang hindi nagbabayad.",
+  "processedQuery": "May nanghiram sa akin ng pera with an agreement na monthly ang payment, pero ilang buwan na siyang hindi nagbabayad.",
+  "top3": [
+   "civilcode:1918",
+   "civilcode:1698",
+   "civilcode:1411"
+  ],
+  "all": [
+   "civilcode:1918",
+   "civilcode:1698",
+   "civilcode:1411"
+  ],
+  "relevant": [
+   "civilcode:1933"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-005",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "May nanghiram sa akin ng pera with an agreement na monthly ang payment, pero ilang buwan na siyang hindi nagbabayad.",
+  "processedQuery": "May nanghiram sa akin ng pera with an agreement na monthly ang payment, pero ilang buwan na siyang hindi nagbabayad.",
+  "top3": [
+   "civilcode:1918",
+   "civilcode:1698",
+   "civilcode:1411"
+  ],
+  "all": [
+   "civilcode:1918",
+   "civilcode:1698",
+   "civilcode:1411"
+  ],
+  "relevant": [
+   "civilcode:1933"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-006",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Ilang buwan ng hindi nagbabayad ng utang yung nangutang sakin, despite na ang usapan namin ay monthly sya magbabayad.",
+  "processedQuery": "Ilang buwan ng hindi nagbabayad ng utang yung nangutang sakin, despite na ang usapan namin ay monthly sya magbabayad.",
+  "top3": [
+   "civilcode:1698",
+   "civilcode:1918",
+   "civilcode:1984"
+  ],
+  "all": [
+   "civilcode:1698",
+   "civilcode:1918",
+   "civilcode:1984"
+  ],
+  "relevant": [
+   "civilcode:1169"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-006",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Ilang buwan ng hindi nagbabayad ng utang yung nangutang sakin, despite na ang usapan namin ay monthly sya magbabayad.",
+  "processedQuery": "Ilang buwan ng hindi nagbabayad ng utang yung nangutang sakin, despite na ang usapan namin ay monthly sya magbabayad.",
+  "top3": [
+   "civilcode:1698",
+   "civilcode:1918",
+   "civilcode:1984"
+  ],
+  "all": [
+   "civilcode:1698",
+   "civilcode:1918",
+   "civilcode:1984"
+  ],
+  "relevant": [
+   "civilcode:1169"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-007",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "Pwede ko bang iterminate ang kointrata namin ng aking landlord kung ang pinapaupahan nito sa akin ay maaring makapahamak saakin.",
+  "processedQuery": "Pwede ko bang iterminate ang kointrata namin ng aking landlord kung ang pinapaupahan nito sa akin ay maaring makapahamak saakin.",
+  "top3": [
+   "civilcode:1523",
+   "civilcode:1636",
+   "civilcode:580"
+  ],
+  "all": [
+   "civilcode:1523",
+   "civilcode:1636",
+   "civilcode:580"
+  ],
+  "relevant": [
+   "civilcode:1660"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-007",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "Pwede ko bang iterminate ang kointrata namin ng aking landlord kung ang pinapaupahan nito sa akin ay maaring makapahamak saakin.",
+  "processedQuery": "Pwede ko bang iterminate ang kointrata namin ng aking landlord kung ang pinapaupahan nito sa akin ay maaring makapahamak saakin.",
+  "top3": [
+   "civilcode:1523",
+   "civilcode:1636",
+   "civilcode:580"
+  ],
+  "all": [
+   "civilcode:1523",
+   "civilcode:1636",
+   "civilcode:580"
+  ],
+  "relevant": [
+   "civilcode:1660"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-008",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "I was supposed to deliver construction materials to a customer, pero nasira ang warehouse namin dahil sa isang unexpected flood. Hindi ko na ma-deliver yung materials on the agreed date.",
+  "processedQuery": "I was supposed to deliver construction materials to a customer, pero nasira ang warehouse namin dahil sa isang unexpected flood. Hindi ko na ma-deliver yung materials on the agreed date.",
+  "top3": [
+   "civilcode:1531",
+   "consumeract:52",
+   "civilcode:1523"
+  ],
+  "all": [
+   "civilcode:1531",
+   "consumeract:52",
+   "civilcode:1523"
+  ],
+  "relevant": [
+   "civilcode:1174"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-008",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "I was supposed to deliver construction materials to a customer, pero nasira ang warehouse namin dahil sa isang unexpected flood. Hindi ko na ma-deliver yung materials on the agreed date.",
+  "processedQuery": "I was supposed to deliver construction materials to a customer, pero nasira ang warehouse namin dahil sa isang unexpected flood. Hindi ko na ma-deliver yung materials on the agreed date.",
+  "top3": [
+   "civilcode:1531",
+   "consumeract:52",
+   "civilcode:1523"
+  ],
+  "all": [
+   "civilcode:1531",
+   "consumeract:52",
+   "civilcode:1523"
+  ],
+  "relevant": [
+   "civilcode:1174"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-009",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "I rented an apartment for one year, pero hindi inaayos ng landlord yung major plumbing problem kahit ilang beses na akong nag-report. The problem is affecting our normal use of the unit.",
+  "processedQuery": "I rented an apartment for one year, pero hindi inaayos ng landlord yung major plumbing problem kahit ilang beses na akong nag-report. The problem is affecting our normal use of the unit.",
+  "top3": [
+   "civilcode:1687",
+   "civilcode:1662",
+   "familycode:29"
+  ],
+  "all": [
+   "civilcode:1687",
+   "civilcode:1662",
+   "familycode:29"
+  ],
+  "relevant": [
+   "civilcode:1654"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-009",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "I rented an apartment for one year, pero hindi inaayos ng landlord yung major plumbing problem kahit ilang beses na akong nag-report. The problem is affecting our normal use of the unit.",
+  "processedQuery": "I rented an apartment for one year, pero hindi inaayos ng landlord yung major plumbing problem kahit ilang beses na akong nag-report. The problem is affecting our normal use of the unit.",
+  "top3": [
+   "civilcode:1687",
+   "civilcode:1662",
+   "familycode:29"
+  ],
+  "all": [
+   "civilcode:1687",
+   "civilcode:1662",
+   "familycode:29"
+  ],
+  "relevant": [
+   "civilcode:1654"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-010",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "My neighbor built a drainage outlet that continuously releases dirty water into our yard. Nakaapekto na ito sa paggamit namin ng property, pero ayaw niyang ayusin kahit ilang beses na naming kinausap.",
+  "processedQuery": "My neighbor built a drainage outlet that continuously releases dirty water into our yard. Nakaapekto na ito sa paggamit namin ng property, pero ayaw niyang ayusin kahit ilang beses na naming kinausap.",
+  "top3": [
+   "civilcode:676",
+   "civilcode:704",
+   "civilcode:447"
+  ],
+  "all": [
+   "civilcode:676",
+   "civilcode:704",
+   "civilcode:447"
+  ],
+  "relevant": [
+   "civilcode:694"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-010",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "My neighbor built a drainage outlet that continuously releases dirty water into our yard. Nakaapekto na ito sa paggamit namin ng property, pero ayaw niyang ayusin kahit ilang beses na naming kinausap.",
+  "processedQuery": "My neighbor built a drainage outlet that continuously releases dirty water into our yard. Nakaapekto na ito sa paggamit namin ng property, pero ayaw niyang ayusin kahit ilang beses na naming kinausap.",
+  "top3": [
+   "civilcode:676",
+   "civilcode:704",
+   "civilcode:447"
+  ],
+  "all": [
+   "civilcode:676",
+   "civilcode:704",
+   "civilcode:447"
+  ],
+  "relevant": [
+   "civilcode:694"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-011",
+  "language": "English",
+  "domain": "Civil-Contract",
+  "query": "I agreed to buy a secondhand motorcycle after the seller accepted my offer and confirmed the price. However, the seller later refused to proceed and demanded a higher amount, even though we had already agreed on the original price.",
+  "processedQuery": "I agreed to buy a secondhand motorcycle after the seller accepted my offer and confirmed the price. However, the seller later refused to proceed and demanded a higher amount, even though we had already agreed on the original price.",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1545"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1545"
+  ],
+  "relevant": [
+   "civilcode:1319"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-011",
+  "language": "English",
+  "domain": "Civil-Contract",
+  "query": "I agreed to buy a secondhand motorcycle after the seller accepted my offer and confirmed the price. However, the seller later refused to proceed and demanded a higher amount, even though we had already agreed on the original price.",
+  "processedQuery": "I agreed to buy a secondhand motorcycle after the seller accepted my offer and confirmed the price. However, the seller later refused to proceed and demanded a higher amount, even though we had already agreed on the original price.",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1545"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1545"
+  ],
+  "relevant": [
+   "civilcode:1319"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-012",
+  "language": "English",
+  "domain": "Civil-Property",
+  "query": "I purchased a residential lot from a seller and paid the full amount. A few weeks later, I discovered that the same property had also been sold to another buyer who had already registered the sale.",
+  "processedQuery": "I purchased a residential lot from a seller and paid the full amount. A few weeks later, I discovered that the same property had also been sold to another buyer who had already registered the sale.",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1522",
+   "civilcode:1617"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1522",
+   "civilcode:1617"
+  ],
+  "relevant": [
+   "civilcode:1544"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-012",
+  "language": "English",
+  "domain": "Civil-Property",
+  "query": "I purchased a residential lot from a seller and paid the full amount. A few weeks later, I discovered that the same property had also been sold to another buyer who had already registered the sale.",
+  "processedQuery": "I purchased a residential lot from a seller and paid the full amount. A few weeks later, I discovered that the same property had also been sold to another buyer who had already registered the sale.",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1522",
+   "civilcode:1617"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1522",
+   "civilcode:1617"
+  ],
+  "relevant": [
+   "civilcode:1544"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-013",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Bumili ako ng secondhand na sasakyan. Pagkatapos ng ilang araw, natuklasan kong may malubhang problema pala sa makina na hindi sinabi ng seller bago kami magkasundo sa bentahan.",
+  "processedQuery": "Bumili ako ng secondhand na sasakyan. Pagkatapos ng ilang araw, natuklasan kong may malubhang problema pala sa makina na hindi sinabi ng seller bago kami magkasundo sa bentahan.",
+  "top3": [
+   "civilcode:1523",
+   "civilcode:1545",
+   "civilcode:1533"
+  ],
+  "all": [
+   "civilcode:1523",
+   "civilcode:1545",
+   "civilcode:1533"
+  ],
+  "relevant": [
+   "civilcode:1561"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-013",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Bumili ako ng secondhand na sasakyan. Pagkatapos ng ilang araw, natuklasan kong may malubhang problema pala sa makina na hindi sinabi ng seller bago kami magkasundo sa bentahan.",
+  "processedQuery": "Bumili ako ng secondhand na sasakyan. Pagkatapos ng ilang araw, natuklasan kong may malubhang problema pala sa makina na hindi sinabi ng seller bago kami magkasundo sa bentahan.",
+  "top3": [
+   "civilcode:1523",
+   "civilcode:1545",
+   "civilcode:1533"
+  ],
+  "all": [
+   "civilcode:1523",
+   "civilcode:1545",
+   "civilcode:1533"
+  ],
+  "relevant": [
+   "civilcode:1561"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-014",
+  "language": "English",
+  "domain": "Civil-Loan",
+  "query": "I lent my friend ₱10,000. We agreed that the amount would be repaid with interest, but the interest agreement was only discussed verbally and was never written in the loan document.",
+  "processedQuery": "I lent my friend ₱10,000. We agreed that the amount would be repaid with interest, but the interest agreement was only discussed verbally and was never written in the loan document.",
+  "top3": [
+   "civilcode:1918",
+   "civilcode:1403",
+   "civilcode:1933"
+  ],
+  "all": [
+   "civilcode:1918",
+   "civilcode:1403",
+   "civilcode:1933"
+  ],
+  "relevant": [
+   "civilcode:1956"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-014",
+  "language": "English",
+  "domain": "Civil-Loan",
+  "query": "I lent my friend ₱10,000. We agreed that the amount would be repaid with interest, but the interest agreement was only discussed verbally and was never written in the loan document.",
+  "processedQuery": "I lent my friend ₱10,000. We agreed that the amount would be repaid with interest, but the interest agreement was only discussed verbally and was never written in the loan document.",
+  "top3": [
+   "civilcode:1918",
+   "civilcode:1403",
+   "civilcode:1933"
+  ],
+  "all": [
+   "civilcode:1918",
+   "civilcode:1403",
+   "civilcode:1933"
+  ],
+  "relevant": [
+   "civilcode:1956"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-015",
+  "language": "English",
+  "domain": "Civil-Property",
+  "query": "In a grocery store, an employee left a wet floor unattended and leave no warning sign. I slipped, suffered an injury, and had to pay for medical treatment.",
+  "processedQuery": "In a grocery store, an employee left a wet floor unattended and leave no warning sign. I slipped, suffered an injury, and had to pay for medical treatment.",
+  "top3": [
+   "civilcode:1523",
+   "consumeract:52",
+   "consumeract:10"
+  ],
+  "all": [
+   "civilcode:1523",
+   "consumeract:52",
+   "consumeract:10"
+  ],
+  "relevant": [
+   "civilcode:2176"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-015",
+  "language": "English",
+  "domain": "Civil-Property",
+  "query": "In a grocery store, an employee left a wet floor unattended and leave no warning sign. I slipped, suffered an injury, and had to pay for medical treatment.",
+  "processedQuery": "In a grocery store, an employee left a wet floor unattended and leave no warning sign. I slipped, suffered an injury, and had to pay for medical treatment.",
+  "top3": [
+   "civilcode:1523",
+   "consumeract:52",
+   "consumeract:10"
+  ],
+  "all": [
+   "civilcode:1523",
+   "consumeract:52",
+   "consumeract:10"
+  ],
+  "relevant": [
+   "civilcode:2176"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-016",
+  "language": "English",
+  "domain": "Civil-Contract",
+  "query": "I authorized an agent to sell my property for no less than ₱2 million. Without informing me, the agent accepted an offer of ₱1.5 million and signed an agreement with the buyer.",
+  "processedQuery": "I authorized an agent to sell my property for no less than ₱2 million. Without informing me, the agent accepted an offer of ₱1.5 million and signed an agreement with the buyer.",
+  "top3": [
+   "civilcode:1403",
+   "civilcode:1918",
+   "civilcode:1476"
+  ],
+  "all": [
+   "civilcode:1403",
+   "civilcode:1918",
+   "civilcode:1476"
+  ],
+  "relevant": [
+   "civilcode:1898"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-016",
+  "language": "English",
+  "domain": "Civil-Contract",
+  "query": "I authorized an agent to sell my property for no less than ₱2 million. Without informing me, the agent accepted an offer of ₱1.5 million and signed an agreement with the buyer.",
+  "processedQuery": "I authorized an agent to sell my property for no less than ₱2 million. Without informing me, the agent accepted an offer of ₱1.5 million and signed an agreement with the buyer.",
+  "top3": [
+   "civilcode:1403",
+   "civilcode:1918",
+   "civilcode:1476"
+  ],
+  "all": [
+   "civilcode:1403",
+   "civilcode:1918",
+   "civilcode:1476"
+  ],
+  "relevant": [
+   "civilcode:1898"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-017",
+  "language": "English",
+  "domain": "Civil-Property-Inheritance",
+  "query": "My father died and left a will giving almost all his estate to one person. I am his legitimate child, but the will did not provide for my legally protected share in the inheritance. How should I prove my legitimacy as heir?",
+  "processedQuery": "My father died and left a will giving almost all his estate to one person. I am his legitimate child, but the will did not provide for my legally protected share in the inheritance. How should I prove my legitimacy as heir?",
+  "top3": [
+   "civilcode:908",
+   "civilcode:993",
+   "civilcode:980"
+  ],
+  "all": [
+   "civilcode:908",
+   "civilcode:993",
+   "civilcode:980"
+  ],
+  "relevant": [
+   "civilcode:887"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-017",
+  "language": "English",
+  "domain": "Civil-Property-Inheritance",
+  "query": "My father died and left a will giving almost all his estate to one person. I am his legitimate child, but the will did not provide for my legally protected share in the inheritance. How should I prove my legitimacy as heir?",
+  "processedQuery": "My father died and left a will giving almost all his estate to one person. I am his legitimate child, but the will did not provide for my legally protected share in the inheritance. How should I prove my legitimacy as heir?",
+  "top3": [
+   "civilcode:908",
+   "civilcode:993",
+   "civilcode:980"
+  ],
+  "all": [
+   "civilcode:908",
+   "civilcode:993",
+   "civilcode:980"
+  ],
+  "relevant": [
+   "civilcode:887"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-019",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "May lupa kaming magkakapatid na namana sa aming mga magulang. Gusto ko nang hatiin ang lupa dahil gusto ko nang gamitin ang parte ko, pero ayaw pumayag ng isa kong kapatid.",
+  "processedQuery": "May lupa kaming magkakapatid na namana sa aming mga magulang. Gusto ko nang hatiin ang lupa dahil gusto ko nang gamitin ang parte ko, pero ayaw pumayag ng isa kong kapatid.",
+  "top3": [
+   "civilcode:1621",
+   "civilcode:966",
+   "civilcode:920"
+  ],
+  "all": [
+   "civilcode:1621",
+   "civilcode:966",
+   "civilcode:920"
+  ],
+  "relevant": [
+   "civilcode:494"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-019",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "May lupa kaming magkakapatid na namana sa aming mga magulang. Gusto ko nang hatiin ang lupa dahil gusto ko nang gamitin ang parte ko, pero ayaw pumayag ng isa kong kapatid.",
+  "processedQuery": "May lupa kaming magkakapatid na namana sa aming mga magulang. Gusto ko nang hatiin ang lupa dahil gusto ko nang gamitin ang parte ko, pero ayaw pumayag ng isa kong kapatid.",
+  "top3": [
+   "civilcode:1621",
+   "civilcode:966",
+   "civilcode:920"
+  ],
+  "all": [
+   "civilcode:1621",
+   "civilcode:966",
+   "civilcode:920"
+  ],
+  "relevant": [
+   "civilcode:494"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-020",
+  "language": "Tagalog",
+  "domain": "Civil-Contract",
+  "query": "Nabunggo ako ng isang lalamove rider. Nagtatrabaho sya noong mga oras nayon ng aksidente.",
+  "processedQuery": "Nabunggo ako ng isang lalamove rider. Nagtatrabaho sya noong mga oras nayon ng aksidente.",
+  "top3": [
+   "civilcode:1727",
+   "civilcode:91",
+   "civilcode:1523"
+  ],
+  "all": [
+   "civilcode:1727",
+   "civilcode:91",
+   "civilcode:1523"
+  ],
+  "relevant": [
+   "civilcode:2180"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-020",
+  "language": "Tagalog",
+  "domain": "Civil-Contract",
+  "query": "Nabunggo ako ng isang lalamove rider. Nagtatrabaho sya noong mga oras nayon ng aksidente.",
+  "processedQuery": "Nabunggo ako ng isang lalamove rider. Nagtatrabaho sya noong mga oras nayon ng aksidente.",
+  "top3": [
+   "civilcode:1727",
+   "civilcode:91",
+   "civilcode:1523"
+  ],
+  "all": [
+   "civilcode:1727",
+   "civilcode:91",
+   "civilcode:1523"
+  ],
+  "relevant": [
+   "civilcode:2180"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-021",
+  "language": "Tagalog",
+  "domain": "Civil-Loan",
+  "query": "Nagbabayad ako sa tamang panahon sa isang pinagkakautangan ko pero ayaw nitong tanggapin kahit tama naman ang binabayad ko. Gusto ko malaman anong pwede kong gawin para masabi na hindi ako ang may mali kung sakaling magkaproblema dito.",
+  "processedQuery": "Nagbabayad ako sa tamang panahon sa isang pinagkakautangan ko pero ayaw nitong tanggapin kahit tama naman ang binabayad ko. Gusto ko malaman anong pwede kong gawin para masabi na hindi ako ang may mali kung sakaling magkaproblema dito.",
+  "top3": [
+   "civilcode:1198",
+   "civilcode:1523",
+   "civilcode:1569"
+  ],
+  "all": [
+   "civilcode:1198",
+   "civilcode:1523",
+   "civilcode:1569"
+  ],
+  "relevant": [
+   "civilcode:1256"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-021",
+  "language": "Tagalog",
+  "domain": "Civil-Loan",
+  "query": "Nagbabayad ako sa tamang panahon sa isang pinagkakautangan ko pero ayaw nitong tanggapin kahit tama naman ang binabayad ko. Gusto ko malaman anong pwede kong gawin para masabi na hindi ako ang may mali kung sakaling magkaproblema dito.",
+  "processedQuery": "Nagbabayad ako sa tamang panahon sa isang pinagkakautangan ko pero ayaw nitong tanggapin kahit tama naman ang binabayad ko. Gusto ko malaman anong pwede kong gawin para masabi na hindi ako ang may mali kung sakaling magkaproblema dito.",
+  "top3": [
+   "civilcode:1198",
+   "civilcode:1523",
+   "civilcode:1569"
+  ],
+  "all": [
+   "civilcode:1198",
+   "civilcode:1523",
+   "civilcode:1569"
+  ],
+  "relevant": [
+   "civilcode:1256"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-022",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Ibinigay ng tatay ko sa akin ang isang lote bilang donasyon habang buhay pa siya. Pero walang maayos na kasulatan kaming pinanghahawakan na napasa na itong lupain sa akin.",
+  "processedQuery": "Ibinigay ng tatay ko sa akin ang isang lote bilang donasyon habang buhay pa siya. Pero walang maayos na kasulatan kaming pinanghahawakan na napasa na itong lupain sa akin.",
+  "top3": [
+   "civilcode:1076",
+   "civilcode:72",
+   "civilcode:1918"
+  ],
+  "all": [
+   "civilcode:1076",
+   "civilcode:72",
+   "civilcode:1918"
+  ],
+  "relevant": [
+   "civilcode:749"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-022",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Ibinigay ng tatay ko sa akin ang isang lote bilang donasyon habang buhay pa siya. Pero walang maayos na kasulatan kaming pinanghahawakan na napasa na itong lupain sa akin.",
+  "processedQuery": "Ibinigay ng tatay ko sa akin ang isang lote bilang donasyon habang buhay pa siya. Pero walang maayos na kasulatan kaming pinanghahawakan na napasa na itong lupain sa akin.",
+  "top3": [
+   "civilcode:1076",
+   "civilcode:72",
+   "civilcode:1918"
+  ],
+  "all": [
+   "civilcode:1076",
+   "civilcode:72",
+   "civilcode:1918"
+  ],
+  "relevant": [
+   "civilcode:749"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-023",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Mahigit tatlumpung taon nang ginagamit at inaalagaan ng pamilya namin ang isang bakanteng lupa. Ngayon ay may ibang taong nagke-claim na sa kanya raw ang lupa kahit matagal na namin itong inaangkin.",
+  "processedQuery": "Mahigit tatlumpung taon nang ginagamit at inaalagaan ng pamilya namin ang isang bakanteng lupa. Ngayon ay may ibang taong nagke-claim na sa kanya raw ang lupa kahit matagal na namin itong inaangkin.",
+  "top3": [
+   "civilcode:1640",
+   "civilcode:716",
+   "civilcode:1621"
+  ],
+  "all": [
+   "civilcode:1640",
+   "civilcode:716",
+   "civilcode:1621"
+  ],
+  "relevant": [
+   "civilcode:1137"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-023",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Mahigit tatlumpung taon nang ginagamit at inaalagaan ng pamilya namin ang isang bakanteng lupa. Ngayon ay may ibang taong nagke-claim na sa kanya raw ang lupa kahit matagal na namin itong inaangkin.",
+  "processedQuery": "Mahigit tatlumpung taon nang ginagamit at inaalagaan ng pamilya namin ang isang bakanteng lupa. Ngayon ay may ibang taong nagke-claim na sa kanya raw ang lupa kahit matagal na namin itong inaangkin.",
+  "top3": [
+   "civilcode:1640",
+   "civilcode:716",
+   "civilcode:1621"
+  ],
+  "all": [
+   "civilcode:1640",
+   "civilcode:716",
+   "civilcode:1621"
+  ],
+  "relevant": [
+   "civilcode:1137"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-024",
+  "language": "Tagalog",
+  "domain": "Civil-Contract",
+  "query": "Nagpagawa ako ng bahay sa isang contractor. Hindi niya natapos ang trabaho ayon sa kontrata at ayaw rin niyang ibalik ang perang ibinayad ko kahit ilang beses na akong nag-demand.",
+  "processedQuery": "Nagpagawa ako ng bahay sa isang contractor. Hindi niya natapos ang trabaho ayon sa kontrata at ayaw rin niyang ibalik ang perang ibinayad ko kahit ilang beses na akong nag-demand.",
+  "top3": [
+   "civilcode:1542",
+   "civilcode:1724",
+   "civilcode:1918"
+  ],
+  "all": [
+   "civilcode:1542",
+   "civilcode:1724",
+   "civilcode:1918"
+  ],
+  "relevant": [
+   "civilcode:1191"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-024",
+  "language": "Tagalog",
+  "domain": "Civil-Contract",
+  "query": "Nagpagawa ako ng bahay sa isang contractor. Hindi niya natapos ang trabaho ayon sa kontrata at ayaw rin niyang ibalik ang perang ibinayad ko kahit ilang beses na akong nag-demand.",
+  "processedQuery": "Nagpagawa ako ng bahay sa isang contractor. Hindi niya natapos ang trabaho ayon sa kontrata at ayaw rin niyang ibalik ang perang ibinayad ko kahit ilang beses na akong nag-demand.",
+  "top3": [
+   "civilcode:1542",
+   "civilcode:1724",
+   "civilcode:1918"
+  ],
+  "all": [
+   "civilcode:1542",
+   "civilcode:1724",
+   "civilcode:1918"
+  ],
+  "relevant": [
+   "civilcode:1191"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CC-EV-025",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Napapalibutan ng ibang lupa ang property namin at wala kaming direktang daan papunta sa public road. Kailangan naming dumaan sa lupa ng kapitbahay, pero ayaw niya kaming bigyan ng legal na daanan.",
+  "processedQuery": "Napapalibutan ng ibang lupa ang property namin at wala kaming direktang daan papunta sa public road. Kailangan naming dumaan sa lupa ng kapitbahay, pero ayaw niya kaming bigyan ng legal na daanan.",
+  "top3": [
+   "civilcode:684",
+   "familycode:80",
+   "civilcode:704"
+  ],
+  "all": [
+   "civilcode:684",
+   "familycode:80",
+   "civilcode:704"
+  ],
+  "relevant": [
+   "civilcode:649"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CC-EV-025",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Napapalibutan ng ibang lupa ang property namin at wala kaming direktang daan papunta sa public road. Kailangan naming dumaan sa lupa ng kapitbahay, pero ayaw niya kaming bigyan ng legal na daanan.",
+  "processedQuery": "Napapalibutan ng ibang lupa ang property namin at wala kaming direktang daan papunta sa public road. Kailangan naming dumaan sa lupa ng kapitbahay, pero ayaw niya kaming bigyan ng legal na daanan.",
+  "top3": [
+   "civilcode:684",
+   "familycode:80",
+   "civilcode:704"
+  ],
+  "all": [
+   "civilcode:684",
+   "familycode:80",
+   "civilcode:704"
+  ],
+  "relevant": [
+   "civilcode:649"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-001",
+  "language": "Taglish",
+  "domain": "Family-Property",
+  "query": "Natalo ang partner ko sa isang sugal. Ngayong pinagbabayad na sya ng kanyang talo, sinasabi nya na gamiting pambayad ang property namin.",
+  "processedQuery": "Natalo ang partner ko sa isang sugal. Ngayong pinagbabayad na sya ng kanyang talo, sinasabi nya na gamiting pambayad ang property namin.",
+  "top3": [
+   "civilcode:1241",
+   "civilcode:136",
+   "civilcode:660"
+  ],
+  "all": [
+   "civilcode:1241",
+   "civilcode:136",
+   "civilcode:660"
+  ],
+  "relevant": [
+   "familycode:123"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-001",
+  "language": "Taglish",
+  "domain": "Family-Property",
+  "query": "Natalo ang partner ko sa isang sugal. Ngayong pinagbabayad na sya ng kanyang talo, sinasabi nya na gamiting pambayad ang property namin.",
+  "processedQuery": "Natalo ang partner ko sa isang sugal. Ngayong pinagbabayad na sya ng kanyang talo, sinasabi nya na gamiting pambayad ang property namin.",
+  "top3": [
+   "civilcode:1241",
+   "civilcode:136",
+   "civilcode:660"
+  ],
+  "all": [
+   "civilcode:1241",
+   "civilcode:136",
+   "civilcode:660"
+  ],
+  "relevant": [
+   "familycode:123"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-002",
+  "language": "Taglish",
+  "domain": "Family-Property",
+  "query": "My husband sold a property acquired during our marriage without my written consent or court authorization. We are under the conjugal partnership of gains, and I only learned about the sale after the buyer started occupying the property.",
+  "processedQuery": "My husband sold a property acquired during our marriage without my written consent or court authorization. We are under the conjugal partnership of gains, and I only learned about the sale after the buyer started occupying the property.",
+  "top3": [
+   "familycode:124",
+   "familycode:129",
+   "civilcode:143"
+  ],
+  "all": [
+   "familycode:124",
+   "familycode:129",
+   "civilcode:143"
+  ],
+  "relevant": [
+   "familycode:124"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-002",
+  "language": "Taglish",
+  "domain": "Family-Property",
+  "query": "My husband sold a property acquired during our marriage without my written consent or court authorization. We are under the conjugal partnership of gains, and I only learned about the sale after the buyer started occupying the property.",
+  "processedQuery": "My husband sold a property acquired during our marriage without my written consent or court authorization. We are under the conjugal partnership of gains, and I only learned about the sale after the buyer started occupying the property.",
+  "top3": [
+   "familycode:124",
+   "familycode:129",
+   "civilcode:143"
+  ],
+  "all": [
+   "familycode:124",
+   "familycode:129",
+   "civilcode:143"
+  ],
+  "relevant": [
+   "familycode:124"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-003",
+  "language": "Taglish",
+  "domain": "Family-Filiation",
+  "query": "My brother and I are involved in a property dispute inherited from our parents. Before filing a case against him, I want to know whether the law requires us to make genuine efforts to settle the disagreement first.",
+  "processedQuery": "My brother and I are involved in a property dispute inherited from our parents. Before filing a case against him, I want to know whether the law requires us to make genuine efforts to settle the disagreement first.",
+  "top3": [
+   "civilcode:704",
+   "familycode:151",
+   "civilcode:1030"
+  ],
+  "all": [
+   "civilcode:704",
+   "familycode:151",
+   "civilcode:1030"
+  ],
+  "relevant": [
+   "familycode:151"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-003",
+  "language": "Taglish",
+  "domain": "Family-Filiation",
+  "query": "My brother and I are involved in a property dispute inherited from our parents. Before filing a case against him, I want to know whether the law requires us to make genuine efforts to settle the disagreement first.",
+  "processedQuery": "My brother and I are involved in a property dispute inherited from our parents. Before filing a case against him, I want to know whether the law requires us to make genuine efforts to settle the disagreement first.",
+  "top3": [
+   "civilcode:704",
+   "familycode:151",
+   "civilcode:1030"
+  ],
+  "all": [
+   "civilcode:704",
+   "familycode:151",
+   "civilcode:1030"
+  ],
+  "relevant": [
+   "familycode:151"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-004",
+  "language": "Taglish",
+  "domain": "Family-Separation",
+  "query": "My spouse has repeatedly physically hurt me and threatened my safety. Gusto ko nang mamuhay nang hiwalay sa kanya through the proper legal process.",
+  "processedQuery": "My spouse has repeatedly physically hurt me and threatened my safety. Gusto ko nang mamuhay nang hiwalay sa kanya through the proper legal process.",
+  "top3": [
+   "familycode:135",
+   "civilcode:178",
+   "familycode:141"
+  ],
+  "all": [
+   "familycode:135",
+   "civilcode:178",
+   "familycode:141"
+  ],
+  "relevant": [
+   "familycode:55"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-004",
+  "language": "Taglish",
+  "domain": "Family-Separation",
+  "query": "My spouse has repeatedly physically hurt me and threatened my safety. Gusto ko nang mamuhay nang hiwalay sa kanya through the proper legal process.",
+  "processedQuery": "My spouse has repeatedly physically hurt me and threatened my safety. Gusto ko nang mamuhay nang hiwalay sa kanya through the proper legal process.",
+  "top3": [
+   "familycode:135",
+   "civilcode:178",
+   "familycode:141"
+  ],
+  "all": [
+   "familycode:135",
+   "civilcode:178",
+   "familycode:141"
+  ],
+  "relevant": [
+   "familycode:55"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-005",
+  "language": "Taglish",
+  "domain": "Family-Custody",
+  "query": "My spouse and I have separated, and we are now arguing about who should have custody of our eight-year-old child. My child has expressed a preference to stay with me, but the other parent disagrees.",
+  "processedQuery": "My spouse and I have separated, and we are now arguing about who should have custody of our eight-year-old child. My child has expressed a preference to stay with me, but the other parent disagrees.",
+  "top3": [
+   "familycode:102",
+   "familycode:129",
+   "familycode:135"
+  ],
+  "all": [
+   "familycode:102",
+   "familycode:129",
+   "familycode:135"
+  ],
+  "relevant": [
+   "familycode:213"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-005",
+  "language": "Taglish",
+  "domain": "Family-Custody",
+  "query": "My spouse and I have separated, and we are now arguing about who should have custody of our eight-year-old child. My child has expressed a preference to stay with me, but the other parent disagrees.",
+  "processedQuery": "My spouse and I have separated, and we are now arguing about who should have custody of our eight-year-old child. My child has expressed a preference to stay with me, but the other parent disagrees.",
+  "top3": [
+   "familycode:102",
+   "familycode:129",
+   "familycode:135"
+  ],
+  "all": [
+   "familycode:102",
+   "familycode:129",
+   "familycode:135"
+  ],
+  "relevant": [
+   "familycode:213"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-006",
+  "language": "Taglish",
+  "domain": "Family-Obligation",
+  "query": "My wife wants us to move to another city because of her work, pero ayaw kong iwan yung current family home namin. Hindi kami magkasundo kung saan dapat manirahan ang pamilya.",
+  "processedQuery": "My wife wants us to move to another city because of her work, pero ayaw kong iwan yung current family home namin. Hindi kami magkasundo kung saan dapat manirahan ang pamilya.",
+  "top3": [
+   "familycode:80",
+   "familycode:170",
+   "civilcode:110"
+  ],
+  "all": [
+   "familycode:80",
+   "familycode:170",
+   "civilcode:110"
+  ],
+  "relevant": [
+   "familycode:69"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-006",
+  "language": "Taglish",
+  "domain": "Family-Obligation",
+  "query": "My wife wants us to move to another city because of her work, pero ayaw kong iwan yung current family home namin. Hindi kami magkasundo kung saan dapat manirahan ang pamilya.",
+  "processedQuery": "My wife wants us to move to another city because of her work, pero ayaw kong iwan yung current family home namin. Hindi kami magkasundo kung saan dapat manirahan ang pamilya.",
+  "top3": [
+   "familycode:80",
+   "familycode:170",
+   "civilcode:110"
+  ],
+  "all": [
+   "familycode:80",
+   "familycode:170",
+   "civilcode:110"
+  ],
+  "relevant": [
+   "familycode:69"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-007",
+  "language": "English",
+  "domain": "Family-Marriage",
+  "query": "My partner and I got married in a civil ceremony, but we later discovered that no marriage license had been issued. We were not covered by any of the exceptions that allow a marriage without a license.",
+  "processedQuery": "My partner and I got married in a civil ceremony, but we later discovered that no marriage license had been issued. We were not covered by any of the exceptions that allow a marriage without a license.",
+  "top3": [
+   "civilcode:72",
+   "civilcode:63",
+   "familycode:28"
+  ],
+  "all": [
+   "civilcode:72",
+   "civilcode:63",
+   "familycode:28"
+  ],
+  "relevant": [
+   "familycode:35"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-007",
+  "language": "English",
+  "domain": "Family-Marriage",
+  "query": "My partner and I got married in a civil ceremony, but we later discovered that no marriage license had been issued. We were not covered by any of the exceptions that allow a marriage without a license.",
+  "processedQuery": "My partner and I got married in a civil ceremony, but we later discovered that no marriage license had been issued. We were not covered by any of the exceptions that allow a marriage without a license.",
+  "top3": [
+   "civilcode:72",
+   "civilcode:63",
+   "familycode:28"
+  ],
+  "all": [
+   "civilcode:72",
+   "civilcode:63",
+   "familycode:28"
+  ],
+  "relevant": [
+   "familycode:35"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-008",
+  "language": "English",
+  "domain": "Family-Obligation",
+  "query": "My former spouse has refused to contribute to our child's school expenses, medical bills, transportation, and daily needs. They argue that child support only covers food and basic necessities.",
+  "processedQuery": "My former spouse has refused to contribute to our child's school expenses, medical bills, transportation, and daily needs. They argue that child support only covers food and basic necessities.",
+  "top3": [
+   "civilcode:295",
+   "familycode:200",
+   "familycode:135"
+  ],
+  "all": [
+   "civilcode:295",
+   "familycode:200",
+   "familycode:135"
+  ],
+  "relevant": [
+   "familycode:194"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-008",
+  "language": "English",
+  "domain": "Family-Obligation",
+  "query": "My former spouse has refused to contribute to our child's school expenses, medical bills, transportation, and daily needs. They argue that child support only covers food and basic necessities.",
+  "processedQuery": "My former spouse has refused to contribute to our child's school expenses, medical bills, transportation, and daily needs. They argue that child support only covers food and basic necessities.",
+  "top3": [
+   "civilcode:295",
+   "familycode:200",
+   "familycode:135"
+  ],
+  "all": [
+   "civilcode:295",
+   "familycode:200",
+   "familycode:135"
+  ],
+  "relevant": [
+   "familycode:194"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-009",
+  "language": "English",
+  "domain": "Family-Filiation",
+  "query": "A man who I believe is my biological father refuses to acknowledge me as his child. I want to establish my filiation using the available records and evidence of our relationship.",
+  "processedQuery": "A man who I believe is my biological father refuses to acknowledge me as his child. I want to establish my filiation using the available records and evidence of our relationship.",
+  "top3": [
+   "civilcode:267",
+   "civilcode:283",
+   "familycode:12"
+  ],
+  "all": [
+   "civilcode:267",
+   "civilcode:283",
+   "familycode:12"
+  ],
+  "relevant": [
+   "familycode:172",
+   "familycode:175"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-009",
+  "language": "English",
+  "domain": "Family-Filiation",
+  "query": "A man who I believe is my biological father refuses to acknowledge me as his child. I want to establish my filiation using the available records and evidence of our relationship.",
+  "processedQuery": "A man who I believe is my biological father refuses to acknowledge me as his child. I want to establish my filiation using the available records and evidence of our relationship.",
+  "top3": [
+   "civilcode:267",
+   "civilcode:283",
+   "familycode:12"
+  ],
+  "all": [
+   "civilcode:267",
+   "civilcode:283",
+   "familycode:12"
+  ],
+  "relevant": [
+   "familycode:172",
+   "familycode:175"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-011",
+  "language": "Tagalog",
+  "domain": "Family-Marriage",
+  "query": "Labing-siyam na taong gulang pa lang ako nang ikasal ako. Hindi ako kumuha ng parental consent dahil ayaw pumayag ng mga magulang ko, pero itinuloy pa rin namin ang kasal.",
+  "processedQuery": "Labing-siyam na taong gulang pa lang ako nang ikasal ako. Hindi ako kumuha ng parental consent dahil ayaw pumayag ng mga magulang ko, pero itinuloy pa rin namin ang kasal.",
+  "top3": [
+   "civilcode:85",
+   "civilcode:67",
+   "familycode:15"
+  ],
+  "all": [
+   "civilcode:85",
+   "civilcode:67",
+   "familycode:15"
+  ],
+  "relevant": [
+   "familycode:45"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-011",
+  "language": "Tagalog",
+  "domain": "Family-Marriage",
+  "query": "Labing-siyam na taong gulang pa lang ako nang ikasal ako. Hindi ako kumuha ng parental consent dahil ayaw pumayag ng mga magulang ko, pero itinuloy pa rin namin ang kasal.",
+  "processedQuery": "Labing-siyam na taong gulang pa lang ako nang ikasal ako. Hindi ako kumuha ng parental consent dahil ayaw pumayag ng mga magulang ko, pero itinuloy pa rin namin ang kasal.",
+  "top3": [
+   "civilcode:85",
+   "civilcode:67",
+   "familycode:15"
+  ],
+  "all": [
+   "civilcode:85",
+   "civilcode:67",
+   "familycode:15"
+  ],
+  "relevant": [
+   "familycode:45"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-012",
+  "language": "Tagalog",
+  "domain": "Family-Property",
+  "query": "May asawa ako at ang minana kong lupa mula sa mga magulang ko ay gusto kong ipagbili. Mayroon kaming marriage settlement na nagsasabing conjugal partnership of gains ang aming property regime, pero sinasabi ng asawa ko na kailangan ko pa rin ang pahintulot niya.",
+  "processedQuery": "May asawa ako at ang minana kong lupa mula sa mga magulang ko ay gusto kong ipagbili. Mayroon kaming marriage settlement na nagsasabing conjugal partnership of gains ang aming property regime, pero sinasabi ng asawa ko na kailangan ko pa rin ang pahintulot niya.",
+  "top3": [
+   "familycode:106",
+   "familycode:120",
+   "civilcode:119"
+  ],
+  "all": [
+   "familycode:106",
+   "familycode:120",
+   "civilcode:119"
+  ],
+  "relevant": [
+   "familycode:109"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-012",
+  "language": "Tagalog",
+  "domain": "Family-Property",
+  "query": "May asawa ako at ang minana kong lupa mula sa mga magulang ko ay gusto kong ipagbili. Mayroon kaming marriage settlement na nagsasabing conjugal partnership of gains ang aming property regime, pero sinasabi ng asawa ko na kailangan ko pa rin ang pahintulot niya.",
+  "processedQuery": "May asawa ako at ang minana kong lupa mula sa mga magulang ko ay gusto kong ipagbili. Mayroon kaming marriage settlement na nagsasabing conjugal partnership of gains ang aming property regime, pero sinasabi ng asawa ko na kailangan ko pa rin ang pahintulot niya.",
+  "top3": [
+   "familycode:106",
+   "familycode:120",
+   "civilcode:119"
+  ],
+  "all": [
+   "familycode:106",
+   "familycode:120",
+   "civilcode:119"
+  ],
+  "relevant": [
+   "familycode:109"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-014",
+  "language": "Tagalog",
+  "domain": "Family-Custody",
+  "query": "Pareho kaming buhay ng asawa ko, pero ayaw niyang payagan ang anak naming mag-aral sa paaralang napili namin. Gusto kong malaman kung paano dapat gamitin ng magulang ang kanilang parental authority kapag hindi sila nagkakasundo.",
+  "processedQuery": "Pareho kaming buhay ng asawa ko, pero ayaw niyang payagan ang anak naming mag-aral sa paaralang napili namin. Gusto kong malaman kung paano dapat gamitin ng magulang ang kanilang parental authority kapag hindi sila nagkakasundo.",
+  "top3": [
+   "civilcode:331",
+   "familycode:230",
+   "civilcode:311"
+  ],
+  "all": [
+   "civilcode:331",
+   "familycode:230",
+   "civilcode:311"
+  ],
+  "relevant": [
+   "familycode:211"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-014",
+  "language": "Tagalog",
+  "domain": "Family-Custody",
+  "query": "Pareho kaming buhay ng asawa ko, pero ayaw niyang payagan ang anak naming mag-aral sa paaralang napili namin. Gusto kong malaman kung paano dapat gamitin ng magulang ang kanilang parental authority kapag hindi sila nagkakasundo.",
+  "processedQuery": "Pareho kaming buhay ng asawa ko, pero ayaw niyang payagan ang anak naming mag-aral sa paaralang napili namin. Gusto kong malaman kung paano dapat gamitin ng magulang ang kanilang parental authority kapag hindi sila nagkakasundo.",
+  "top3": [
+   "civilcode:331",
+   "familycode:230",
+   "civilcode:311"
+  ],
+  "all": [
+   "civilcode:331",
+   "familycode:230",
+   "civilcode:311"
+  ],
+  "relevant": [
+   "familycode:211"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "FC-EV-015",
+  "language": "Tagalog",
+  "domain": "Family-Filiation",
+  "query": "Hindi kasal ang mga magulang ko noong ipinanganak ako. Kinikilala ako ng tatay ko sa isang public document, at gusto kong malaman kung maaari kong gamitin ang apelyido niya.",
+  "processedQuery": "Hindi kasal ang mga magulang ko noong ipinanganak ako. Kinikilala ako ng tatay ko sa isang public document, at gusto kong malaman kung maaari kong gamitin ang apelyido niya.",
+  "top3": [
+   "civilcode:280",
+   "civilcode:366",
+   "familycode:12"
+  ],
+  "all": [
+   "civilcode:280",
+   "civilcode:366",
+   "familycode:12"
+  ],
+  "relevant": [
+   "familycode:176"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "FC-EV-015",
+  "language": "Tagalog",
+  "domain": "Family-Filiation",
+  "query": "Hindi kasal ang mga magulang ko noong ipinanganak ako. Kinikilala ako ng tatay ko sa isang public document, at gusto kong malaman kung maaari kong gamitin ang apelyido niya.",
+  "processedQuery": "Hindi kasal ang mga magulang ko noong ipinanganak ako. Kinikilala ako ng tatay ko sa isang public document, at gusto kong malaman kung maaari kong gamitin ang apelyido niya.",
+  "top3": [
+   "civilcode:280",
+   "civilcode:366",
+   "familycode:12"
+  ],
+  "all": [
+   "civilcode:280",
+   "civilcode:366",
+   "familycode:12"
+  ],
+  "relevant": [
+   "familycode:176"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-001",
+  "language": "Taglish",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "The online seller advertised the phone as brand new and unused. Pagdating ng package, may existing scratches, signs of previous repairs, at used parts pala yung device.",
+  "processedQuery": "The online seller advertised the phone as brand new and unused. Pagdating ng package, may existing scratches, signs of previous repairs, at used parts pala yung device.",
+  "top3": [
+   "consumeract:100",
+   "consumeract:15",
+   "consumeract:50"
+  ],
+  "all": [
+   "consumeract:100",
+   "consumeract:15",
+   "consumeract:50"
+  ],
+  "relevant": [
+   "consumeract:50"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-001",
+  "language": "Taglish",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "The online seller advertised the phone as brand new and unused. Pagdating ng package, may existing scratches, signs of previous repairs, at used parts pala yung device.",
+  "processedQuery": "The online seller advertised the phone as brand new and unused. Pagdating ng package, may existing scratches, signs of previous repairs, at used parts pala yung device.",
+  "top3": [
+   "consumeract:100",
+   "consumeract:15",
+   "consumeract:50"
+  ],
+  "all": [
+   "consumeract:100",
+   "consumeract:15",
+   "consumeract:50"
+  ],
+  "relevant": [
+   "consumeract:50"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-002",
+  "language": "Taglish",
+  "domain": "Consumer-Defective-Product",
+  "query": "I brought my laptop to a repair shop because of a keyboard problem. After the repair, hindi na gumagana yung screen, and the technician refuses to fix the additional damage caused during the service.",
+  "processedQuery": "I brought my laptop to a repair shop because of a keyboard problem. After the repair, hindi na gumagana yung screen, and the technician refuses to fix the additional damage caused during the service.",
+  "top3": [
+   "consumeract:11",
+   "consumeract:164",
+   "civilcode:303"
+  ],
+  "all": [
+   "consumeract:11",
+   "consumeract:164",
+   "civilcode:303"
+  ],
+  "relevant": [
+   "consumeract:99"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-002",
+  "language": "Taglish",
+  "domain": "Consumer-Defective-Product",
+  "query": "I brought my laptop to a repair shop because of a keyboard problem. After the repair, hindi na gumagana yung screen, and the technician refuses to fix the additional damage caused during the service.",
+  "processedQuery": "I brought my laptop to a repair shop because of a keyboard problem. After the repair, hindi na gumagana yung screen, and the technician refuses to fix the additional damage caused during the service.",
+  "top3": [
+   "consumeract:11",
+   "consumeract:164",
+   "civilcode:303"
+  ],
+  "all": [
+   "consumeract:11",
+   "consumeract:164",
+   "civilcode:303"
+  ],
+  "relevant": [
+   "consumeract:99"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-003",
+  "language": "Taglish",
+  "domain": "Consumer-Product-Standard",
+  "query": "A store sells electrical extension cords that do not comply with the applicable mandatory Philippine safety standard. The seller continues distributing them even after being informed of the noncompliance.",
+  "processedQuery": "A store sells electrical extension cords that do not comply with the applicable mandatory Philippine safety standard. The seller continues distributing them even after being informed of the noncompliance.",
+  "top3": [
+   "consumeract:18",
+   "consumeract:15",
+   "civilcode:1599"
+  ],
+  "all": [
+   "consumeract:18",
+   "consumeract:15",
+   "civilcode:1599"
+  ],
+  "relevant": [
+   "consumeract:18"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-003",
+  "language": "Taglish",
+  "domain": "Consumer-Product-Standard",
+  "query": "A store sells electrical extension cords that do not comply with the applicable mandatory Philippine safety standard. The seller continues distributing them even after being informed of the noncompliance.",
+  "processedQuery": "A store sells electrical extension cords that do not comply with the applicable mandatory Philippine safety standard. The seller continues distributing them even after being informed of the noncompliance.",
+  "top3": [
+   "consumeract:18",
+   "consumeract:15",
+   "civilcode:1599"
+  ],
+  "all": [
+   "consumeract:18",
+   "consumeract:15",
+   "civilcode:1599"
+  ],
+  "relevant": [
+   "consumeract:18"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-004",
+  "language": "Taglish",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "Bumili ako ng isang kilo ng bigas, pero nang timbangin ko ito gamit ang isang maayos at calibrated na timbangan, kulang pala ang aktuwal na timbang na ibinigay ng tindahan.",
+  "processedQuery": "Bumili ako ng isang kilo ng bigas, pero nang timbangin ko ito gamit ang isang maayos at calibrated na timbangan, kulang pala ang aktuwal na timbang na ibinigay ng tindahan.",
+  "top3": [
+   "civilcode:1464",
+   "consumeract:64",
+   "consumeract:36"
+  ],
+  "all": [
+   "civilcode:1464",
+   "consumeract:64",
+   "consumeract:36"
+  ],
+  "relevant": [
+   "consumeract:64"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-004",
+  "language": "Taglish",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "Bumili ako ng isang kilo ng bigas, pero nang timbangin ko ito gamit ang isang maayos at calibrated na timbangan, kulang pala ang aktuwal na timbang na ibinigay ng tindahan.",
+  "processedQuery": "Bumili ako ng isang kilo ng bigas, pero nang timbangin ko ito gamit ang isang maayos at calibrated na timbangan, kulang pala ang aktuwal na timbang na ibinigay ng tindahan.",
+  "top3": [
+   "civilcode:1464",
+   "consumeract:64",
+   "consumeract:36"
+  ],
+  "all": [
+   "civilcode:1464",
+   "consumeract:64",
+   "consumeract:36"
+  ],
+  "relevant": [
+   "consumeract:64"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-005",
+  "language": "Tagalog",
+  "domain": "Consumer-Defective-Product",
+  "query": "Bumili ako ng de-latang pagkain sa grocery. Pagbukas ko, may kakaibang amoy at kulay ang laman kahit hindi pa lumalagpas sa expiration date na nakalagay sa lata.",
+  "processedQuery": "Bumili ako ng de-latang pagkain sa grocery. Pagbukas ko, may kakaibang amoy at kulay ang laman kahit hindi pa lumalagpas sa expiration date na nakalagay sa lata.",
+  "top3": [
+   "consumeract:88",
+   "consumeract:35",
+   "consumeract:16"
+  ],
+  "all": [
+   "consumeract:88",
+   "consumeract:35",
+   "consumeract:16"
+  ],
+  "relevant": [
+   "consumeract:23"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-005",
+  "language": "Tagalog",
+  "domain": "Consumer-Defective-Product",
+  "query": "Bumili ako ng de-latang pagkain sa grocery. Pagbukas ko, may kakaibang amoy at kulay ang laman kahit hindi pa lumalagpas sa expiration date na nakalagay sa lata.",
+  "processedQuery": "Bumili ako ng de-latang pagkain sa grocery. Pagbukas ko, may kakaibang amoy at kulay ang laman kahit hindi pa lumalagpas sa expiration date na nakalagay sa lata.",
+  "top3": [
+   "consumeract:88",
+   "consumeract:35",
+   "consumeract:16"
+  ],
+  "all": [
+   "consumeract:88",
+   "consumeract:35",
+   "consumeract:16"
+  ],
+  "relevant": [
+   "consumeract:23"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-006",
+  "language": "Tagalog",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "Bumili ako ng household pesticide pero walang malinaw na hazard warnings at instructions kung paano ito ligtas gamitin at itago. May maliliit kaming bata sa bahay kaya nag-aalala ako sa posibleng aksidente.",
+  "processedQuery": "Bumili ako ng household pesticide pero walang malinaw na hazard warnings at instructions kung paano ito ligtas gamitin at itago. May maliliit kaming bata sa bahay kaya nag-aalala ako sa posibleng aksidente.",
+  "top3": [
+   "consumeract:44",
+   "consumeract:91",
+   "consumeract:18"
+  ],
+  "all": [
+   "consumeract:44",
+   "consumeract:91",
+   "consumeract:18"
+  ],
+  "relevant": [
+   "consumeract:91"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-006",
+  "language": "Tagalog",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "Bumili ako ng household pesticide pero walang malinaw na hazard warnings at instructions kung paano ito ligtas gamitin at itago. May maliliit kaming bata sa bahay kaya nag-aalala ako sa posibleng aksidente.",
+  "processedQuery": "Bumili ako ng household pesticide pero walang malinaw na hazard warnings at instructions kung paano ito ligtas gamitin at itago. May maliliit kaming bata sa bahay kaya nag-aalala ako sa posibleng aksidente.",
+  "top3": [
+   "consumeract:44",
+   "consumeract:91",
+   "consumeract:18"
+  ],
+  "all": [
+   "consumeract:44",
+   "consumeract:91",
+   "consumeract:18"
+  ],
+  "relevant": [
+   "consumeract:91"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-007",
+  "language": "Tagalog",
+  "domain": "Consumer-Defective-Product",
+  "query": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na sya. Ayaw tanggapin ng seller nung nirereturn ko kahit may resibo naman ako",
+  "processedQuery": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na sya. Ayaw tanggapin ng seller nung nirereturn ko kahit may resibo naman ako",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1678",
+   "civilcode:1523"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1678",
+   "civilcode:1523"
+  ],
+  "relevant": [
+   "civilcode:1561",
+   "civilcode:1566",
+   "consumeract:67"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-007",
+  "language": "Tagalog",
+  "domain": "Consumer-Defective-Product",
+  "query": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na sya. Ayaw tanggapin ng seller nung nirereturn ko kahit may resibo naman ako",
+  "processedQuery": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na sya. Ayaw tanggapin ng seller nung nirereturn ko kahit may resibo naman ako",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1678",
+   "civilcode:1523"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1678",
+   "civilcode:1523"
+  ],
+  "relevant": [
+   "civilcode:1561",
+   "civilcode:1566",
+   "consumeract:67"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-008",
+  "language": "English",
+  "domain": "Consumer-Defective-Product",
+  "query": "I bought a new electric fan, but its motor overheated during normal use and caused the plastic casing to melt. The manufacturer refused to take responsibility for the damage.",
+  "processedQuery": "I bought a new electric fan, but its motor overheated during normal use and caused the plastic casing to melt. The manufacturer refused to take responsibility for the damage.",
+  "top3": [
+   "consumeract:106",
+   "consumeract:15",
+   "civilcode:1561"
+  ],
+  "all": [
+   "consumeract:106",
+   "consumeract:15",
+   "civilcode:1561"
+  ],
+  "relevant": [
+   "consumeract:97"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-008",
+  "language": "English",
+  "domain": "Consumer-Defective-Product",
+  "query": "I bought a new electric fan, but its motor overheated during normal use and caused the plastic casing to melt. The manufacturer refused to take responsibility for the damage.",
+  "processedQuery": "I bought a new electric fan, but its motor overheated during normal use and caused the plastic casing to melt. The manufacturer refused to take responsibility for the damage.",
+  "top3": [
+   "consumeract:106",
+   "consumeract:15",
+   "civilcode:1561"
+  ],
+  "all": [
+   "consumeract:106",
+   "consumeract:15",
+   "civilcode:1561"
+  ],
+  "relevant": [
+   "consumeract:97"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-009",
+  "language": "English",
+  "domain": "Consumer-Advertisement",
+  "query": "A company advertised that its skincare product could permanently remove acne scars in just three days. The advertisement made these claims without sufficient evidence to support them.",
+  "processedQuery": "A company advertised that its skincare product could permanently remove acne scars in just three days. The advertisement made these claims without sufficient evidence to support them.",
+  "top3": [
+   "consumeract:112",
+   "consumeract:15",
+   "consumeract:100"
+  ],
+  "all": [
+   "consumeract:112",
+   "consumeract:15",
+   "consumeract:100"
+  ],
+  "relevant": [
+   "consumeract:110"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-009",
+  "language": "English",
+  "domain": "Consumer-Advertisement",
+  "query": "A company advertised that its skincare product could permanently remove acne scars in just three days. The advertisement made these claims without sufficient evidence to support them.",
+  "processedQuery": "A company advertised that its skincare product could permanently remove acne scars in just three days. The advertisement made these claims without sufficient evidence to support them.",
+  "top3": [
+   "consumeract:112",
+   "consumeract:15",
+   "consumeract:100"
+  ],
+  "all": [
+   "consumeract:112",
+   "consumeract:15",
+   "consumeract:100"
+  ],
+  "relevant": [
+   "consumeract:110"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "baseline",
+  "datasetId": "CA-EV-010",
+  "language": "English",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "I joined a product-selling program that required me to pay a large membership fee. I was told that I could earn substantial money mainly by recruiting new members who would also pay to join.",
+  "processedQuery": "I joined a product-selling program that required me to pay a large membership fee. I was told that I could earn substantial money mainly by recruiting new members who would also pay to join.",
+  "top3": [
+   "consumeract:52",
+   "civilcode:1918",
+   "consumeract:69"
+  ],
+  "all": [
+   "consumeract:52",
+   "civilcode:1918",
+   "consumeract:69"
+  ],
+  "relevant": [
+   "consumeract:53"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "denseOnly",
+  "mode": "translation",
+  "datasetId": "CA-EV-010",
+  "language": "English",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "I joined a product-selling program that required me to pay a large membership fee. I was told that I could earn substantial money mainly by recruiting new members who would also pay to join.",
+  "processedQuery": "I joined a product-selling program that required me to pay a large membership fee. I was told that I could earn substantial money mainly by recruiting new members who would also pay to join.",
+  "top3": [
+   "consumeract:52",
+   "civilcode:1918",
+   "consumeract:69"
+  ],
+  "all": [
+   "consumeract:52",
+   "civilcode:1918",
+   "consumeract:69"
+  ],
+  "relevant": [
+   "consumeract:53"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-001",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are we both liable to follow this contract?",
+  "processedQuery": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are we both liable to follow this contract?",
+  "top3": [
+   "civilcode:1723",
+   "civilcode:1716",
+   "civilcode:1724"
+  ],
+  "all": [
+   "civilcode:1723",
+   "civilcode:1716",
+   "civilcode:1724",
+   "civilcode:1308",
+   "civilcode:1728",
+   "civilcode:1407",
+   "familycode:80",
+   "civilcode:1714",
+   "civilcode:1898",
+   "civilcode:1727",
+   "civilcode:203",
+   "civilcode:1719",
+   "civilcode:1945",
+   "civilcode:1729",
+   "civilcode:1586"
+  ],
+  "relevant": [
+   "civilcode:1305"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-001",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are we both liable to follow this contract?",
+  "processedQuery": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are we both liable to follow this contract?",
+  "top3": [
+   "civilcode:1723",
+   "civilcode:1716",
+   "civilcode:1724"
+  ],
+  "all": [
+   "civilcode:1723",
+   "civilcode:1716",
+   "civilcode:1724",
+   "civilcode:1308",
+   "civilcode:1728",
+   "civilcode:1407",
+   "familycode:80",
+   "civilcode:1714",
+   "civilcode:1898",
+   "civilcode:1727",
+   "civilcode:203",
+   "civilcode:1719",
+   "civilcode:1945",
+   "civilcode:1729",
+   "civilcode:1586"
+  ],
+  "relevant": [
+   "civilcode:1305"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-002",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are both liable to follow this contract?",
+  "processedQuery": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are both liable to follow this contract?",
+  "top3": [
+   "civilcode:1723",
+   "civilcode:1716",
+   "civilcode:1728"
+  ],
+  "all": [
+   "civilcode:1723",
+   "civilcode:1716",
+   "civilcode:1728",
+   "civilcode:1724",
+   "civilcode:1308",
+   "civilcode:1407",
+   "civilcode:1898",
+   "civilcode:1714",
+   "familycode:80",
+   "civilcode:1945",
+   "civilcode:1835",
+   "civilcode:1586",
+   "civilcode:1719",
+   "civilcode:65",
+   "civilcode:1858"
+  ],
+  "relevant": [
+   "civilcode:1159",
+   "civilcode:1308"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": true,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-002",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are both liable to follow this contract?",
+  "processedQuery": "Nagkaroon na kami ng agreement ng nakausap kong contractor. Are both liable to follow this contract?",
+  "top3": [
+   "civilcode:1723",
+   "civilcode:1716",
+   "civilcode:1728"
+  ],
+  "all": [
+   "civilcode:1723",
+   "civilcode:1716",
+   "civilcode:1728",
+   "civilcode:1724",
+   "civilcode:1308",
+   "civilcode:1407",
+   "civilcode:1898",
+   "civilcode:1714",
+   "familycode:80",
+   "civilcode:1945",
+   "civilcode:1835",
+   "civilcode:1586",
+   "civilcode:1719",
+   "civilcode:65",
+   "civilcode:1858"
+  ],
+  "relevant": [
+   "civilcode:1159",
+   "civilcode:1308"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": true,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-004",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Pwede ko bang bawiin ang pag sangayon ko sa isang kontratang napag usapan na?",
+  "processedQuery": "Pwede ko bang bawiin ang pag sangayon ko sa isang kontratang napag usapan na?",
+  "top3": [
+   "civilcode:1560",
+   "civilcode:1813",
+   "civilcode:1359"
+  ],
+  "all": [
+   "civilcode:1560",
+   "civilcode:1813",
+   "civilcode:1359",
+   "familycode:124",
+   "civilcode:1539",
+   "familycode:96",
+   "civilcode:1380",
+   "civilcode:1583",
+   "civilcode:1523",
+   "civilcode:1878",
+   "civilcode:1324",
+   "familycode:64",
+   "civilcode:1534",
+   "civilcode:1545",
+   "civilcode:1636"
+  ],
+  "relevant": [
+   "civilcode:1191"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-004",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Pwede ko bang bawiin ang pag sangayon ko sa isang kontratang napag usapan na?",
+  "processedQuery": "Pwede ko bang bawiin ang pag sangayon ko sa isang kontratang napag usapan na?",
+  "top3": [
+   "civilcode:1560",
+   "civilcode:1813",
+   "civilcode:1359"
+  ],
+  "all": [
+   "civilcode:1560",
+   "civilcode:1813",
+   "civilcode:1359",
+   "familycode:124",
+   "civilcode:1539",
+   "familycode:96",
+   "civilcode:1380",
+   "civilcode:1583",
+   "civilcode:1523",
+   "civilcode:1878",
+   "civilcode:1324",
+   "familycode:64",
+   "civilcode:1534",
+   "civilcode:1545",
+   "civilcode:1636"
+  ],
+  "relevant": [
+   "civilcode:1191"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-005",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "May nanghiram sa akin ng pera with an agreement na monthly ang payment, pero ilang buwan na siyang hindi nagbabayad.",
+  "processedQuery": "May nanghiram sa akin ng pera with an agreement na monthly ang payment, pero ilang buwan na siyang hindi nagbabayad.",
+  "top3": [
+   "civilcode:2209",
+   "civilcode:1180",
+   "civilcode:1788"
+  ],
+  "all": [
+   "civilcode:2209",
+   "civilcode:1180",
+   "civilcode:1788",
+   "civilcode:1484",
+   "civilcode:1236",
+   "civilcode:1221",
+   "civilcode:2066",
+   "civilcode:1251",
+   "civilcode:1626",
+   "civilcode:2159",
+   "civilcode:1302",
+   "civilcode:1248",
+   "civilcode:1165",
+   "civilcode:1382",
+   "civilcode:1428"
+  ],
+  "relevant": [
+   "civilcode:1933"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-005",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "May nanghiram sa akin ng pera with an agreement na monthly ang payment, pero ilang buwan na siyang hindi nagbabayad.",
+  "processedQuery": "May nanghiram sa akin ng pera with an agreement na monthly ang payment, pero ilang buwan na siyang hindi nagbabayad.",
+  "top3": [
+   "civilcode:2209",
+   "civilcode:1180",
+   "civilcode:1788"
+  ],
+  "all": [
+   "civilcode:2209",
+   "civilcode:1180",
+   "civilcode:1788",
+   "civilcode:1484",
+   "civilcode:1236",
+   "civilcode:1221",
+   "civilcode:2066",
+   "civilcode:1251",
+   "civilcode:1626",
+   "civilcode:2159",
+   "civilcode:1302",
+   "civilcode:1248",
+   "civilcode:1165",
+   "civilcode:1382",
+   "civilcode:1428"
+  ],
+  "relevant": [
+   "civilcode:1933"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-006",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Ilang buwan ng hindi nagbabayad ng utang yung nangutang sakin, despite na ang usapan namin ay monthly sya magbabayad.",
+  "processedQuery": "Ilang buwan ng hindi nagbabayad ng utang yung nangutang sakin, despite na ang usapan namin ay monthly sya magbabayad.",
+  "top3": [
+   "civilcode:1933",
+   "civilcode:2154",
+   "civilcode:1180"
+  ],
+  "all": [
+   "civilcode:1933",
+   "civilcode:2154",
+   "civilcode:1180",
+   "civilcode:2209",
+   "civilcode:1425",
+   "civilcode:1243",
+   "civilcode:1198",
+   "civilcode:2069",
+   "civilcode:1236",
+   "civilcode:1626",
+   "civilcode:1217",
+   "civilcode:1165",
+   "civilcode:1302",
+   "civilcode:1221",
+   "civilcode:1788"
+  ],
+  "relevant": [
+   "civilcode:1169"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-006",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "Ilang buwan ng hindi nagbabayad ng utang yung nangutang sakin, despite na ang usapan namin ay monthly sya magbabayad.",
+  "processedQuery": "Ilang buwan ng hindi nagbabayad ng utang yung nangutang sakin, despite na ang usapan namin ay monthly sya magbabayad.",
+  "top3": [
+   "civilcode:1933",
+   "civilcode:2154",
+   "civilcode:1180"
+  ],
+  "all": [
+   "civilcode:1933",
+   "civilcode:2154",
+   "civilcode:1180",
+   "civilcode:2209",
+   "civilcode:1425",
+   "civilcode:1243",
+   "civilcode:1198",
+   "civilcode:2069",
+   "civilcode:1236",
+   "civilcode:1626",
+   "civilcode:1217",
+   "civilcode:1165",
+   "civilcode:1302",
+   "civilcode:1221",
+   "civilcode:1788"
+  ],
+  "relevant": [
+   "civilcode:1169"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-007",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "Pwede ko bang iterminate ang kointrata namin ng aking landlord kung ang pinapaupahan nito sa akin ay maaring makapahamak saakin.",
+  "processedQuery": "Pwede ko bang iterminate ang kointrata namin ng aking landlord kung ang pinapaupahan nito sa akin ay maaring makapahamak saakin.",
+  "top3": [
+   "civilcode:1659",
+   "civilcode:1678",
+   "civilcode:1523"
+  ],
+  "all": [
+   "civilcode:1659",
+   "civilcode:1678",
+   "civilcode:1523",
+   "civilcode:1658",
+   "civilcode:1686",
+   "civilcode:1663",
+   "civilcode:1661",
+   "civilcode:1636",
+   "civilcode:580",
+   "civilcode:447",
+   "civilcode:1662",
+   "civilcode:1981",
+   "civilcode:1664",
+   "civilcode:1649",
+   "civilcode:762"
+  ],
+  "relevant": [
+   "civilcode:1660"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-007",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "Pwede ko bang iterminate ang kointrata namin ng aking landlord kung ang pinapaupahan nito sa akin ay maaring makapahamak saakin.",
+  "processedQuery": "Pwede ko bang iterminate ang kointrata namin ng aking landlord kung ang pinapaupahan nito sa akin ay maaring makapahamak saakin.",
+  "top3": [
+   "civilcode:1659",
+   "civilcode:1678",
+   "civilcode:1523"
+  ],
+  "all": [
+   "civilcode:1659",
+   "civilcode:1678",
+   "civilcode:1523",
+   "civilcode:1658",
+   "civilcode:1686",
+   "civilcode:1663",
+   "civilcode:1661",
+   "civilcode:1636",
+   "civilcode:580",
+   "civilcode:447",
+   "civilcode:1662",
+   "civilcode:1981",
+   "civilcode:1664",
+   "civilcode:1649",
+   "civilcode:762"
+  ],
+  "relevant": [
+   "civilcode:1660"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-008",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "I was supposed to deliver construction materials to a customer, pero nasira ang warehouse namin dahil sa isang unexpected flood. Hindi ko na ma-deliver yung materials on the agreed date.",
+  "processedQuery": "I was supposed to deliver construction materials to a customer, pero nasira ang warehouse namin dahil sa isang unexpected flood. Hindi ko na ma-deliver yung materials on the agreed date.",
+  "top3": [
+   "civilcode:508",
+   "civilcode:1583",
+   "civilcode:447"
+  ],
+  "all": [
+   "civilcode:508",
+   "civilcode:1583",
+   "civilcode:447",
+   "civilcode:1531",
+   "civilcode:1587",
+   "civilcode:1265",
+   "civilcode:1723",
+   "consumeract:52",
+   "civilcode:2168",
+   "civilcode:1523",
+   "civilcode:1545",
+   "civilcode:1584",
+   "civilcode:1726",
+   "civilcode:1981",
+   "civilcode:1189"
+  ],
+  "relevant": [
+   "civilcode:1174"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-008",
+  "language": "Taglish",
+  "domain": "Civil-Contract",
+  "query": "I was supposed to deliver construction materials to a customer, pero nasira ang warehouse namin dahil sa isang unexpected flood. Hindi ko na ma-deliver yung materials on the agreed date.",
+  "processedQuery": "I was supposed to deliver construction materials to a customer, pero nasira ang warehouse namin dahil sa isang unexpected flood. Hindi ko na ma-deliver yung materials on the agreed date.",
+  "top3": [
+   "civilcode:508",
+   "civilcode:1583",
+   "civilcode:447"
+  ],
+  "all": [
+   "civilcode:508",
+   "civilcode:1583",
+   "civilcode:447",
+   "civilcode:1531",
+   "civilcode:1587",
+   "civilcode:1265",
+   "civilcode:1723",
+   "consumeract:52",
+   "civilcode:2168",
+   "civilcode:1523",
+   "civilcode:1545",
+   "civilcode:1584",
+   "civilcode:1726",
+   "civilcode:1981",
+   "civilcode:1189"
+  ],
+  "relevant": [
+   "civilcode:1174"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-009",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "I rented an apartment for one year, pero hindi inaayos ng landlord yung major plumbing problem kahit ilang beses na akong nag-report. The problem is affecting our normal use of the unit.",
+  "processedQuery": "I rented an apartment for one year, pero hindi inaayos ng landlord yung major plumbing problem kahit ilang beses na akong nag-report. The problem is affecting our normal use of the unit.",
+  "top3": [
+   "civilcode:1687",
+   "civilcode:1678",
+   "civilcode:1662"
+  ],
+  "all": [
+   "civilcode:1687",
+   "civilcode:1678",
+   "civilcode:1662",
+   "civilcode:1652",
+   "consumeract:65",
+   "civilcode:1673",
+   "civilcode:1661",
+   "civilcode:1681",
+   "civilcode:1658",
+   "civilcode:1769",
+   "familycode:29",
+   "civilcode:450",
+   "civilcode:506",
+   "civilcode:660",
+   "consumeract:154"
+  ],
+  "relevant": [
+   "civilcode:1654"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-009",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "I rented an apartment for one year, pero hindi inaayos ng landlord yung major plumbing problem kahit ilang beses na akong nag-report. The problem is affecting our normal use of the unit.",
+  "processedQuery": "I rented an apartment for one year, pero hindi inaayos ng landlord yung major plumbing problem kahit ilang beses na akong nag-report. The problem is affecting our normal use of the unit.",
+  "top3": [
+   "civilcode:1687",
+   "civilcode:1678",
+   "civilcode:1662"
+  ],
+  "all": [
+   "civilcode:1687",
+   "civilcode:1678",
+   "civilcode:1662",
+   "civilcode:1652",
+   "consumeract:65",
+   "civilcode:1673",
+   "civilcode:1661",
+   "civilcode:1681",
+   "civilcode:1658",
+   "civilcode:1769",
+   "familycode:29",
+   "civilcode:450",
+   "civilcode:506",
+   "civilcode:660",
+   "consumeract:154"
+  ],
+  "relevant": [
+   "civilcode:1654"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-010",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "My neighbor built a drainage outlet that continuously releases dirty water into our yard. Nakaapekto na ito sa paggamit namin ng property, pero ayaw niyang ayusin kahit ilang beses na naming kinausap.",
+  "processedQuery": "My neighbor built a drainage outlet that continuously releases dirty water into our yard. Nakaapekto na ito sa paggamit namin ng property, pero ayaw niyang ayusin kahit ilang beses na naming kinausap.",
+  "top3": [
+   "civilcode:676",
+   "civilcode:675",
+   "civilcode:674"
+  ],
+  "all": [
+   "civilcode:676",
+   "civilcode:675",
+   "civilcode:674",
+   "civilcode:506",
+   "civilcode:704",
+   "civilcode:680",
+   "civilcode:447",
+   "civilcode:303",
+   "civilcode:660",
+   "civilcode:511",
+   "civilcode:508",
+   "civilcode:502",
+   "civilcode:503",
+   "civilcode:450",
+   "civilcode:507"
+  ],
+  "relevant": [
+   "civilcode:694"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-010",
+  "language": "Taglish",
+  "domain": "Civil-Property",
+  "query": "My neighbor built a drainage outlet that continuously releases dirty water into our yard. Nakaapekto na ito sa paggamit namin ng property, pero ayaw niyang ayusin kahit ilang beses na naming kinausap.",
+  "processedQuery": "My neighbor built a drainage outlet that continuously releases dirty water into our yard. Nakaapekto na ito sa paggamit namin ng property, pero ayaw niyang ayusin kahit ilang beses na naming kinausap.",
+  "top3": [
+   "civilcode:676",
+   "civilcode:675",
+   "civilcode:674"
+  ],
+  "all": [
+   "civilcode:676",
+   "civilcode:675",
+   "civilcode:674",
+   "civilcode:506",
+   "civilcode:704",
+   "civilcode:680",
+   "civilcode:447",
+   "civilcode:303",
+   "civilcode:660",
+   "civilcode:511",
+   "civilcode:508",
+   "civilcode:502",
+   "civilcode:503",
+   "civilcode:450",
+   "civilcode:507"
+  ],
+  "relevant": [
+   "civilcode:694"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-011",
+  "language": "English",
+  "domain": "Civil-Contract",
+  "query": "I agreed to buy a secondhand motorcycle after the seller accepted my offer and confirmed the price. However, the seller later refused to proceed and demanded a higher amount, even though we had already agreed on the original price.",
+  "processedQuery": "I agreed to buy a secondhand motorcycle after the seller accepted my offer and confirmed the price. However, the seller later refused to proceed and demanded a higher amount, even though we had already agreed on the original price.",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1595"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1595",
+   "civilcode:1522",
+   "civilcode:1545",
+   "civilcode:1555",
+   "consumeract:111",
+   "civilcode:2115",
+   "consumeract:52",
+   "civilcode:1533",
+   "civilcode:1587",
+   "consumeract:81",
+   "civilcode:1724",
+   "civilcode:1561",
+   "civilcode:1584"
+  ],
+  "relevant": [
+   "civilcode:1319"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-011",
+  "language": "English",
+  "domain": "Civil-Contract",
+  "query": "I agreed to buy a secondhand motorcycle after the seller accepted my offer and confirmed the price. However, the seller later refused to proceed and demanded a higher amount, even though we had already agreed on the original price.",
+  "processedQuery": "I agreed to buy a secondhand motorcycle after the seller accepted my offer and confirmed the price. However, the seller later refused to proceed and demanded a higher amount, even though we had already agreed on the original price.",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1595"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1595",
+   "civilcode:1522",
+   "civilcode:1545",
+   "civilcode:1555",
+   "consumeract:111",
+   "civilcode:2115",
+   "consumeract:52",
+   "civilcode:1533",
+   "civilcode:1587",
+   "consumeract:81",
+   "civilcode:1724",
+   "civilcode:1561",
+   "civilcode:1584"
+  ],
+  "relevant": [
+   "civilcode:1319"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-012",
+  "language": "English",
+  "domain": "Civil-Property",
+  "query": "I purchased a residential lot from a seller and paid the full amount. A few weeks later, I discovered that the same property had also been sold to another buyer who had already registered the sale.",
+  "processedQuery": "I purchased a residential lot from a seller and paid the full amount. A few weeks later, I discovered that the same property had also been sold to another buyer who had already registered the sale.",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1522",
+   "civilcode:1601"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1522",
+   "civilcode:1601",
+   "civilcode:1555",
+   "civilcode:1533",
+   "civilcode:1503",
+   "civilcode:1556",
+   "civilcode:1596",
+   "civilcode:1617",
+   "civilcode:1569",
+   "civilcode:1521",
+   "civilcode:1676",
+   "civilcode:1621",
+   "civilcode:1568",
+   "civilcode:1464"
+  ],
+  "relevant": [
+   "civilcode:1544"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-012",
+  "language": "English",
+  "domain": "Civil-Property",
+  "query": "I purchased a residential lot from a seller and paid the full amount. A few weeks later, I discovered that the same property had also been sold to another buyer who had already registered the sale.",
+  "processedQuery": "I purchased a residential lot from a seller and paid the full amount. A few weeks later, I discovered that the same property had also been sold to another buyer who had already registered the sale.",
+  "top3": [
+   "civilcode:1599",
+   "civilcode:1522",
+   "civilcode:1601"
+  ],
+  "all": [
+   "civilcode:1599",
+   "civilcode:1522",
+   "civilcode:1601",
+   "civilcode:1555",
+   "civilcode:1533",
+   "civilcode:1503",
+   "civilcode:1556",
+   "civilcode:1596",
+   "civilcode:1617",
+   "civilcode:1569",
+   "civilcode:1521",
+   "civilcode:1676",
+   "civilcode:1621",
+   "civilcode:1568",
+   "civilcode:1464"
+  ],
+  "relevant": [
+   "civilcode:1544"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-013",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Bumili ako ng secondhand na sasakyan. Pagkatapos ng ilang araw, natuklasan kong may malubhang problema pala sa makina na hindi sinabi ng seller bago kami magkasundo sa bentahan.",
+  "processedQuery": "Bumili ako ng secondhand na sasakyan. Pagkatapos ng ilang araw, natuklasan kong may malubhang problema pala sa makina na hindi sinabi ng seller bago kami magkasundo sa bentahan.",
+  "top3": [
+   "consumeract:97",
+   "civilcode:1533",
+   "civilcode:1545"
+  ],
+  "all": [
+   "consumeract:97",
+   "civilcode:1533",
+   "civilcode:1545",
+   "civilcode:1523",
+   "civilcode:1546",
+   "civilcode:1599",
+   "civilcode:1505",
+   "civilcode:1526",
+   "civilcode:1597",
+   "civilcode:1586",
+   "civilcode:1548",
+   "civilcode:1585",
+   "civilcode:1596",
+   "civilcode:1562",
+   "civilcode:1569"
+  ],
+  "relevant": [
+   "civilcode:1561"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-013",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Bumili ako ng secondhand na sasakyan. Pagkatapos ng ilang araw, natuklasan kong may malubhang problema pala sa makina na hindi sinabi ng seller bago kami magkasundo sa bentahan.",
+  "processedQuery": "Bumili ako ng secondhand na sasakyan. Pagkatapos ng ilang araw, natuklasan kong may malubhang problema pala sa makina na hindi sinabi ng seller bago kami magkasundo sa bentahan.",
+  "top3": [
+   "consumeract:97",
+   "civilcode:1533",
+   "civilcode:1545"
+  ],
+  "all": [
+   "consumeract:97",
+   "civilcode:1533",
+   "civilcode:1545",
+   "civilcode:1523",
+   "civilcode:1546",
+   "civilcode:1599",
+   "civilcode:1505",
+   "civilcode:1526",
+   "civilcode:1597",
+   "civilcode:1586",
+   "civilcode:1548",
+   "civilcode:1585",
+   "civilcode:1596",
+   "civilcode:1562",
+   "civilcode:1569"
+  ],
+  "relevant": [
+   "civilcode:1561"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-014",
+  "language": "English",
+  "domain": "Civil-Loan",
+  "query": "I lent my friend ₱10,000. We agreed that the amount would be repaid with interest, but the interest agreement was only discussed verbally and was never written in the loan document.",
+  "processedQuery": "I lent my friend ₱10,000. We agreed that the amount would be repaid with interest, but the interest agreement was only discussed verbally and was never written in the loan document.",
+  "top3": [
+   "civilcode:1956",
+   "civilcode:1933",
+   "consumeract:147"
+  ],
+  "all": [
+   "civilcode:1956",
+   "civilcode:1933",
+   "consumeract:147",
+   "civilcode:1403",
+   "civilcode:1358",
+   "civilcode:1918",
+   "consumeract:142",
+   "civilcode:1769",
+   "civilcode:2115",
+   "civilcode:1864",
+   "civilcode:1841",
+   "civilcode:2134",
+   "civilcode:1837",
+   "consumeract:93",
+   "civilcode:2059"
+  ],
+  "relevant": [
+   "civilcode:1956"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-014",
+  "language": "English",
+  "domain": "Civil-Loan",
+  "query": "I lent my friend ₱10,000. We agreed that the amount would be repaid with interest, but the interest agreement was only discussed verbally and was never written in the loan document.",
+  "processedQuery": "I lent my friend ₱10,000. We agreed that the amount would be repaid with interest, but the interest agreement was only discussed verbally and was never written in the loan document.",
+  "top3": [
+   "civilcode:1956",
+   "civilcode:1933",
+   "consumeract:147"
+  ],
+  "all": [
+   "civilcode:1956",
+   "civilcode:1933",
+   "consumeract:147",
+   "civilcode:1403",
+   "civilcode:1358",
+   "civilcode:1918",
+   "consumeract:142",
+   "civilcode:1769",
+   "civilcode:2115",
+   "civilcode:1864",
+   "civilcode:1841",
+   "civilcode:2134",
+   "civilcode:1837",
+   "consumeract:93",
+   "civilcode:2059"
+  ],
+  "relevant": [
+   "civilcode:1956"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-015",
+  "language": "English",
+  "domain": "Civil-Property",
+  "query": "In a grocery store, an employee left a wet floor unattended and leave no warning sign. I slipped, suffered an injury, and had to pay for medical treatment.",
+  "processedQuery": "In a grocery store, an employee left a wet floor unattended and leave no warning sign. I slipped, suffered an injury, and had to pay for medical treatment.",
+  "top3": [
+   "civilcode:1711",
+   "civilcode:2207",
+   "civilcode:1678"
+  ],
+  "all": [
+   "civilcode:1711",
+   "civilcode:2207",
+   "civilcode:1678",
+   "civilcode:27",
+   "civilcode:549",
+   "civilcode:490",
+   "civilcode:1523",
+   "consumeract:52",
+   "consumeract:10",
+   "civilcode:1599",
+   "consumeract:11",
+   "civilcode:1533",
+   "consumeract:15",
+   "civilcode:1189",
+   "civilcode:447"
+  ],
+  "relevant": [
+   "civilcode:2176"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-015",
+  "language": "English",
+  "domain": "Civil-Property",
+  "query": "In a grocery store, an employee left a wet floor unattended and leave no warning sign. I slipped, suffered an injury, and had to pay for medical treatment.",
+  "processedQuery": "In a grocery store, an employee left a wet floor unattended and leave no warning sign. I slipped, suffered an injury, and had to pay for medical treatment.",
+  "top3": [
+   "civilcode:1711",
+   "civilcode:2207",
+   "civilcode:1678"
+  ],
+  "all": [
+   "civilcode:1711",
+   "civilcode:2207",
+   "civilcode:1678",
+   "civilcode:27",
+   "civilcode:549",
+   "civilcode:490",
+   "civilcode:1523",
+   "consumeract:52",
+   "consumeract:10",
+   "civilcode:1599",
+   "consumeract:11",
+   "civilcode:1533",
+   "consumeract:15",
+   "civilcode:1189",
+   "civilcode:447"
+  ],
+  "relevant": [
+   "civilcode:2176"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-016",
+  "language": "English",
+  "domain": "Civil-Contract",
+  "query": "I authorized an agent to sell my property for no less than ₱2 million. Without informing me, the agent accepted an offer of ₱1.5 million and signed an agreement with the buyer.",
+  "processedQuery": "I authorized an agent to sell my property for no less than ₱2 million. Without informing me, the agent accepted an offer of ₱1.5 million and signed an agreement with the buyer.",
+  "top3": [
+   "civilcode:1403",
+   "civilcode:1599",
+   "civilcode:1322"
+  ],
+  "all": [
+   "civilcode:1403",
+   "civilcode:1599",
+   "civilcode:1322",
+   "civilcode:1906",
+   "civilcode:1522",
+   "civilcode:1596",
+   "civilcode:1547",
+   "civilcode:1918",
+   "civilcode:1585",
+   "civilcode:1476",
+   "civilcode:1584",
+   "civilcode:1502",
+   "consumeract:81",
+   "civilcode:1586",
+   "civilcode:1358"
+  ],
+  "relevant": [
+   "civilcode:1898"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-016",
+  "language": "English",
+  "domain": "Civil-Contract",
+  "query": "I authorized an agent to sell my property for no less than ₱2 million. Without informing me, the agent accepted an offer of ₱1.5 million and signed an agreement with the buyer.",
+  "processedQuery": "I authorized an agent to sell my property for no less than ₱2 million. Without informing me, the agent accepted an offer of ₱1.5 million and signed an agreement with the buyer.",
+  "top3": [
+   "civilcode:1403",
+   "civilcode:1599",
+   "civilcode:1322"
+  ],
+  "all": [
+   "civilcode:1403",
+   "civilcode:1599",
+   "civilcode:1322",
+   "civilcode:1906",
+   "civilcode:1522",
+   "civilcode:1596",
+   "civilcode:1547",
+   "civilcode:1918",
+   "civilcode:1585",
+   "civilcode:1476",
+   "civilcode:1584",
+   "civilcode:1502",
+   "consumeract:81",
+   "civilcode:1586",
+   "civilcode:1358"
+  ],
+  "relevant": [
+   "civilcode:1898"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-017",
+  "language": "English",
+  "domain": "Civil-Property-Inheritance",
+  "query": "My father died and left a will giving almost all his estate to one person. I am his legitimate child, but the will did not provide for my legally protected share in the inheritance. How should I prove my legitimacy as heir?",
+  "processedQuery": "My father died and left a will giving almost all his estate to one person. I am his legitimate child, but the will did not provide for my legally protected share in the inheritance. How should I prove my legitimacy as heir?",
+  "top3": [
+   "civilcode:993",
+   "civilcode:903",
+   "civilcode:991"
+  ],
+  "all": [
+   "civilcode:993",
+   "civilcode:903",
+   "civilcode:991",
+   "civilcode:986",
+   "civilcode:1000",
+   "civilcode:842",
+   "civilcode:892",
+   "civilcode:2263",
+   "civilcode:999",
+   "civilcode:262",
+   "familycode:173",
+   "civilcode:855",
+   "civilcode:996",
+   "civilcode:982",
+   "civilcode:890"
+  ],
+  "relevant": [
+   "civilcode:887"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-017",
+  "language": "English",
+  "domain": "Civil-Property-Inheritance",
+  "query": "My father died and left a will giving almost all his estate to one person. I am his legitimate child, but the will did not provide for my legally protected share in the inheritance. How should I prove my legitimacy as heir?",
+  "processedQuery": "My father died and left a will giving almost all his estate to one person. I am his legitimate child, but the will did not provide for my legally protected share in the inheritance. How should I prove my legitimacy as heir?",
+  "top3": [
+   "civilcode:993",
+   "civilcode:903",
+   "civilcode:991"
+  ],
+  "all": [
+   "civilcode:993",
+   "civilcode:903",
+   "civilcode:991",
+   "civilcode:986",
+   "civilcode:1000",
+   "civilcode:842",
+   "civilcode:892",
+   "civilcode:2263",
+   "civilcode:999",
+   "civilcode:262",
+   "familycode:173",
+   "civilcode:855",
+   "civilcode:996",
+   "civilcode:982",
+   "civilcode:890"
+  ],
+  "relevant": [
+   "civilcode:887"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-019",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "May lupa kaming magkakapatid na namana sa aming mga magulang. Gusto ko nang hatiin ang lupa dahil gusto ko nang gamitin ang parte ko, pero ayaw pumayag ng isa kong kapatid.",
+  "processedQuery": "May lupa kaming magkakapatid na namana sa aming mga magulang. Gusto ko nang hatiin ang lupa dahil gusto ko nang gamitin ang parte ko, pero ayaw pumayag ng isa kong kapatid.",
+  "top3": [
+   "civilcode:691",
+   "civilcode:493",
+   "civilcode:486"
+  ],
+  "all": [
+   "civilcode:691",
+   "civilcode:493",
+   "civilcode:486",
+   "civilcode:494",
+   "civilcode:495",
+   "civilcode:488",
+   "civilcode:690",
+   "civilcode:492",
+   "civilcode:491",
+   "civilcode:1811",
+   "civilcode:321",
+   "civilcode:714",
+   "civilcode:689",
+   "civilcode:485",
+   "familycode:147"
+  ],
+  "relevant": [
+   "civilcode:494"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": true,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-019",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "May lupa kaming magkakapatid na namana sa aming mga magulang. Gusto ko nang hatiin ang lupa dahil gusto ko nang gamitin ang parte ko, pero ayaw pumayag ng isa kong kapatid.",
+  "processedQuery": "May lupa kaming magkakapatid na namana sa aming mga magulang. Gusto ko nang hatiin ang lupa dahil gusto ko nang gamitin ang parte ko, pero ayaw pumayag ng isa kong kapatid.",
+  "top3": [
+   "civilcode:691",
+   "civilcode:493",
+   "civilcode:486"
+  ],
+  "all": [
+   "civilcode:691",
+   "civilcode:493",
+   "civilcode:486",
+   "civilcode:494",
+   "civilcode:495",
+   "civilcode:488",
+   "civilcode:690",
+   "civilcode:492",
+   "civilcode:491",
+   "civilcode:1811",
+   "civilcode:321",
+   "civilcode:714",
+   "civilcode:689",
+   "civilcode:485",
+   "familycode:147"
+  ],
+  "relevant": [
+   "civilcode:494"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": true,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-020",
+  "language": "Tagalog",
+  "domain": "Civil-Contract",
+  "query": "Nabunggo ako ng isang lalamove rider. Nagtatrabaho sya noong mga oras nayon ng aksidente.",
+  "processedQuery": "Nabunggo ako ng isang lalamove rider. Nagtatrabaho sya noong mga oras nayon ng aksidente.",
+  "top3": [
+   "civilcode:1523",
+   "civilcode:91",
+   "civilcode:1727"
+  ],
+  "all": [
+   "civilcode:1523",
+   "civilcode:91",
+   "civilcode:1727",
+   "civilcode:303",
+   "civilcode:1918",
+   "civilcode:72",
+   "civilcode:1705",
+   "civilcode:1852",
+   "civilcode:829",
+   "civilcode:1966",
+   "civilcode:1531",
+   "civilcode:2170",
+   "civilcode:2215",
+   "civilcode:2094",
+   "civilcode:2225"
+  ],
+  "relevant": [
+   "civilcode:2180"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-020",
+  "language": "Tagalog",
+  "domain": "Civil-Contract",
+  "query": "Nabunggo ako ng isang lalamove rider. Nagtatrabaho sya noong mga oras nayon ng aksidente.",
+  "processedQuery": "Nabunggo ako ng isang lalamove rider. Nagtatrabaho sya noong mga oras nayon ng aksidente.",
+  "top3": [
+   "civilcode:1523",
+   "civilcode:91",
+   "civilcode:1727"
+  ],
+  "all": [
+   "civilcode:1523",
+   "civilcode:91",
+   "civilcode:1727",
+   "civilcode:303",
+   "civilcode:1918",
+   "civilcode:72",
+   "civilcode:1705",
+   "civilcode:1852",
+   "civilcode:829",
+   "civilcode:1966",
+   "civilcode:1531",
+   "civilcode:2170",
+   "civilcode:2215",
+   "civilcode:2094",
+   "civilcode:2225"
+  ],
+  "relevant": [
+   "civilcode:2180"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-021",
+  "language": "Tagalog",
+  "domain": "Civil-Loan",
+  "query": "Nagbabayad ako sa tamang panahon sa isang pinagkakautangan ko pero ayaw nitong tanggapin kahit tama naman ang binabayad ko. Gusto ko malaman anong pwede kong gawin para masabi na hindi ako ang may mali kung sakaling magkaproblema dito.",
+  "processedQuery": "Nagbabayad ako sa tamang panahon sa isang pinagkakautangan ko pero ayaw nitong tanggapin kahit tama naman ang binabayad ko. Gusto ko malaman anong pwede kong gawin para masabi na hindi ako ang may mali kung sakaling magkaproblema dito.",
+  "top3": [
+   "civilcode:1198",
+   "civilcode:1523",
+   "civilcode:1569"
+  ],
+  "all": [
+   "civilcode:1198",
+   "civilcode:1523",
+   "civilcode:1569",
+   "civilcode:573",
+   "civilcode:1561",
+   "civilcode:299",
+   "civilcode:2024",
+   "civilcode:1189",
+   "civilcode:1502",
+   "civilcode:2234",
+   "consumeract:165",
+   "civilcode:1984",
+   "consumeract:52",
+   "civilcode:957",
+   "civilcode:1191"
+  ],
+  "relevant": [
+   "civilcode:1256"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-021",
+  "language": "Tagalog",
+  "domain": "Civil-Loan",
+  "query": "Nagbabayad ako sa tamang panahon sa isang pinagkakautangan ko pero ayaw nitong tanggapin kahit tama naman ang binabayad ko. Gusto ko malaman anong pwede kong gawin para masabi na hindi ako ang may mali kung sakaling magkaproblema dito.",
+  "processedQuery": "Nagbabayad ako sa tamang panahon sa isang pinagkakautangan ko pero ayaw nitong tanggapin kahit tama naman ang binabayad ko. Gusto ko malaman anong pwede kong gawin para masabi na hindi ako ang may mali kung sakaling magkaproblema dito.",
+  "top3": [
+   "civilcode:1198",
+   "civilcode:1523",
+   "civilcode:1569"
+  ],
+  "all": [
+   "civilcode:1198",
+   "civilcode:1523",
+   "civilcode:1569",
+   "civilcode:573",
+   "civilcode:1561",
+   "civilcode:299",
+   "civilcode:2024",
+   "civilcode:1189",
+   "civilcode:1502",
+   "civilcode:2234",
+   "consumeract:165",
+   "civilcode:1984",
+   "consumeract:52",
+   "civilcode:957",
+   "civilcode:1191"
+  ],
+  "relevant": [
+   "civilcode:1256"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-022",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Ibinigay ng tatay ko sa akin ang isang lote bilang donasyon habang buhay pa siya. Pero walang maayos na kasulatan kaming pinanghahawakan na napasa na itong lupain sa akin.",
+  "processedQuery": "Ibinigay ng tatay ko sa akin ang isang lote bilang donasyon habang buhay pa siya. Pero walang maayos na kasulatan kaming pinanghahawakan na napasa na itong lupain sa akin.",
+  "top3": [
+   "civilcode:283",
+   "civilcode:1761",
+   "civilcode:320"
+  ],
+  "all": [
+   "civilcode:283",
+   "civilcode:1761",
+   "civilcode:320",
+   "civilcode:589",
+   "civilcode:2203",
+   "civilcode:276",
+   "civilcode:2008",
+   "civilcode:367",
+   "civilcode:325",
+   "civilcode:331",
+   "civilcode:1072",
+   "civilcode:1163",
+   "civilcode:338",
+   "civilcode:321",
+   "civilcode:986"
+  ],
+  "relevant": [
+   "civilcode:749"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-022",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Ibinigay ng tatay ko sa akin ang isang lote bilang donasyon habang buhay pa siya. Pero walang maayos na kasulatan kaming pinanghahawakan na napasa na itong lupain sa akin.",
+  "processedQuery": "Ibinigay ng tatay ko sa akin ang isang lote bilang donasyon habang buhay pa siya. Pero walang maayos na kasulatan kaming pinanghahawakan na napasa na itong lupain sa akin.",
+  "top3": [
+   "civilcode:283",
+   "civilcode:1761",
+   "civilcode:320"
+  ],
+  "all": [
+   "civilcode:283",
+   "civilcode:1761",
+   "civilcode:320",
+   "civilcode:589",
+   "civilcode:2203",
+   "civilcode:276",
+   "civilcode:2008",
+   "civilcode:367",
+   "civilcode:325",
+   "civilcode:331",
+   "civilcode:1072",
+   "civilcode:1163",
+   "civilcode:338",
+   "civilcode:321",
+   "civilcode:986"
+  ],
+  "relevant": [
+   "civilcode:749"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-023",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Mahigit tatlumpung taon nang ginagamit at inaalagaan ng pamilya namin ang isang bakanteng lupa. Ngayon ay may ibang taong nagke-claim na sa kanya raw ang lupa kahit matagal na namin itong inaangkin.",
+  "processedQuery": "Mahigit tatlumpung taon nang ginagamit at inaalagaan ng pamilya namin ang isang bakanteng lupa. Ngayon ay may ibang taong nagke-claim na sa kanya raw ang lupa kahit matagal na namin itong inaangkin.",
+  "top3": [
+   "familycode:156",
+   "civilcode:714",
+   "civilcode:510"
+  ],
+  "all": [
+   "familycode:156",
+   "civilcode:714",
+   "civilcode:510",
+   "civilcode:503",
+   "civilcode:136",
+   "civilcode:459",
+   "civilcode:240",
+   "civilcode:463",
+   "civilcode:206",
+   "civilcode:690",
+   "civilcode:1126",
+   "civilcode:223",
+   "civilcode:638",
+   "familycode:226",
+   "civilcode:2008"
+  ],
+  "relevant": [
+   "civilcode:1137"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-023",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Mahigit tatlumpung taon nang ginagamit at inaalagaan ng pamilya namin ang isang bakanteng lupa. Ngayon ay may ibang taong nagke-claim na sa kanya raw ang lupa kahit matagal na namin itong inaangkin.",
+  "processedQuery": "Mahigit tatlumpung taon nang ginagamit at inaalagaan ng pamilya namin ang isang bakanteng lupa. Ngayon ay may ibang taong nagke-claim na sa kanya raw ang lupa kahit matagal na namin itong inaangkin.",
+  "top3": [
+   "familycode:156",
+   "civilcode:714",
+   "civilcode:510"
+  ],
+  "all": [
+   "familycode:156",
+   "civilcode:714",
+   "civilcode:510",
+   "civilcode:503",
+   "civilcode:136",
+   "civilcode:459",
+   "civilcode:240",
+   "civilcode:463",
+   "civilcode:206",
+   "civilcode:690",
+   "civilcode:1126",
+   "civilcode:223",
+   "civilcode:638",
+   "familycode:226",
+   "civilcode:2008"
+  ],
+  "relevant": [
+   "civilcode:1137"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-024",
+  "language": "Tagalog",
+  "domain": "Civil-Contract",
+  "query": "Nagpagawa ako ng bahay sa isang contractor. Hindi niya natapos ang trabaho ayon sa kontrata at ayaw rin niyang ibalik ang perang ibinayad ko kahit ilang beses na akong nag-demand.",
+  "processedQuery": "Nagpagawa ako ng bahay sa isang contractor. Hindi niya natapos ang trabaho ayon sa kontrata at ayaw rin niyang ibalik ang perang ibinayad ko kahit ilang beses na akong nag-demand.",
+  "top3": [
+   "civilcode:1720",
+   "civilcode:1725",
+   "civilcode:1568"
+  ],
+  "all": [
+   "civilcode:1720",
+   "civilcode:1725",
+   "civilcode:1568",
+   "civilcode:1722",
+   "civilcode:1726",
+   "civilcode:1713",
+   "civilcode:1715",
+   "civilcode:1724",
+   "civilcode:1721",
+   "civilcode:1716",
+   "civilcode:1727",
+   "civilcode:1718",
+   "civilcode:1719",
+   "civilcode:1729",
+   "civilcode:1167"
+  ],
+  "relevant": [
+   "civilcode:1191"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-024",
+  "language": "Tagalog",
+  "domain": "Civil-Contract",
+  "query": "Nagpagawa ako ng bahay sa isang contractor. Hindi niya natapos ang trabaho ayon sa kontrata at ayaw rin niyang ibalik ang perang ibinayad ko kahit ilang beses na akong nag-demand.",
+  "processedQuery": "Nagpagawa ako ng bahay sa isang contractor. Hindi niya natapos ang trabaho ayon sa kontrata at ayaw rin niyang ibalik ang perang ibinayad ko kahit ilang beses na akong nag-demand.",
+  "top3": [
+   "civilcode:1720",
+   "civilcode:1725",
+   "civilcode:1568"
+  ],
+  "all": [
+   "civilcode:1720",
+   "civilcode:1725",
+   "civilcode:1568",
+   "civilcode:1722",
+   "civilcode:1726",
+   "civilcode:1713",
+   "civilcode:1715",
+   "civilcode:1724",
+   "civilcode:1721",
+   "civilcode:1716",
+   "civilcode:1727",
+   "civilcode:1718",
+   "civilcode:1719",
+   "civilcode:1729",
+   "civilcode:1167"
+  ],
+  "relevant": [
+   "civilcode:1191"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CC-EV-025",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Napapalibutan ng ibang lupa ang property namin at wala kaming direktang daan papunta sa public road. Kailangan naming dumaan sa lupa ng kapitbahay, pero ayaw niya kaming bigyan ng legal na daanan.",
+  "processedQuery": "Napapalibutan ng ibang lupa ang property namin at wala kaming direktang daan papunta sa public road. Kailangan naming dumaan sa lupa ng kapitbahay, pero ayaw niya kaming bigyan ng legal na daanan.",
+  "top3": [
+   "civilcode:714",
+   "civilcode:503",
+   "civilcode:419"
+  ],
+  "all": [
+   "civilcode:714",
+   "civilcode:503",
+   "civilcode:419",
+   "civilcode:510",
+   "civilcode:1126",
+   "civilcode:1621",
+   "civilcode:424",
+   "civilcode:690",
+   "civilcode:674",
+   "civilcode:415",
+   "civilcode:437",
+   "civilcode:684",
+   "civilcode:483",
+   "civilcode:512",
+   "civilcode:136"
+  ],
+  "relevant": [
+   "civilcode:649"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CC-EV-025",
+  "language": "Tagalog",
+  "domain": "Civil-Property",
+  "query": "Napapalibutan ng ibang lupa ang property namin at wala kaming direktang daan papunta sa public road. Kailangan naming dumaan sa lupa ng kapitbahay, pero ayaw niya kaming bigyan ng legal na daanan.",
+  "processedQuery": "Napapalibutan ng ibang lupa ang property namin at wala kaming direktang daan papunta sa public road. Kailangan naming dumaan sa lupa ng kapitbahay, pero ayaw niya kaming bigyan ng legal na daanan.",
+  "top3": [
+   "civilcode:714",
+   "civilcode:503",
+   "civilcode:419"
+  ],
+  "all": [
+   "civilcode:714",
+   "civilcode:503",
+   "civilcode:419",
+   "civilcode:510",
+   "civilcode:1126",
+   "civilcode:1621",
+   "civilcode:424",
+   "civilcode:690",
+   "civilcode:674",
+   "civilcode:415",
+   "civilcode:437",
+   "civilcode:684",
+   "civilcode:483",
+   "civilcode:512",
+   "civilcode:136"
+  ],
+  "relevant": [
+   "civilcode:649"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-001",
+  "language": "Taglish",
+  "domain": "Family-Property",
+  "query": "Natalo ang partner ko sa isang sugal. Ngayong pinagbabayad na sya ng kanyang talo, sinasabi nya na gamiting pambayad ang property namin.",
+  "processedQuery": "Natalo ang partner ko sa isang sugal. Ngayong pinagbabayad na sya ng kanyang talo, sinasabi nya na gamiting pambayad ang property namin.",
+  "top3": [
+   "civilcode:1814",
+   "civilcode:1840",
+   "civilcode:1839"
+  ],
+  "all": [
+   "civilcode:1814",
+   "civilcode:1840",
+   "civilcode:1839",
+   "civilcode:1241",
+   "civilcode:1835",
+   "civilcode:1769",
+   "civilcode:1819",
+   "civilcode:1830",
+   "civilcode:136",
+   "civilcode:1918",
+   "civilcode:1857",
+   "familycode:122",
+   "civilcode:660",
+   "civilcode:1837",
+   "civilcode:1844"
+  ],
+  "relevant": [
+   "familycode:123"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-001",
+  "language": "Taglish",
+  "domain": "Family-Property",
+  "query": "Natalo ang partner ko sa isang sugal. Ngayong pinagbabayad na sya ng kanyang talo, sinasabi nya na gamiting pambayad ang property namin.",
+  "processedQuery": "Natalo ang partner ko sa isang sugal. Ngayong pinagbabayad na sya ng kanyang talo, sinasabi nya na gamiting pambayad ang property namin.",
+  "top3": [
+   "civilcode:1814",
+   "civilcode:1840",
+   "civilcode:1839"
+  ],
+  "all": [
+   "civilcode:1814",
+   "civilcode:1840",
+   "civilcode:1839",
+   "civilcode:1241",
+   "civilcode:1835",
+   "civilcode:1769",
+   "civilcode:1819",
+   "civilcode:1830",
+   "civilcode:136",
+   "civilcode:1918",
+   "civilcode:1857",
+   "familycode:122",
+   "civilcode:660",
+   "civilcode:1837",
+   "civilcode:1844"
+  ],
+  "relevant": [
+   "familycode:123"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-002",
+  "language": "Taglish",
+  "domain": "Family-Property",
+  "query": "My husband sold a property acquired during our marriage without my written consent or court authorization. We are under the conjugal partnership of gains, and I only learned about the sale after the buyer started occupying the property.",
+  "processedQuery": "My husband sold a property acquired during our marriage without my written consent or court authorization. We are under the conjugal partnership of gains, and I only learned about the sale after the buyer started occupying the property.",
+  "top3": [
+   "civilcode:143",
+   "civilcode:178",
+   "familycode:124"
+  ],
+  "all": [
+   "civilcode:143",
+   "civilcode:178",
+   "familycode:124",
+   "civilcode:173",
+   "familycode:116",
+   "civilcode:166",
+   "civilcode:153",
+   "civilcode:191",
+   "familycode:118",
+   "civilcode:155",
+   "civilcode:142",
+   "familycode:106",
+   "familycode:136",
+   "familycode:117",
+   "civilcode:195"
+  ],
+  "relevant": [
+   "familycode:124"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-002",
+  "language": "Taglish",
+  "domain": "Family-Property",
+  "query": "My husband sold a property acquired during our marriage without my written consent or court authorization. We are under the conjugal partnership of gains, and I only learned about the sale after the buyer started occupying the property.",
+  "processedQuery": "My husband sold a property acquired during our marriage without my written consent or court authorization. We are under the conjugal partnership of gains, and I only learned about the sale after the buyer started occupying the property.",
+  "top3": [
+   "civilcode:143",
+   "civilcode:178",
+   "familycode:124"
+  ],
+  "all": [
+   "civilcode:143",
+   "civilcode:178",
+   "familycode:124",
+   "civilcode:173",
+   "familycode:116",
+   "civilcode:166",
+   "civilcode:153",
+   "civilcode:191",
+   "familycode:118",
+   "civilcode:155",
+   "civilcode:142",
+   "familycode:106",
+   "familycode:136",
+   "familycode:117",
+   "civilcode:195"
+  ],
+  "relevant": [
+   "familycode:124"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-003",
+  "language": "Taglish",
+  "domain": "Family-Filiation",
+  "query": "My brother and I are involved in a property dispute inherited from our parents. Before filing a case against him, I want to know whether the law requires us to make genuine efforts to settle the disagreement first.",
+  "processedQuery": "My brother and I are involved in a property dispute inherited from our parents. Before filing a case against him, I want to know whether the law requires us to make genuine efforts to settle the disagreement first.",
+  "top3": [
+   "civilcode:206",
+   "familycode:73",
+   "civilcode:704"
+  ],
+  "all": [
+   "civilcode:206",
+   "familycode:73",
+   "civilcode:704",
+   "familycode:215",
+   "civilcode:311",
+   "familycode:151",
+   "familycode:197",
+   "civilcode:920",
+   "civilcode:1030",
+   "familycode:211",
+   "civilcode:117",
+   "civilcode:477",
+   "civilcode:434",
+   "civilcode:103",
+   "civilcode:315"
+  ],
+  "relevant": [
+   "familycode:151"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": true,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-003",
+  "language": "Taglish",
+  "domain": "Family-Filiation",
+  "query": "My brother and I are involved in a property dispute inherited from our parents. Before filing a case against him, I want to know whether the law requires us to make genuine efforts to settle the disagreement first.",
+  "processedQuery": "My brother and I are involved in a property dispute inherited from our parents. Before filing a case against him, I want to know whether the law requires us to make genuine efforts to settle the disagreement first.",
+  "top3": [
+   "civilcode:206",
+   "familycode:73",
+   "civilcode:704"
+  ],
+  "all": [
+   "civilcode:206",
+   "familycode:73",
+   "civilcode:704",
+   "familycode:215",
+   "civilcode:311",
+   "familycode:151",
+   "familycode:197",
+   "civilcode:920",
+   "civilcode:1030",
+   "familycode:211",
+   "civilcode:117",
+   "civilcode:477",
+   "civilcode:434",
+   "civilcode:103",
+   "civilcode:315"
+  ],
+  "relevant": [
+   "familycode:151"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": true,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-004",
+  "language": "Taglish",
+  "domain": "Family-Separation",
+  "query": "My spouse has repeatedly physically hurt me and threatened my safety. Gusto ko nang mamuhay nang hiwalay sa kanya through the proper legal process.",
+  "processedQuery": "My spouse has repeatedly physically hurt me and threatened my safety. Gusto ko nang mamuhay nang hiwalay sa kanya through the proper legal process.",
+  "top3": [
+   "familycode:55",
+   "familycode:135",
+   "familycode:141"
+  ],
+  "all": [
+   "familycode:55",
+   "familycode:135",
+   "familycode:141",
+   "familycode:66",
+   "familycode:56",
+   "civilcode:97",
+   "civilcode:104",
+   "civilcode:195",
+   "civilcode:292",
+   "familycode:198",
+   "familycode:63",
+   "civilcode:100",
+   "civilcode:106",
+   "familycode:65",
+   "civilcode:921"
+  ],
+  "relevant": [
+   "familycode:55"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-004",
+  "language": "Taglish",
+  "domain": "Family-Separation",
+  "query": "My spouse has repeatedly physically hurt me and threatened my safety. Gusto ko nang mamuhay nang hiwalay sa kanya through the proper legal process.",
+  "processedQuery": "My spouse has repeatedly physically hurt me and threatened my safety. Gusto ko nang mamuhay nang hiwalay sa kanya through the proper legal process.",
+  "top3": [
+   "familycode:55",
+   "familycode:135",
+   "familycode:141"
+  ],
+  "all": [
+   "familycode:55",
+   "familycode:135",
+   "familycode:141",
+   "familycode:66",
+   "familycode:56",
+   "civilcode:97",
+   "civilcode:104",
+   "civilcode:195",
+   "civilcode:292",
+   "familycode:198",
+   "familycode:63",
+   "civilcode:100",
+   "civilcode:106",
+   "familycode:65",
+   "civilcode:921"
+  ],
+  "relevant": [
+   "familycode:55"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-005",
+  "language": "Taglish",
+  "domain": "Family-Custody",
+  "query": "My spouse and I have separated, and we are now arguing about who should have custody of our eight-year-old child. My child has expressed a preference to stay with me, but the other parent disagrees.",
+  "processedQuery": "My spouse and I have separated, and we are now arguing about who should have custody of our eight-year-old child. My child has expressed a preference to stay with me, but the other parent disagrees.",
+  "top3": [
+   "familycode:213",
+   "civilcode:363",
+   "familycode:135"
+  ],
+  "all": [
+   "familycode:213",
+   "civilcode:363",
+   "familycode:135",
+   "civilcode:919",
+   "civilcode:920",
+   "familycode:38",
+   "familycode:102",
+   "familycode:216",
+   "familycode:189",
+   "familycode:129",
+   "familycode:231",
+   "civilcode:280",
+   "familycode:188",
+   "civilcode:117",
+   "civilcode:921"
+  ],
+  "relevant": [
+   "familycode:213"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-005",
+  "language": "Taglish",
+  "domain": "Family-Custody",
+  "query": "My spouse and I have separated, and we are now arguing about who should have custody of our eight-year-old child. My child has expressed a preference to stay with me, but the other parent disagrees.",
+  "processedQuery": "My spouse and I have separated, and we are now arguing about who should have custody of our eight-year-old child. My child has expressed a preference to stay with me, but the other parent disagrees.",
+  "top3": [
+   "familycode:213",
+   "civilcode:363",
+   "familycode:135"
+  ],
+  "all": [
+   "familycode:213",
+   "civilcode:363",
+   "familycode:135",
+   "civilcode:919",
+   "civilcode:920",
+   "familycode:38",
+   "familycode:102",
+   "familycode:216",
+   "familycode:189",
+   "familycode:129",
+   "familycode:231",
+   "civilcode:280",
+   "familycode:188",
+   "civilcode:117",
+   "civilcode:921"
+  ],
+  "relevant": [
+   "familycode:213"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-006",
+  "language": "Taglish",
+  "domain": "Family-Obligation",
+  "query": "My wife wants us to move to another city because of her work, pero ayaw kong iwan yung current family home namin. Hindi kami magkasundo kung saan dapat manirahan ang pamilya.",
+  "processedQuery": "My wife wants us to move to another city because of her work, pero ayaw kong iwan yung current family home namin. Hindi kami magkasundo kung saan dapat manirahan ang pamilya.",
+  "top3": [
+   "familycode:152",
+   "civilcode:223",
+   "civilcode:227"
+  ],
+  "all": [
+   "familycode:152",
+   "civilcode:223",
+   "civilcode:227",
+   "civilcode:235",
+   "familycode:156",
+   "civilcode:228",
+   "familycode:154",
+   "familycode:153",
+   "familycode:161",
+   "civilcode:231",
+   "civilcode:224",
+   "civilcode:226",
+   "civilcode:234",
+   "familycode:151",
+   "civilcode:240"
+  ],
+  "relevant": [
+   "familycode:69"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-006",
+  "language": "Taglish",
+  "domain": "Family-Obligation",
+  "query": "My wife wants us to move to another city because of her work, pero ayaw kong iwan yung current family home namin. Hindi kami magkasundo kung saan dapat manirahan ang pamilya.",
+  "processedQuery": "My wife wants us to move to another city because of her work, pero ayaw kong iwan yung current family home namin. Hindi kami magkasundo kung saan dapat manirahan ang pamilya.",
+  "top3": [
+   "familycode:152",
+   "civilcode:223",
+   "civilcode:227"
+  ],
+  "all": [
+   "familycode:152",
+   "civilcode:223",
+   "civilcode:227",
+   "civilcode:235",
+   "familycode:156",
+   "civilcode:228",
+   "familycode:154",
+   "familycode:153",
+   "familycode:161",
+   "civilcode:231",
+   "civilcode:224",
+   "civilcode:226",
+   "civilcode:234",
+   "familycode:151",
+   "civilcode:240"
+  ],
+  "relevant": [
+   "familycode:69"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-007",
+  "language": "English",
+  "domain": "Family-Marriage",
+  "query": "My partner and I got married in a civil ceremony, but we later discovered that no marriage license had been issued. We were not covered by any of the exceptions that allow a marriage without a license.",
+  "processedQuery": "My partner and I got married in a civil ceremony, but we later discovered that no marriage license had been issued. We were not covered by any of the exceptions that allow a marriage without a license.",
+  "top3": [
+   "familycode:35",
+   "civilcode:63",
+   "civilcode:58"
+  ],
+  "all": [
+   "familycode:35",
+   "civilcode:63",
+   "civilcode:58",
+   "familycode:9",
+   "familycode:28",
+   "civilcode:72",
+   "familycode:15",
+   "familycode:22",
+   "civilcode:65",
+   "familycode:17",
+   "civilcode:84",
+   "familycode:11",
+   "familycode:18",
+   "civilcode:53",
+   "civilcode:70"
+  ],
+  "relevant": [
+   "familycode:35"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-007",
+  "language": "English",
+  "domain": "Family-Marriage",
+  "query": "My partner and I got married in a civil ceremony, but we later discovered that no marriage license had been issued. We were not covered by any of the exceptions that allow a marriage without a license.",
+  "processedQuery": "My partner and I got married in a civil ceremony, but we later discovered that no marriage license had been issued. We were not covered by any of the exceptions that allow a marriage without a license.",
+  "top3": [
+   "familycode:35",
+   "civilcode:63",
+   "civilcode:58"
+  ],
+  "all": [
+   "familycode:35",
+   "civilcode:63",
+   "civilcode:58",
+   "familycode:9",
+   "familycode:28",
+   "civilcode:72",
+   "familycode:15",
+   "familycode:22",
+   "civilcode:65",
+   "familycode:17",
+   "civilcode:84",
+   "familycode:11",
+   "familycode:18",
+   "civilcode:53",
+   "civilcode:70"
+  ],
+  "relevant": [
+   "familycode:35"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-008",
+  "language": "English",
+  "domain": "Family-Obligation",
+  "query": "My former spouse has refused to contribute to our child's school expenses, medical bills, transportation, and daily needs. They argue that child support only covers food and basic necessities.",
+  "processedQuery": "My former spouse has refused to contribute to our child's school expenses, medical bills, transportation, and daily needs. They argue that child support only covers food and basic necessities.",
+  "top3": [
+   "familycode:195",
+   "familycode:194",
+   "familycode:226"
+  ],
+  "all": [
+   "familycode:195",
+   "familycode:194",
+   "familycode:226",
+   "familycode:207",
+   "civilcode:295",
+   "familycode:200",
+   "civilcode:2166",
+   "familycode:121",
+   "civilcode:1067",
+   "civilcode:201",
+   "familycode:122",
+   "civilcode:215",
+   "familycode:94",
+   "familycode:202",
+   "familycode:135"
+  ],
+  "relevant": [
+   "familycode:194"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-008",
+  "language": "English",
+  "domain": "Family-Obligation",
+  "query": "My former spouse has refused to contribute to our child's school expenses, medical bills, transportation, and daily needs. They argue that child support only covers food and basic necessities.",
+  "processedQuery": "My former spouse has refused to contribute to our child's school expenses, medical bills, transportation, and daily needs. They argue that child support only covers food and basic necessities.",
+  "top3": [
+   "familycode:195",
+   "familycode:194",
+   "familycode:226"
+  ],
+  "all": [
+   "familycode:195",
+   "familycode:194",
+   "familycode:226",
+   "familycode:207",
+   "civilcode:295",
+   "familycode:200",
+   "civilcode:2166",
+   "familycode:121",
+   "civilcode:1067",
+   "civilcode:201",
+   "familycode:122",
+   "civilcode:215",
+   "familycode:94",
+   "familycode:202",
+   "familycode:135"
+  ],
+  "relevant": [
+   "familycode:194"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-009",
+  "language": "English",
+  "domain": "Family-Filiation",
+  "query": "A man who I believe is my biological father refuses to acknowledge me as his child. I want to establish my filiation using the available records and evidence of our relationship.",
+  "processedQuery": "A man who I believe is my biological father refuses to acknowledge me as his child. I want to establish my filiation using the available records and evidence of our relationship.",
+  "top3": [
+   "familycode:166",
+   "familycode:172",
+   "civilcode:283"
+  ],
+  "all": [
+   "familycode:166",
+   "familycode:172",
+   "civilcode:283",
+   "civilcode:267",
+   "civilcode:265",
+   "civilcode:763",
+   "familycode:171",
+   "civilcode:285",
+   "civilcode:280",
+   "civilcode:258",
+   "familycode:175",
+   "civilcode:266",
+   "familycode:163",
+   "civilcode:276",
+   "familycode:12"
+  ],
+  "relevant": [
+   "familycode:172",
+   "familycode:175"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 0.5
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-009",
+  "language": "English",
+  "domain": "Family-Filiation",
+  "query": "A man who I believe is my biological father refuses to acknowledge me as his child. I want to establish my filiation using the available records and evidence of our relationship.",
+  "processedQuery": "A man who I believe is my biological father refuses to acknowledge me as his child. I want to establish my filiation using the available records and evidence of our relationship.",
+  "top3": [
+   "familycode:166",
+   "familycode:172",
+   "civilcode:283"
+  ],
+  "all": [
+   "familycode:166",
+   "familycode:172",
+   "civilcode:283",
+   "civilcode:267",
+   "civilcode:265",
+   "civilcode:763",
+   "familycode:171",
+   "civilcode:285",
+   "civilcode:280",
+   "civilcode:258",
+   "familycode:175",
+   "civilcode:266",
+   "familycode:163",
+   "civilcode:276",
+   "familycode:12"
+  ],
+  "relevant": [
+   "familycode:172",
+   "familycode:175"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 0.5
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-011",
+  "language": "Tagalog",
+  "domain": "Family-Marriage",
+  "query": "Labing-siyam na taong gulang pa lang ako nang ikasal ako. Hindi ako kumuha ng parental consent dahil ayaw pumayag ng mga magulang ko, pero itinuloy pa rin namin ang kasal.",
+  "processedQuery": "Labing-siyam na taong gulang pa lang ako nang ikasal ako. Hindi ako kumuha ng parental consent dahil ayaw pumayag ng mga magulang ko, pero itinuloy pa rin namin ang kasal.",
+  "top3": [
+   "familycode:45",
+   "familycode:164",
+   "civilcode:1047"
+  ],
+  "all": [
+   "familycode:45",
+   "familycode:164",
+   "civilcode:1047",
+   "civilcode:67",
+   "civilcode:2049",
+   "familycode:16",
+   "familycode:22",
+   "civilcode:802",
+   "civilcode:85",
+   "civilcode:403",
+   "civilcode:279",
+   "civilcode:140",
+   "civilcode:120",
+   "civilcode:173",
+   "civilcode:228"
+  ],
+  "relevant": [
+   "familycode:45"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-011",
+  "language": "Tagalog",
+  "domain": "Family-Marriage",
+  "query": "Labing-siyam na taong gulang pa lang ako nang ikasal ako. Hindi ako kumuha ng parental consent dahil ayaw pumayag ng mga magulang ko, pero itinuloy pa rin namin ang kasal.",
+  "processedQuery": "Labing-siyam na taong gulang pa lang ako nang ikasal ako. Hindi ako kumuha ng parental consent dahil ayaw pumayag ng mga magulang ko, pero itinuloy pa rin namin ang kasal.",
+  "top3": [
+   "familycode:45",
+   "familycode:164",
+   "civilcode:1047"
+  ],
+  "all": [
+   "familycode:45",
+   "familycode:164",
+   "civilcode:1047",
+   "civilcode:67",
+   "civilcode:2049",
+   "familycode:16",
+   "familycode:22",
+   "civilcode:802",
+   "civilcode:85",
+   "civilcode:403",
+   "civilcode:279",
+   "civilcode:140",
+   "civilcode:120",
+   "civilcode:173",
+   "civilcode:228"
+  ],
+  "relevant": [
+   "familycode:45"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-012",
+  "language": "Tagalog",
+  "domain": "Family-Property",
+  "query": "May asawa ako at ang minana kong lupa mula sa mga magulang ko ay gusto kong ipagbili. Mayroon kaming marriage settlement na nagsasabing conjugal partnership of gains ang aming property regime, pero sinasabi ng asawa ko na kailangan ko pa rin ang pahintulot niya.",
+  "processedQuery": "May asawa ako at ang minana kong lupa mula sa mga magulang ko ay gusto kong ipagbili. Mayroon kaming marriage settlement na nagsasabing conjugal partnership of gains ang aming property regime, pero sinasabi ng asawa ko na kailangan ko pa rin ang pahintulot niya.",
+  "top3": [
+   "familycode:109",
+   "civilcode:119",
+   "civilcode:143"
+  ],
+  "all": [
+   "familycode:109",
+   "civilcode:119",
+   "civilcode:143",
+   "familycode:106",
+   "civilcode:228",
+   "civilcode:178",
+   "civilcode:142",
+   "familycode:75",
+   "civilcode:161",
+   "familycode:129",
+   "civilcode:167",
+   "civilcode:191",
+   "civilcode:158",
+   "civilcode:166",
+   "familycode:136"
+  ],
+  "relevant": [
+   "familycode:109"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-012",
+  "language": "Tagalog",
+  "domain": "Family-Property",
+  "query": "May asawa ako at ang minana kong lupa mula sa mga magulang ko ay gusto kong ipagbili. Mayroon kaming marriage settlement na nagsasabing conjugal partnership of gains ang aming property regime, pero sinasabi ng asawa ko na kailangan ko pa rin ang pahintulot niya.",
+  "processedQuery": "May asawa ako at ang minana kong lupa mula sa mga magulang ko ay gusto kong ipagbili. Mayroon kaming marriage settlement na nagsasabing conjugal partnership of gains ang aming property regime, pero sinasabi ng asawa ko na kailangan ko pa rin ang pahintulot niya.",
+  "top3": [
+   "familycode:109",
+   "civilcode:119",
+   "civilcode:143"
+  ],
+  "all": [
+   "familycode:109",
+   "civilcode:119",
+   "civilcode:143",
+   "familycode:106",
+   "civilcode:228",
+   "civilcode:178",
+   "civilcode:142",
+   "familycode:75",
+   "civilcode:161",
+   "familycode:129",
+   "civilcode:167",
+   "civilcode:191",
+   "civilcode:158",
+   "civilcode:166",
+   "familycode:136"
+  ],
+  "relevant": [
+   "familycode:109"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-014",
+  "language": "Tagalog",
+  "domain": "Family-Custody",
+  "query": "Pareho kaming buhay ng asawa ko, pero ayaw niyang payagan ang anak naming mag-aral sa paaralang napili namin. Gusto kong malaman kung paano dapat gamitin ng magulang ang kanilang parental authority kapag hindi sila nagkakasundo.",
+  "processedQuery": "Pareho kaming buhay ng asawa ko, pero ayaw niyang payagan ang anak naming mag-aral sa paaralang napili namin. Gusto kong malaman kung paano dapat gamitin ng magulang ang kanilang parental authority kapag hindi sila nagkakasundo.",
+  "top3": [
+   "familycode:212",
+   "familycode:164",
+   "civilcode:336"
+  ],
+  "all": [
+   "familycode:212",
+   "familycode:164",
+   "civilcode:336",
+   "familycode:186",
+   "civilcode:161",
+   "familycode:166",
+   "civilcode:192",
+   "civilcode:328",
+   "familycode:189",
+   "civilcode:255",
+   "civilcode:765",
+   "familycode:185",
+   "civilcode:321",
+   "civilcode:217",
+   "civilcode:311"
+  ],
+  "relevant": [
+   "familycode:211"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-014",
+  "language": "Tagalog",
+  "domain": "Family-Custody",
+  "query": "Pareho kaming buhay ng asawa ko, pero ayaw niyang payagan ang anak naming mag-aral sa paaralang napili namin. Gusto kong malaman kung paano dapat gamitin ng magulang ang kanilang parental authority kapag hindi sila nagkakasundo.",
+  "processedQuery": "Pareho kaming buhay ng asawa ko, pero ayaw niyang payagan ang anak naming mag-aral sa paaralang napili namin. Gusto kong malaman kung paano dapat gamitin ng magulang ang kanilang parental authority kapag hindi sila nagkakasundo.",
+  "top3": [
+   "familycode:212",
+   "familycode:164",
+   "civilcode:336"
+  ],
+  "all": [
+   "familycode:212",
+   "familycode:164",
+   "civilcode:336",
+   "familycode:186",
+   "civilcode:161",
+   "familycode:166",
+   "civilcode:192",
+   "civilcode:328",
+   "familycode:189",
+   "civilcode:255",
+   "civilcode:765",
+   "familycode:185",
+   "civilcode:321",
+   "civilcode:217",
+   "civilcode:311"
+  ],
+  "relevant": [
+   "familycode:211"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "FC-EV-015",
+  "language": "Tagalog",
+  "domain": "Family-Filiation",
+  "query": "Hindi kasal ang mga magulang ko noong ipinanganak ako. Kinikilala ako ng tatay ko sa isang public document, at gusto kong malaman kung maaari kong gamitin ang apelyido niya.",
+  "processedQuery": "Hindi kasal ang mga magulang ko noong ipinanganak ako. Kinikilala ako ng tatay ko sa isang public document, at gusto kong malaman kung maaari kong gamitin ang apelyido niya.",
+  "top3": [
+   "familycode:164",
+   "familycode:176",
+   "familycode:165"
+  ],
+  "all": [
+   "familycode:164",
+   "familycode:176",
+   "familycode:165",
+   "civilcode:887",
+   "civilcode:369",
+   "familycode:172",
+   "familycode:163",
+   "civilcode:993",
+   "civilcode:265",
+   "civilcode:329",
+   "familycode:177",
+   "civilcode:367",
+   "civilcode:267",
+   "familycode:11",
+   "civilcode:364"
+  ],
+  "relevant": [
+   "familycode:176"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "FC-EV-015",
+  "language": "Tagalog",
+  "domain": "Family-Filiation",
+  "query": "Hindi kasal ang mga magulang ko noong ipinanganak ako. Kinikilala ako ng tatay ko sa isang public document, at gusto kong malaman kung maaari kong gamitin ang apelyido niya.",
+  "processedQuery": "Hindi kasal ang mga magulang ko noong ipinanganak ako. Kinikilala ako ng tatay ko sa isang public document, at gusto kong malaman kung maaari kong gamitin ang apelyido niya.",
+  "top3": [
+   "familycode:164",
+   "familycode:176",
+   "familycode:165"
+  ],
+  "all": [
+   "familycode:164",
+   "familycode:176",
+   "familycode:165",
+   "civilcode:887",
+   "civilcode:369",
+   "familycode:172",
+   "familycode:163",
+   "civilcode:993",
+   "civilcode:265",
+   "civilcode:329",
+   "familycode:177",
+   "civilcode:367",
+   "civilcode:267",
+   "familycode:11",
+   "civilcode:364"
+  ],
+  "relevant": [
+   "familycode:176"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-001",
+  "language": "Taglish",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "The online seller advertised the phone as brand new and unused. Pagdating ng package, may existing scratches, signs of previous repairs, at used parts pala yung device.",
+  "processedQuery": "The online seller advertised the phone as brand new and unused. Pagdating ng package, may existing scratches, signs of previous repairs, at used parts pala yung device.",
+  "top3": [
+   "consumeract:50",
+   "consumeract:124",
+   "consumeract:31"
+  ],
+  "all": [
+   "consumeract:50",
+   "consumeract:124",
+   "consumeract:31",
+   "consumeract:100",
+   "consumeract:15",
+   "civilcode:1599",
+   "consumeract:64",
+   "consumeract:11",
+   "consumeract:111",
+   "consumeract:40",
+   "consumeract:46",
+   "civilcode:1533",
+   "consumeract:164",
+   "consumeract:122",
+   "civilcode:1484"
+  ],
+  "relevant": [
+   "consumeract:50"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-001",
+  "language": "Taglish",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "The online seller advertised the phone as brand new and unused. Pagdating ng package, may existing scratches, signs of previous repairs, at used parts pala yung device.",
+  "processedQuery": "The online seller advertised the phone as brand new and unused. Pagdating ng package, may existing scratches, signs of previous repairs, at used parts pala yung device.",
+  "top3": [
+   "consumeract:50",
+   "consumeract:124",
+   "consumeract:31"
+  ],
+  "all": [
+   "consumeract:50",
+   "consumeract:124",
+   "consumeract:31",
+   "consumeract:100",
+   "consumeract:15",
+   "civilcode:1599",
+   "consumeract:64",
+   "consumeract:11",
+   "consumeract:111",
+   "consumeract:40",
+   "consumeract:46",
+   "civilcode:1533",
+   "consumeract:164",
+   "consumeract:122",
+   "civilcode:1484"
+  ],
+  "relevant": [
+   "consumeract:50"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-002",
+  "language": "Taglish",
+  "domain": "Consumer-Defective-Product",
+  "query": "I brought my laptop to a repair shop because of a keyboard problem. After the repair, hindi na gumagana yung screen, and the technician refuses to fix the additional damage caused during the service.",
+  "processedQuery": "I brought my laptop to a repair shop because of a keyboard problem. After the repair, hindi na gumagana yung screen, and the technician refuses to fix the additional damage caused during the service.",
+  "top3": [
+   "consumeract:50",
+   "consumeract:106",
+   "consumeract:99"
+  ],
+  "all": [
+   "consumeract:50",
+   "consumeract:106",
+   "consumeract:99",
+   "consumeract:11",
+   "consumeract:164",
+   "civilcode:1662",
+   "consumeract:124",
+   "consumeract:103",
+   "civilcode:303",
+   "civilcode:1678",
+   "consumeract:18",
+   "consumeract:128",
+   "consumeract:95",
+   "civilcode:1599",
+   "civilcode:1698"
+  ],
+  "relevant": [
+   "consumeract:99"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-002",
+  "language": "Taglish",
+  "domain": "Consumer-Defective-Product",
+  "query": "I brought my laptop to a repair shop because of a keyboard problem. After the repair, hindi na gumagana yung screen, and the technician refuses to fix the additional damage caused during the service.",
+  "processedQuery": "I brought my laptop to a repair shop because of a keyboard problem. After the repair, hindi na gumagana yung screen, and the technician refuses to fix the additional damage caused during the service.",
+  "top3": [
+   "consumeract:50",
+   "consumeract:106",
+   "consumeract:99"
+  ],
+  "all": [
+   "consumeract:50",
+   "consumeract:106",
+   "consumeract:99",
+   "consumeract:11",
+   "consumeract:164",
+   "civilcode:1662",
+   "consumeract:124",
+   "consumeract:103",
+   "civilcode:303",
+   "civilcode:1678",
+   "consumeract:18",
+   "consumeract:128",
+   "consumeract:95",
+   "civilcode:1599",
+   "civilcode:1698"
+  ],
+  "relevant": [
+   "consumeract:99"
+  ],
+  "top1": false,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-003",
+  "language": "Taglish",
+  "domain": "Consumer-Product-Standard",
+  "query": "A store sells electrical extension cords that do not comply with the applicable mandatory Philippine safety standard. The seller continues distributing them even after being informed of the noncompliance.",
+  "processedQuery": "A store sells electrical extension cords that do not comply with the applicable mandatory Philippine safety standard. The seller continues distributing them even after being informed of the noncompliance.",
+  "top3": [
+   "consumeract:18",
+   "consumeract:14",
+   "consumeract:15"
+  ],
+  "all": [
+   "consumeract:18",
+   "consumeract:14",
+   "consumeract:15",
+   "consumeract:11",
+   "consumeract:9",
+   "civilcode:1599",
+   "consumeract:16",
+   "consumeract:7",
+   "civilcode:1505",
+   "consumeract:93",
+   "consumeract:19",
+   "civilcode:1586",
+   "consumeract:68",
+   "civilcode:1547",
+   "consumeract:10"
+  ],
+  "relevant": [
+   "consumeract:18"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-003",
+  "language": "Taglish",
+  "domain": "Consumer-Product-Standard",
+  "query": "A store sells electrical extension cords that do not comply with the applicable mandatory Philippine safety standard. The seller continues distributing them even after being informed of the noncompliance.",
+  "processedQuery": "A store sells electrical extension cords that do not comply with the applicable mandatory Philippine safety standard. The seller continues distributing them even after being informed of the noncompliance.",
+  "top3": [
+   "consumeract:18",
+   "consumeract:14",
+   "consumeract:15"
+  ],
+  "all": [
+   "consumeract:18",
+   "consumeract:14",
+   "consumeract:15",
+   "consumeract:11",
+   "consumeract:9",
+   "civilcode:1599",
+   "consumeract:16",
+   "consumeract:7",
+   "civilcode:1505",
+   "consumeract:93",
+   "consumeract:19",
+   "civilcode:1586",
+   "consumeract:68",
+   "civilcode:1547",
+   "consumeract:10"
+  ],
+  "relevant": [
+   "consumeract:18"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-004",
+  "language": "Taglish",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "Bumili ako ng isang kilo ng bigas, pero nang timbangin ko ito gamit ang isang maayos at calibrated na timbangan, kulang pala ang aktuwal na timbang na ibinigay ng tindahan.",
+  "processedQuery": "Bumili ako ng isang kilo ng bigas, pero nang timbangin ko ito gamit ang isang maayos at calibrated na timbangan, kulang pala ang aktuwal na timbang na ibinigay ng tindahan.",
+  "top3": [
+   "consumeract:64",
+   "civilcode:1546",
+   "civilcode:1505"
+  ],
+  "all": [
+   "consumeract:64",
+   "civilcode:1546",
+   "civilcode:1505",
+   "civilcode:1533",
+   "civilcode:1464",
+   "civilcode:1599",
+   "civilcode:1494",
+   "civilcode:1562",
+   "civilcode:1526",
+   "civilcode:1523",
+   "civilcode:1506",
+   "civilcode:1545",
+   "civilcode:1597",
+   "civilcode:1547",
+   "civilcode:1476"
+  ],
+  "relevant": [
+   "consumeract:64"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-004",
+  "language": "Taglish",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "Bumili ako ng isang kilo ng bigas, pero nang timbangin ko ito gamit ang isang maayos at calibrated na timbangan, kulang pala ang aktuwal na timbang na ibinigay ng tindahan.",
+  "processedQuery": "Bumili ako ng isang kilo ng bigas, pero nang timbangin ko ito gamit ang isang maayos at calibrated na timbangan, kulang pala ang aktuwal na timbang na ibinigay ng tindahan.",
+  "top3": [
+   "consumeract:64",
+   "civilcode:1546",
+   "civilcode:1505"
+  ],
+  "all": [
+   "consumeract:64",
+   "civilcode:1546",
+   "civilcode:1505",
+   "civilcode:1533",
+   "civilcode:1464",
+   "civilcode:1599",
+   "civilcode:1494",
+   "civilcode:1562",
+   "civilcode:1526",
+   "civilcode:1523",
+   "civilcode:1506",
+   "civilcode:1545",
+   "civilcode:1597",
+   "civilcode:1547",
+   "civilcode:1476"
+  ],
+  "relevant": [
+   "consumeract:64"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-005",
+  "language": "Tagalog",
+  "domain": "Consumer-Defective-Product",
+  "query": "Bumili ako ng de-latang pagkain sa grocery. Pagbukas ko, may kakaibang amoy at kulay ang laman kahit hindi pa lumalagpas sa expiration date na nakalagay sa lata.",
+  "processedQuery": "Bumili ako ng de-latang pagkain sa grocery. Pagbukas ko, may kakaibang amoy at kulay ang laman kahit hindi pa lumalagpas sa expiration date na nakalagay sa lata.",
+  "top3": [
+   "civilcode:1546",
+   "civilcode:1533",
+   "civilcode:1505"
+  ],
+  "all": [
+   "civilcode:1546",
+   "civilcode:1533",
+   "civilcode:1505",
+   "civilcode:1526",
+   "civilcode:1545",
+   "civilcode:1599",
+   "civilcode:1523",
+   "civilcode:1494",
+   "civilcode:1562",
+   "civilcode:1547",
+   "civilcode:1548",
+   "consumeract:68",
+   "civilcode:1617",
+   "civilcode:1502",
+   "consumeract:111"
+  ],
+  "relevant": [
+   "consumeract:23"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-005",
+  "language": "Tagalog",
+  "domain": "Consumer-Defective-Product",
+  "query": "Bumili ako ng de-latang pagkain sa grocery. Pagbukas ko, may kakaibang amoy at kulay ang laman kahit hindi pa lumalagpas sa expiration date na nakalagay sa lata.",
+  "processedQuery": "Bumili ako ng de-latang pagkain sa grocery. Pagbukas ko, may kakaibang amoy at kulay ang laman kahit hindi pa lumalagpas sa expiration date na nakalagay sa lata.",
+  "top3": [
+   "civilcode:1546",
+   "civilcode:1533",
+   "civilcode:1505"
+  ],
+  "all": [
+   "civilcode:1546",
+   "civilcode:1533",
+   "civilcode:1505",
+   "civilcode:1526",
+   "civilcode:1545",
+   "civilcode:1599",
+   "civilcode:1523",
+   "civilcode:1494",
+   "civilcode:1562",
+   "civilcode:1547",
+   "civilcode:1548",
+   "consumeract:68",
+   "civilcode:1617",
+   "civilcode:1502",
+   "consumeract:111"
+  ],
+  "relevant": [
+   "consumeract:23"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-006",
+  "language": "Tagalog",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "Bumili ako ng household pesticide pero walang malinaw na hazard warnings at instructions kung paano ito ligtas gamitin at itago. May maliliit kaming bata sa bahay kaya nag-aalala ako sa posibleng aksidente.",
+  "processedQuery": "Bumili ako ng household pesticide pero walang malinaw na hazard warnings at instructions kung paano ito ligtas gamitin at itago. May maliliit kaming bata sa bahay kaya nag-aalala ako sa posibleng aksidente.",
+  "top3": [
+   "consumeract:91",
+   "civilcode:1546",
+   "civilcode:1523"
+  ],
+  "all": [
+   "consumeract:91",
+   "civilcode:1546",
+   "civilcode:1523",
+   "consumeract:18",
+   "civilcode:1533",
+   "civilcode:1545",
+   "civilcode:1505",
+   "civilcode:1547",
+   "civilcode:1599",
+   "civilcode:1526",
+   "civilcode:1562",
+   "civilcode:1494",
+   "civilcode:1548",
+   "civilcode:1597",
+   "civilcode:1506"
+  ],
+  "relevant": [
+   "consumeract:91"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-006",
+  "language": "Tagalog",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "Bumili ako ng household pesticide pero walang malinaw na hazard warnings at instructions kung paano ito ligtas gamitin at itago. May maliliit kaming bata sa bahay kaya nag-aalala ako sa posibleng aksidente.",
+  "processedQuery": "Bumili ako ng household pesticide pero walang malinaw na hazard warnings at instructions kung paano ito ligtas gamitin at itago. May maliliit kaming bata sa bahay kaya nag-aalala ako sa posibleng aksidente.",
+  "top3": [
+   "consumeract:91",
+   "civilcode:1546",
+   "civilcode:1523"
+  ],
+  "all": [
+   "consumeract:91",
+   "civilcode:1546",
+   "civilcode:1523",
+   "consumeract:18",
+   "civilcode:1533",
+   "civilcode:1545",
+   "civilcode:1505",
+   "civilcode:1547",
+   "civilcode:1599",
+   "civilcode:1526",
+   "civilcode:1562",
+   "civilcode:1494",
+   "civilcode:1548",
+   "civilcode:1597",
+   "civilcode:1506"
+  ],
+  "relevant": [
+   "consumeract:91"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-007",
+  "language": "Tagalog",
+  "domain": "Consumer-Defective-Product",
+  "query": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na sya. Ayaw tanggapin ng seller nung nirereturn ko kahit may resibo naman ako",
+  "processedQuery": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na sya. Ayaw tanggapin ng seller nung nirereturn ko kahit may resibo naman ako",
+  "top3": [
+   "consumeract:97",
+   "civilcode:1599",
+   "civilcode:1596"
+  ],
+  "all": [
+   "consumeract:97",
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1597",
+   "consumeract:110",
+   "civilcode:1534",
+   "civilcode:1579",
+   "civilcode:1587",
+   "civilcode:1502",
+   "civilcode:1533",
+   "civilcode:1616",
+   "civilcode:1522",
+   "civilcode:1526",
+   "civilcode:1546",
+   "civilcode:1585"
+  ],
+  "relevant": [
+   "civilcode:1561",
+   "civilcode:1566",
+   "consumeract:67"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-007",
+  "language": "Tagalog",
+  "domain": "Consumer-Defective-Product",
+  "query": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na sya. Ayaw tanggapin ng seller nung nirereturn ko kahit may resibo naman ako",
+  "processedQuery": "Bumili ako ng portable e-fan tapos ilang gamit lang ay humihina na sya. Ayaw tanggapin ng seller nung nirereturn ko kahit may resibo naman ako",
+  "top3": [
+   "consumeract:97",
+   "civilcode:1599",
+   "civilcode:1596"
+  ],
+  "all": [
+   "consumeract:97",
+   "civilcode:1599",
+   "civilcode:1596",
+   "civilcode:1597",
+   "consumeract:110",
+   "civilcode:1534",
+   "civilcode:1579",
+   "civilcode:1587",
+   "civilcode:1502",
+   "civilcode:1533",
+   "civilcode:1616",
+   "civilcode:1522",
+   "civilcode:1526",
+   "civilcode:1546",
+   "civilcode:1585"
+  ],
+  "relevant": [
+   "civilcode:1561",
+   "civilcode:1566",
+   "consumeract:67"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-008",
+  "language": "English",
+  "domain": "Consumer-Defective-Product",
+  "query": "I bought a new electric fan, but its motor overheated during normal use and caused the plastic casing to melt. The manufacturer refused to take responsibility for the damage.",
+  "processedQuery": "I bought a new electric fan, but its motor overheated during normal use and caused the plastic casing to melt. The manufacturer refused to take responsibility for the damage.",
+  "top3": [
+   "consumeract:97",
+   "consumeract:106",
+   "consumeract:98"
+  ],
+  "all": [
+   "consumeract:97",
+   "consumeract:106",
+   "consumeract:98",
+   "civilcode:1256",
+   "consumeract:68",
+   "consumeract:15",
+   "civilcode:1561",
+   "civilcode:1545",
+   "civilcode:2225",
+   "consumeract:18",
+   "civilcode:1599",
+   "consumeract:154",
+   "consumeract:11",
+   "consumeract:124",
+   "civilcode:2191"
+  ],
+  "relevant": [
+   "consumeract:97"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-008",
+  "language": "English",
+  "domain": "Consumer-Defective-Product",
+  "query": "I bought a new electric fan, but its motor overheated during normal use and caused the plastic casing to melt. The manufacturer refused to take responsibility for the damage.",
+  "processedQuery": "I bought a new electric fan, but its motor overheated during normal use and caused the plastic casing to melt. The manufacturer refused to take responsibility for the damage.",
+  "top3": [
+   "consumeract:97",
+   "consumeract:106",
+   "consumeract:98"
+  ],
+  "all": [
+   "consumeract:97",
+   "consumeract:106",
+   "consumeract:98",
+   "civilcode:1256",
+   "consumeract:68",
+   "consumeract:15",
+   "civilcode:1561",
+   "civilcode:1545",
+   "civilcode:2225",
+   "consumeract:18",
+   "civilcode:1599",
+   "consumeract:154",
+   "consumeract:11",
+   "consumeract:124",
+   "civilcode:2191"
+  ],
+  "relevant": [
+   "consumeract:97"
+  ],
+  "top1": true,
+  "hit3": true,
+  "hitAll": true,
+  "hits": 1,
+  "recall3": 1.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-009",
+  "language": "English",
+  "domain": "Consumer-Advertisement",
+  "query": "A company advertised that its skincare product could permanently remove acne scars in just three days. The advertisement made these claims without sufficient evidence to support them.",
+  "processedQuery": "A company advertised that its skincare product could permanently remove acne scars in just three days. The advertisement made these claims without sufficient evidence to support them.",
+  "top3": [
+   "consumeract:112",
+   "consumeract:100",
+   "consumeract:15"
+  ],
+  "all": [
+   "consumeract:112",
+   "consumeract:100",
+   "consumeract:15",
+   "consumeract:111",
+   "consumeract:110",
+   "consumeract:12",
+   "consumeract:115",
+   "consumeract:68",
+   "consumeract:165",
+   "consumeract:122",
+   "consumeract:124",
+   "consumeract:97",
+   "civilcode:255",
+   "consumeract:72",
+   "civilcode:1578"
+  ],
+  "relevant": [
+   "consumeract:110"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": true,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-009",
+  "language": "English",
+  "domain": "Consumer-Advertisement",
+  "query": "A company advertised that its skincare product could permanently remove acne scars in just three days. The advertisement made these claims without sufficient evidence to support them.",
+  "processedQuery": "A company advertised that its skincare product could permanently remove acne scars in just three days. The advertisement made these claims without sufficient evidence to support them.",
+  "top3": [
+   "consumeract:112",
+   "consumeract:100",
+   "consumeract:15"
+  ],
+  "all": [
+   "consumeract:112",
+   "consumeract:100",
+   "consumeract:15",
+   "consumeract:111",
+   "consumeract:110",
+   "consumeract:12",
+   "consumeract:115",
+   "consumeract:68",
+   "consumeract:165",
+   "consumeract:122",
+   "consumeract:124",
+   "consumeract:97",
+   "civilcode:255",
+   "consumeract:72",
+   "civilcode:1578"
+  ],
+  "relevant": [
+   "consumeract:110"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": true,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "baseline",
+  "datasetId": "CA-EV-010",
+  "language": "English",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "I joined a product-selling program that required me to pay a large membership fee. I was told that I could earn substantial money mainly by recruiting new members who would also pay to join.",
+  "processedQuery": "I joined a product-selling program that required me to pay a large membership fee. I was told that I could earn substantial money mainly by recruiting new members who would also pay to join.",
+  "top3": [
+   "consumeract:52",
+   "consumeract:153",
+   "civilcode:1857"
+  ],
+  "all": [
+   "consumeract:52",
+   "consumeract:153",
+   "civilcode:1857",
+   "civilcode:1918",
+   "consumeract:69",
+   "consumeract:154",
+   "consumeract:151",
+   "consumeract:11",
+   "civilcode:1599",
+   "civilcode:1601",
+   "civilcode:1852",
+   "civilcode:1830",
+   "civilcode:1555",
+   "consumeract:50",
+   "consumeract:17"
+  ],
+  "relevant": [
+   "consumeract:53"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ },
+ {
+  "strategy": "hybrid",
+  "mode": "translation",
+  "datasetId": "CA-EV-010",
+  "language": "English",
+  "domain": "Consumer-Deceptive-Product",
+  "query": "I joined a product-selling program that required me to pay a large membership fee. I was told that I could earn substantial money mainly by recruiting new members who would also pay to join.",
+  "processedQuery": "I joined a product-selling program that required me to pay a large membership fee. I was told that I could earn substantial money mainly by recruiting new members who would also pay to join.",
+  "top3": [
+   "consumeract:52",
+   "consumeract:153",
+   "civilcode:1857"
+  ],
+  "all": [
+   "consumeract:52",
+   "consumeract:153",
+   "civilcode:1857",
+   "civilcode:1918",
+   "consumeract:69",
+   "consumeract:154",
+   "consumeract:151",
+   "consumeract:11",
+   "civilcode:1599",
+   "civilcode:1601",
+   "civilcode:1852",
+   "civilcode:1830",
+   "civilcode:1555",
+   "consumeract:50",
+   "consumeract:17"
+  ],
+  "relevant": [
+   "consumeract:53"
+  ],
+  "top1": false,
+  "hit3": false,
+  "hitAll": false,
+  "hits": 0,
+  "recall3": 0.0
+ }
+]

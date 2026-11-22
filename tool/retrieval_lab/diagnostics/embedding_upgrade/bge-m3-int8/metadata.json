@@ -1,0 +1,15 @@
+{
+  "signature": "2712b5a3047bad8ca8bce590a08d012873364f03266d024011f687949e7fead9",
+  "model": "BAAI/bge-m3",
+  "quantization": "dynamic-int8",
+  "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+  "dimensions": 1024,
+  "weightBytes": 2271145830,
+  "estimatedQuantizedParameterBytes": 1361903616,
+  "corpusDigest": "c5da2324ad710132dde511284581e21704425ba42fcda230386b05ac83d29741",
+  "indexingSeconds": 1350.649468699994,
+  "meanSingleQuerySeconds": 0.41234998507407816,
+  "peakRssBytes": 6033682432,
+  "maxChunkTokens": 305,
+  "maxQueryTokens": 60
+}

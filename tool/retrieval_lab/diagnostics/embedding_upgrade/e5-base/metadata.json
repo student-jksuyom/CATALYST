@@ -1,0 +1,13 @@
+{
+  "signature": "8f0fdd88cc00c8f46e0a1890a0b46bc4e0c7bec3d2000471d02b898a45287ef8",
+  "model": "intfloat/multilingual-e5-base",
+  "revision": "d128750597153bb5987e10b1c3493a34e5a4502a",
+  "dimensions": 768,
+  "weightBytes": 1112201288,
+  "corpusDigest": "c5da2324ad710132dde511284581e21704425ba42fcda230386b05ac83d29741",
+  "indexingSeconds": 726.6773260000045,
+  "meanSingleQuerySeconds": 0.13902132537036982,
+  "peakRssBytes": 1360117760,
+  "maxChunkTokens": 307,
+  "maxQueryTokens": 63
+}

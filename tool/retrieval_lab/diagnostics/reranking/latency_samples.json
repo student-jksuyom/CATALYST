@@ -1,0 +1,310 @@
+{
+  "sampleCaseIds": [
+    "CC-EV-001",
+    "FC-EV-001",
+    "CA-EV-001"
+  ],
+  "note": "Three warm CPU samples, not a mobile or ONNX-embedding latency benchmark.",
+  "modelLoadSeconds": 2.348707099998137,
+  "threads": 4,
+  "memory": {
+    "before_load_working_set_bytes": 73318400,
+    "after_load_working_set_bytes": 476114944,
+    "after_load_peak_working_set_bytes": 565182464,
+    "endWorkingSetBytes": 566272000,
+    "peakWorkingSetBytes": 566272000
+  },
+  "summary": [
+    {
+      "pool": "pool50",
+      "requestedCandidates": 30,
+      "meanRerankSeconds": 5.858602433339304,
+      "minRerankSeconds": 3.187045400001807,
+      "maxRerankSeconds": 8.138225100003183,
+      "meanActualCandidates": 30,
+      "meanRetrievalMilliseconds": 68.47966666666667
+    },
+    {
+      "pool": "pool50",
+      "requestedCandidates": 50,
+      "meanRerankSeconds": 10.844587166667528,
+      "minRerankSeconds": 7.46785070002079,
+      "maxRerankSeconds": 16.94473570000264,
+      "meanActualCandidates": 50,
+      "meanRetrievalMilliseconds": 68.47966666666667
+    },
+    {
+      "pool": "pool50",
+      "requestedCandidates": 100,
+      "meanRerankSeconds": 14.249935699995453,
+      "minRerankSeconds": 10.735901000007289,
+      "maxRerankSeconds": 19.108165699988604,
+      "meanActualCandidates": 69,
+      "meanRetrievalMilliseconds": 68.47966666666667
+    },
+    {
+      "pool": "pool50",
+      "requestedCandidates": 200,
+      "meanRerankSeconds": 12.81217563333727,
+      "minRerankSeconds": 10.372115000005579,
+      "maxRerankSeconds": 14.638279400009196,
+      "meanActualCandidates": 69,
+      "meanRetrievalMilliseconds": 68.47966666666667
+    },
+    {
+      "pool": "pool500",
+      "requestedCandidates": 30,
+      "meanRerankSeconds": 7.358771300001536,
+      "minRerankSeconds": 4.223039900010917,
+      "maxRerankSeconds": 9.162668399978429,
+      "meanActualCandidates": 30,
+      "meanRetrievalMilliseconds": 119.298
+    },
+    {
+      "pool": "pool500",
+      "requestedCandidates": 50,
+      "meanRerankSeconds": 10.947603400001148,
+      "minRerankSeconds": 6.174578500009375,
+      "maxRerankSeconds": 13.800927100004628,
+      "meanActualCandidates": 50,
+      "meanRetrievalMilliseconds": 119.298
+    },
+    {
+      "pool": "pool500",
+      "requestedCandidates": 100,
+      "meanRerankSeconds": 16.8541321666562,
+      "minRerankSeconds": 14.85044559999369,
+      "maxRerankSeconds": 19.128633799991803,
+      "meanActualCandidates": 86,
+      "meanRetrievalMilliseconds": 119.298
+    },
+    {
+      "pool": "pool500",
+      "requestedCandidates": 200,
+      "meanRerankSeconds": 25.635271533334162,
+      "minRerankSeconds": 13.584329200006323,
+      "maxRerankSeconds": 34.73453289997997,
+      "meanActualCandidates": 152.66666666666666,
+      "meanRetrievalMilliseconds": 119.298
+    }
+  ],
+  "measurements": [
+    {
+      "datasetId": "CC-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 30,
+      "actualCandidates": 30,
+      "windows": 34,
+      "seconds": 3.187045400001807,
+      "retrievalMilliseconds": 75.018
+    },
+    {
+      "datasetId": "CC-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 50,
+      "actualCandidates": 50,
+      "windows": 60,
+      "seconds": 7.46785070002079,
+      "retrievalMilliseconds": 75.018
+    },
+    {
+      "datasetId": "CC-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 100,
+      "actualCandidates": 85,
+      "windows": 102,
+      "seconds": 12.905740399990464,
+      "retrievalMilliseconds": 75.018
+    },
+    {
+      "datasetId": "CC-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 200,
+      "actualCandidates": 85,
+      "windows": 102,
+      "seconds": 10.372115000005579,
+      "retrievalMilliseconds": 75.018
+    },
+    {
+      "datasetId": "CC-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 30,
+      "actualCandidates": 30,
+      "windows": 37,
+      "seconds": 4.223039900010917,
+      "retrievalMilliseconds": 116.716
+    },
+    {
+      "datasetId": "CC-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 50,
+      "actualCandidates": 50,
+      "windows": 62,
+      "seconds": 6.174578500009375,
+      "retrievalMilliseconds": 116.716
+    },
+    {
+      "datasetId": "CC-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 100,
+      "actualCandidates": 100,
+      "windows": 120,
+      "seconds": 16.583317099983105,
+      "retrievalMilliseconds": 116.716
+    },
+    {
+      "datasetId": "CC-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 200,
+      "actualCandidates": 200,
+      "windows": 237,
+      "seconds": 34.73453289997997,
+      "retrievalMilliseconds": 116.716
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 30,
+      "actualCandidates": 30,
+      "windows": 47,
+      "seconds": 6.250536800012924,
+      "retrievalMilliseconds": 59.978
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 50,
+      "actualCandidates": 50,
+      "windows": 70,
+      "seconds": 8.121175099979155,
+      "retrievalMilliseconds": 59.978
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 100,
+      "actualCandidates": 70,
+      "windows": 92,
+      "seconds": 10.735901000007289,
+      "retrievalMilliseconds": 59.978
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 200,
+      "actualCandidates": 70,
+      "windows": 92,
+      "seconds": 14.638279400009196,
+      "retrievalMilliseconds": 59.978
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 30,
+      "actualCandidates": 30,
+      "windows": 49,
+      "seconds": 8.69060560001526,
+      "retrievalMilliseconds": 158.51
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 50,
+      "actualCandidates": 50,
+      "windows": 72,
+      "seconds": 12.867304599989438,
+      "retrievalMilliseconds": 158.51
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 100,
+      "actualCandidates": 100,
+      "windows": 132,
+      "seconds": 19.128633799991803,
+      "retrievalMilliseconds": 158.51
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 200,
+      "actualCandidates": 200,
+      "windows": 259,
+      "seconds": 28.586952500016196,
+      "retrievalMilliseconds": 158.51
+    },
+    {
+      "datasetId": "CA-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 30,
+      "actualCandidates": 30,
+      "windows": 73,
+      "seconds": 8.138225100003183,
+      "retrievalMilliseconds": 70.443
+    },
+    {
+      "datasetId": "CA-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 50,
+      "actualCandidates": 50,
+      "windows": 116,
+      "seconds": 16.94473570000264,
+      "retrievalMilliseconds": 70.443
+    },
+    {
+      "datasetId": "CA-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 100,
+      "actualCandidates": 52,
+      "windows": 123,
+      "seconds": 19.108165699988604,
+      "retrievalMilliseconds": 70.443
+    },
+    {
+      "datasetId": "CA-EV-001",
+      "pool": "pool50",
+      "requestedCandidates": 200,
+      "actualCandidates": 52,
+      "windows": 123,
+      "seconds": 13.426132499997038,
+      "retrievalMilliseconds": 70.443
+    },
+    {
+      "datasetId": "CA-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 30,
+      "actualCandidates": 30,
+      "windows": 79,
+      "seconds": 9.162668399978429,
+      "retrievalMilliseconds": 82.668
+    },
+    {
+      "datasetId": "CA-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 50,
+      "actualCandidates": 50,
+      "windows": 122,
+      "seconds": 13.800927100004628,
+      "retrievalMilliseconds": 82.668
+    },
+    {
+      "datasetId": "CA-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 100,
+      "actualCandidates": 58,
+      "windows": 135,
+      "seconds": 14.85044559999369,
+      "retrievalMilliseconds": 82.668
+    },
+    {
+      "datasetId": "CA-EV-001",
+      "pool": "pool500",
+      "requestedCandidates": 200,
+      "actualCandidates": 58,
+      "windows": 135,
+      "seconds": 13.584329200006323,
+      "retrievalMilliseconds": 82.668
+    }
+  ],
+  "finishedUnixTime": 1794767307.899194
+}

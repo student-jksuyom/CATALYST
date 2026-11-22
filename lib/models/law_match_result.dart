@@ -23,6 +23,7 @@ class LawMatchResult {
     required this.title,
     required this.description,
     required this.matchScore,
+    this.rawCosineScore,
     this.detailsReference,
     this.chapterTitle,
     this.articleText,
@@ -39,6 +40,7 @@ class LawMatchResult {
     title: json['title'] as String,
     description: json['description'] as String,
     matchScore: (json['matchScore'] as num).toDouble(),
+    rawCosineScore: (json['rawCosineScore'] as num?)?.toDouble(),
     detailsReference: json['detailsReference'],
     chapterTitle: json['chapterTitle'] as String?,
     articleText: json['articleText'] as String?,
@@ -61,8 +63,11 @@ class LawMatchResult {
   final String title;
   final String description;
 
-  /// A similarity score from 0 to 100, not a probability of legal correctness.
+  /// Final displayed retrieval relevance score from 0 to 100, not a probability.
   final double matchScore;
+
+  /// Raw semantic cosine similarity, when dense retrieval produced one.
+  final double? rawCosineScore;
 
   /// Optional identifier or payload understood by a future Law Details screen.
   final Object? detailsReference;
@@ -95,6 +100,7 @@ class LawMatchResult {
     'title': title,
     'description': description,
     'matchScore': matchScore,
+    'rawCosineScore': rawCosineScore,
     'detailsReference': detailsReference,
     'chapterTitle': chapterTitle,
     'articleText': articleText,

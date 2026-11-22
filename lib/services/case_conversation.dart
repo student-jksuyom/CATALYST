@@ -61,6 +61,13 @@ FollowUpIntent classifyFollowUp(String message) {
     'similar case',
     'related case',
     'g.r.',
+    'are there already similar',
+    'similar cases of mine',
+    'existing cases',
+    'past cases',
+    'previous cases',
+    'related jurisprudence',
+    'case like mine',
   ])) {
     return FollowUpIntent.jurisprudence;
   }
@@ -243,18 +250,17 @@ class CaseConversation extends ChangeNotifier {
     final intent = classifyFollowUp(message);
     switch (intent) {
       case FollowUpIntent.why:
-        return _grounded(message, _explainWhy);
+        return _statutoryAnswer(_explainWhy);
       case FollowUpIntent.simpler:
-        return _grounded(message, _explainSimply);
+        return _statutoryAnswer(_explainSimply);
       case FollowUpIntent.otherLaws:
-        return _grounded(message, _otherLaws);
+        return _statutoryAnswer(_otherLaws);
       case FollowUpIntent.missingFacts:
-        return _grounded(message, _missingFacts);
+        return _statutoryAnswer(_missingFacts);
       case FollowUpIntent.jurisprudence:
         return _grounded(message, () => _noCasesOffline);
       case FollowUpIntent.procedure:
-        return _grounded(
-          message,
+        return _statutoryAnswer(
           () =>
               'The local corpus holds statutory text only. It does not '
               'include court procedure, filing steps, deadlines for filing or '
@@ -287,13 +293,23 @@ class CaseConversation extends ChangeNotifier {
         .toList();
   }
 
+  String _statutoryAnswer(String Function() answer) {
+    _answerMode = RetrievalMode.onDevice;
+    return answer();
+  }
+
   /// Answers from the retrieved articles plus the best-matching decisions of
   /// the bundled jurisprudence dataset. Online it asks the proxy for a plain
   /// answer bound to those sources; offline it keeps the on-device answer and
   /// lists the matching decisions.
   Future<String> _grounded(String message, String Function() offline) async {
-    final index = await _loadCases();
     final articles = _articlesForPrompt();
+    if (articles.isEmpty) {
+      _answerMode = RetrievalMode.onDevice;
+      return 'No provision has been matched yet. The local corpus may not '
+          'cover your concern; please add detail or consult a qualified lawyer.';
+    }
+    final index = await _loadCases();
     final hits = index.search(
       '$message $_processed',
       articles: articles,
@@ -312,11 +328,9 @@ class CaseConversation extends ChangeNotifier {
       );
       if (answer != null) {
         _answerMode = RetrievalMode.online;
-        _answerNote = cases.isEmpty
-            ? 'Online answer. No matching decision in the dataset.'
-            : 'Online answer, based on ${cases.length} decision'
-                  '${cases.length == 1 ? '' : 's'} from the jurisprudence '
-                  'dataset and the retrieved articles.';
+        _answerNote =
+            'Online-generated answer; its legal claims and citations have '
+            'not been verified against the supplied sources.';
         final buffer = StringBuffer(answer.text);
         if (answer.citedCases.isNotEmpty) {
           buffer.writeln('\n\nDecisions cited (from the dataset):');
@@ -330,7 +344,10 @@ class CaseConversation extends ChangeNotifier {
             '${answer.webSources.join('; ')}.',
           );
         }
-        buffer.write('\n$legalInformationNotice');
+        buffer.write(
+          '\nThe online answer may contain unsupported claims or citations; '
+          'verify them against the cited sources. $legalInformationNotice',
+        );
         return buffer.toString();
       }
       _answerMode = RetrievalMode.onDeviceFallback;
@@ -360,12 +377,21 @@ class CaseConversation extends ChangeNotifier {
       return 'No provision has been matched yet, so there is nothing to '
           'explain. Describe your situation first.';
     }
-    final points = target.caseExplanationPoints ?? const <String>[];
     final buffer = StringBuffer(
       'Why ${target.lawName} ${target.articleNumber} may be relevant:\n',
     );
-    for (final point in points.where((p) => p != legalInformationNotice)) {
-      buffer.writeln('- ${stripEmphasis(point)}');
+    final text = target.articleText;
+    if (text == null || text.trim().isEmpty) {
+      buffer.writeln('- The retrieved provision text is unavailable.');
+    } else {
+      buffer.writeln('- Provision excerpt: "${firstStatement(text)}"');
+      buffer.writeln('- ${_possibleConnection(target, _caseFacts)}');
+      final issue =
+          knownCorpusIssues[normalizedArticleId(
+            target.lawName,
+            target.articleNumber,
+          )];
+      if (issue != null) buffer.writeln('- $issue');
     }
     final story = _narrative;
     if (story != null && story.isNotEmpty) {
@@ -378,10 +404,12 @@ class CaseConversation extends ChangeNotifier {
         'Facts added later: ${_newFacts.map((f) => '"$f"').join('; ')}',
       );
     }
-    buffer.writeln(
-      '\nSupported by the text: the quoted provision. Uncertain: whether every '
-      'condition in it is met by your facts.',
-    );
+    if (text != null && text.trim().isNotEmpty) {
+      buffer.writeln(
+        '\nUncertain: whether every condition in the quoted provision is '
+        'met by your facts.',
+      );
+    }
     buffer.write(legalInformationNotice);
     return buffer.toString();
   }
@@ -392,10 +420,12 @@ class CaseConversation extends ChangeNotifier {
       return 'No provision has been matched yet, so there is nothing to '
           'simplify.';
     }
-    final text = (target.articleText ?? target.description)
-        .replaceAll(RegExp(r'\s+'), ' ')
-        .replaceAll(RegExp(r'\((?:n|\d+[a-z]?(?:,\s*\d+[a-z]?)*)\)\s*$'), '')
-        .trim();
+    final provision = target.articleText;
+    if (provision == null || provision.trim().isEmpty) {
+      return 'The retrieved provision text is unavailable, so I cannot '
+          'simplify it. $legalInformationNotice';
+    }
+    final text = provision.replaceAll(RegExp(r'\s+'), ' ').trim();
     final clauses = text
         .split(RegExp(r'(?<=[.;:])\s+(?=[A-Z(])'))
         .map((clause) => clause.trim())
@@ -409,8 +439,8 @@ class CaseConversation extends ChangeNotifier {
       buffer.writeln('- ${firstStatement(clause, maxLength: 220)}');
     }
     buffer.writeln(
-      '\nI can only break the official wording into parts; I will not '
-      'paraphrase it, because that could change its legal meaning.',
+      '\nThese are excerpts, not a substitute for the full provision. I will '
+      'not paraphrase them, because that could change their legal meaning.',
     );
     buffer.write(legalInformationNotice);
     return buffer.toString();
@@ -436,13 +466,42 @@ class CaseConversation extends ChangeNotifier {
       'applicable):\n',
     );
     for (final result in others) {
-      buffer.writeln(
-        '- ${result.lawName} ${result.articleNumber}: '
-        '"${firstStatement(result.articleText ?? result.description, maxLength: 160)}"',
-      );
+      final text = result.articleText;
+      buffer.writeln('- ${result.lawName} ${result.articleNumber}:');
+      if (text == null || text.trim().isEmpty) {
+        buffer.writeln(
+          '  Provision text unavailable; relevance cannot be assessed.',
+        );
+      } else {
+        buffer.writeln('  "${firstStatement(text, maxLength: 160)}"');
+        buffer.writeln('  ${_possibleConnection(result, _caseFacts)}');
+      }
     }
     buffer.write(legalInformationNotice);
     return buffer.toString();
+  }
+
+  String get _caseFacts => [?_narrative, ..._newFacts].join(' ');
+
+  String _possibleConnection(LawMatchResult result, String facts) {
+    if (facts.trim().isEmpty) {
+      return 'No facts were provided to compare with this provision.';
+    }
+    final text = result.articleText;
+    if (text == null || text.trim().isEmpty) {
+      return 'The provision text is unavailable, so its relevance is uncertain.';
+    }
+    final shared = sharedWording(
+      queryTexts: [facts],
+      articleText: text,
+    ).where((word) => !RegExp(r'^\d+$').hasMatch(word)).toList();
+    if (shared.isEmpty) {
+      return 'The search found a possible meaning match, but no shared '
+          'wording was found. Applicability is uncertain.';
+    }
+    return 'Possible connection: your concern and this provision share '
+        'wording related to ${shared.join(', ')}. This does not establish '
+        'that the provision applies.';
   }
 
   String _missingFacts() {
@@ -492,7 +551,8 @@ class CaseConversation extends ChangeNotifier {
 
     if (response.results.isEmpty) {
       return '${response.warning}\nI would rather show nothing than an '
-          'unrelated provision.';
+          'unrelated provision. The local corpus may not contain the law '
+          'needed for your concern.';
     }
 
     final newIds = {
@@ -517,12 +577,21 @@ class CaseConversation extends ChangeNotifier {
       );
     }
     for (final result in response.results) {
-      buffer.writeln(
-        '- ${result.lawName} ${result.articleNumber}: '
-        '"${firstStatement(result.articleText ?? result.description, maxLength: 160)}"',
-      );
+      final provision = result.articleText;
+      buffer.writeln('- ${result.lawName} ${result.articleNumber}:');
+      if (provision == null || provision.trim().isEmpty) {
+        buffer.writeln(
+          '  Provision text unavailable; relevance cannot be assessed.',
+        );
+      } else {
+        buffer.writeln('  "${firstStatement(provision, maxLength: 160)}"');
+        buffer.writeln('  ${_possibleConnection(result, combined)}');
+      }
     }
-    buffer.write('Ask "Why is this relevant?" for the reasoning. ');
+    buffer.write(
+      'These are possible matches; the local corpus may not '
+      'cover every relevant law. ',
+    );
     buffer.write(legalInformationNotice);
     return buffer.toString();
   }

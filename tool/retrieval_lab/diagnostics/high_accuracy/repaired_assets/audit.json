@@ -1,0 +1,27 @@
+{
+  "originalArticles": 2700,
+  "repairedArticles": 2699,
+  "originalChunks": 4368,
+  "repairedChunks": 4514,
+  "reusedVectors": 4361,
+  "newVectors": 153,
+  "tokenCappedChunks": 2,
+  "tokenCappedChunksHaveNoCoverageGap": true,
+  "minimumEncoderCompatibilityCosine": 0.9999999403953552,
+  "trainingExamplesValidatedAgainstWorkbook": 182,
+  "originalArticleSha256": "8319eeb3c122ad4df63478c4d095cb1d2225a2ab660e073e200d2726effb7948",
+  "changes": [
+    "Joined Civil Code 1595 with its incorrectly split continuation; remapped 1596 labels to its actual provision.",
+    "Changed Family Code 50 to 150 and its heading; restored the omitted ascendants/descendants clause and corrected sibling clause numbering.",
+    "Changed Family Code 129 to 219 and its heading; removed the following chapter heading from its text.",
+    "Added all missing 60-word/40-stride windows for eight long Consumer Act articles."
+  ],
+  "sources": [
+    "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/1/43553",
+    "https://lawphil.net/executive/execord/eo1987/eo_209_1987.html",
+    "https://lawphil.net/statutes/repacts/ra1949/ra_386_1949.html"
+  ],
+  "limitations": [
+    "The corpus as a whole has not been legally audited."
+  ]
+}

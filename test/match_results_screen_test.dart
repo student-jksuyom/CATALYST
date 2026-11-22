@@ -39,13 +39,17 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(home: MatchResultsScreen(results: results)),
     );
+    final semantics = tester.ensureSemantics();
 
     expect(find.text('96%'), findsOneWidget);
     expect(find.text('88%'), findsOneWidget);
+    expect(find.byTooltip('Relevance score'), findsWidgets);
+    expect(find.bySemanticsLabel('Relevance score: 96%'), findsOneWidget);
     await tester.drag(find.byType(ListView), const Offset(0, -300));
     await tester.pumpAndSettle();
     expect(find.text('77%'), findsOneWidget);
     expect(find.text('69%'), findsNothing);
+    semantics.dispose();
   });
 
   testWidgets('All Results shows the full sorted result list', (tester) async {

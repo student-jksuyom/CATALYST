@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:math' as math;
-import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
 
@@ -11,6 +11,7 @@ import 'explanation_builder.dart';
 import 'explanation_language.dart';
 import 'legal_query_preprocessor.dart';
 import 'lexical_index.dart';
+import 'local_cross_encoder_reranker.dart';
 import 'local_tokenizer.dart';
 import 'query_analysis.dart';
 
@@ -66,6 +67,96 @@ enum CatalystRetrievalStrategy {
 
   /// Dense variants fused with BM25; the default for the app.
   hybrid,
+}
+
+enum RetrievalRankingMode { calibratedScore, rankBased }
+
+class RetrievalExperimentConfig {
+  const RetrievalExperimentConfig({
+    this.domainIndependentTraining = false,
+    this.bm25Weight = _lexicalWeight,
+    this.trainingQueryWeight = _trainingSignalWeight,
+    this.rrfK = _fusionK,
+    this.rankingMode = RetrievalRankingMode.calibratedScore,
+    this.candidatePoolSize = _candidatePoolSize,
+    this.experimentalConceptExpansion = false,
+    this.experimentalChunkAggregation = false,
+    this.experimentalGateRecovery = false,
+    this.experimentalOverlapReranking = false,
+    this.enableDenseRetrieval = true,
+    this.enableLexicalRetrieval = true,
+    this.enableTrainingExampleRetrieval = true,
+    this.disableTrainingSignal = false,
+    this.enableCrossEncoderReranking = false,
+    this.crossEncoderCandidateLimit = 100,
+    this.crossEncoderWeight = 0.5,
+  }) : assert(bm25Weight >= 0 && bm25Weight <= 1),
+       assert(trainingQueryWeight >= 0 && trainingQueryWeight <= 1),
+       assert(crossEncoderWeight >= 0 && crossEncoderWeight <= 1),
+       assert(rrfK > 0),
+       assert(candidatePoolSize > 0),
+       assert(crossEncoderCandidateLimit > 0);
+
+  static const originalProduction = RetrievalExperimentConfig();
+  static const highestMetricDevelopment = RetrievalExperimentConfig(
+    domainIndependentTraining: true,
+    bm25Weight: 0.15,
+    trainingQueryWeight: 0.45,
+    rrfK: 20,
+    rankingMode: RetrievalRankingMode.rankBased,
+  );
+  static const selectedProduction = RetrievalExperimentConfig(
+    domainIndependentTraining: true,
+    bm25Weight: 0.15,
+    trainingQueryWeight: 0.30,
+    rrfK: 20,
+    rankingMode: RetrievalRankingMode.calibratedScore,
+    enableCrossEncoderReranking: true,
+    crossEncoderCandidateLimit: 100,
+    crossEncoderWeight: 0.5,
+  );
+  static const developmentCrossEncoder = RetrievalExperimentConfig(
+    domainIndependentTraining: true,
+    enableCrossEncoderReranking: true,
+    crossEncoderCandidateLimit: 100,
+    crossEncoderWeight: 0.5,
+  );
+
+  final bool domainIndependentTraining;
+  final double bm25Weight;
+  final double trainingQueryWeight;
+  final int rrfK;
+  final RetrievalRankingMode rankingMode;
+  final int candidatePoolSize;
+  final bool experimentalConceptExpansion;
+  final bool experimentalChunkAggregation;
+  final bool experimentalGateRecovery;
+  final bool experimentalOverlapReranking;
+  final bool enableDenseRetrieval;
+  final bool enableLexicalRetrieval;
+  final bool enableTrainingExampleRetrieval;
+  final bool disableTrainingSignal;
+  final bool enableCrossEncoderReranking;
+  final int crossEncoderCandidateLimit;
+  final double crossEncoderWeight;
+}
+
+class RetrievalDiagnosticTrace {
+  const RetrievalDiagnosticTrace({
+    required this.semanticLists,
+    required this.lexicalIds,
+    required this.trainingIds,
+    required this.combinedIds,
+    required this.eligibleIds,
+    required this.cosines,
+  });
+
+  final List<List<String>> semanticLists;
+  final List<String> lexicalIds;
+  final List<String> trainingIds;
+  final List<String> combinedIds;
+  final List<String> eligibleIds;
+  final Map<String, double> cosines;
 }
 
 enum CatalystRetrievalFailure {
@@ -167,16 +258,24 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     this._strategy = CatalystRetrievalStrategy.hybrid,
     this._minimumCosine = _defaultMinimumCosine,
     this._resultLimit = _allResultCount,
+    this.experimentConfig = RetrievalExperimentConfig.selectedProduction,
+    this.onDiagnosticTrace,
+    this.crossEncoderReranker,
   });
 
   static Future<_LocalRetrievalResources>? _resourcesFuture;
   static Future<OrtSession>? _sessionFuture;
+  static final ArticleCrossEncoderReranker _defaultCrossEncoderReranker =
+      LocalCrossEncoderReranker();
 
   final LocalQueryEncoder? _queryEncoder;
   final LegalQueryPreprocessor _queryPreprocessor;
   final CatalystRetrievalStrategy _strategy;
   final double _minimumCosine;
   final int _resultLimit;
+  final RetrievalExperimentConfig experimentConfig;
+  final void Function(RetrievalDiagnosticTrace)? onDiagnosticTrace;
+  final ArticleCrossEncoderReranker? crossEncoderReranker;
 
   /// A provision from the local corpus by law and article number, or null.
   /// Duplicate ids resolve to the first corpus entry.
@@ -385,6 +484,28 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     addVariant(analysis.normalized);
     addVariant(analysis.glossaryQuery);
 
+    final useDenseRetrieval = experimentConfig.enableDenseRetrieval;
+    final useLexicalRetrieval = experimentConfig.enableLexicalRetrieval;
+    final useTrainingExamples =
+        experimentConfig.enableTrainingExampleRetrieval &&
+        !experimentConfig.disableTrainingSignal;
+    final hasCorpusRetrieval = useDenseRetrieval || useLexicalRetrieval;
+    final denseWeight = !useDenseRetrieval
+        ? 0.0
+        : useLexicalRetrieval
+        ? 1 - experimentConfig.bm25Weight
+        : 1.0;
+    final lexicalWeight = !useLexicalRetrieval
+        ? 0.0
+        : useDenseRetrieval
+        ? experimentConfig.bm25Weight
+        : 1.0;
+    final trainingWeight = !experimentConfig.enableTrainingExampleRetrieval
+        ? 0.0
+        : experimentConfig.disableTrainingSignal || hasCorpusRetrieval
+        ? experimentConfig.trainingQueryWeight
+        : 1.0;
+
     final articles = resources.articles;
     final bestCosine = List<double>.filled(articles.length, -1);
     final cosineSum = List<double>.filled(articles.length, 0);
@@ -394,68 +515,173 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       final vector = await _encodeQuery(resources, variant);
       _validateQueryEmbedding(vector);
       primaryVector ??= vector;
-      final scores = _articleCosines(resources, vector);
-      for (var row = 0; row < scores.length; row++) {
-        if (scores[row] > bestCosine[row]) bestCosine[row] = scores[row];
-        cosineSum[row] += scores[row];
+      final gateScores = experimentConfig.experimentalChunkAggregation
+          ? List<double>.filled(articles.length, -1)
+          : null;
+      if (useDenseRetrieval) {
+        final scores = _articleCosines(
+          resources,
+          vector,
+          averageTopTwo: experimentConfig.experimentalChunkAggregation,
+          bestScores: gateScores,
+        );
+        for (var row = 0; row < scores.length; row++) {
+          final gateScore = gateScores?[row] ?? scores[row];
+          if (gateScore > bestCosine[row]) bestCosine[row] = gateScore;
+          cosineSum[row] += scores[row];
+        }
+        final order = List<int>.generate(articles.length, (i) => i)
+          ..sort((a, b) {
+            final byScore = scores[b].compareTo(scores[a]);
+            return byScore != 0 ? byScore : a.compareTo(b);
+          });
+        denseLists.add(
+          order
+              .take(experimentConfig.candidatePoolSize)
+              .toList(growable: false),
+        );
       }
-      final order = List<int>.generate(articles.length, (i) => i)
-        ..sort((a, b) {
-          final byScore = scores[b].compareTo(scores[a]);
-          return byScore != 0 ? byScore : a.compareTo(b);
-        });
-      denseLists.add(order.take(_candidatePoolSize).toList(growable: false));
     }
 
-    final trainingMatches = _rankTrainingExamples(
-      resources: resources,
-      queryEmbedding: primaryVector!,
-      domain: analysis.domain,
-    );
+    final trainingMatches = !useTrainingExamples
+        ? (rankedIndexes: <int>[], normalizedVotes: <int, double>{})
+        : _rankTrainingExamples(
+            resources: resources,
+            queryEmbedding: primaryVector!,
+            domain: analysis.domain,
+            domainIndependent: experimentConfig.domainIndependentTraining,
+            candidatePoolSize: experimentConfig.candidatePoolSize,
+          );
     final lexicalQuery = [
       originalQuery,
       processedQuery,
       ...analysis.glossaryTerms,
       ...expandLegalWording(originalQuery),
+      if (experimentConfig.experimentalConceptExpansion)
+        ...expandExperimentalLegalConcepts(originalQuery),
     ].join(' ');
-    final lexical = resources.lexicalIndex.search(
-      lexicalQuery,
-      limit: _candidatePoolSize,
-    );
+    final lexical = useLexicalRetrieval
+        ? resources.lexicalIndex.search(
+            lexicalQuery,
+            limit: experimentConfig.candidatePoolSize,
+          )
+        : <({int index, double score})>[];
     final fused = fuseRankings([
       ...denseLists,
       if (lexical.isNotEmpty) lexical.map((hit) => hit.index).toList(),
       if (trainingMatches.rankedIndexes.isNotEmpty)
         trainingMatches.rankedIndexes,
-    ], k: _fusionK);
+    ], k: experimentConfig.rrfK);
 
     // Keep the supervised example signal modest so it can improve ranking
     // without replacing the corpus-grounded dense and lexical matches.
     final maxLexical = lexical.isEmpty ? 0.0 : lexical.first.score;
     final lexicalScore = {for (final hit in lexical) hit.index: hit.score};
+    final semanticRankScores = <int, double>{};
+    for (final list in denseLists) {
+      for (var rank = 0; rank < list.length; rank++) {
+        final index = list[rank];
+        semanticRankScores[index] =
+            (semanticRankScores[index] ?? 0) +
+            _normalizedReciprocalRank(rank, experimentConfig.rrfK) /
+                denseLists.length;
+      }
+    }
+    final lexicalRankScores = <int, double>{
+      for (var rank = 0; rank < lexical.length; rank++)
+        lexical[rank].index: _normalizedReciprocalRank(
+          rank,
+          experimentConfig.rrfK,
+        ),
+    };
+    final trainingRankScores = <int, double>{
+      for (var rank = 0; rank < trainingMatches.rankedIndexes.length; rank++)
+        trainingMatches.rankedIndexes[rank]: _normalizedReciprocalRank(
+          rank,
+          experimentConfig.rrfK,
+        ),
+    };
     double blendedScore(int index) {
-      final meanCosine = cosineSum[index] / variants.length;
-      final dense =
-          ((meanCosine - _displayFloorCosine) /
-                  (_displayCeilingCosine - _displayFloorCosine))
-              .clamp(0.0, 1.0);
+      final trainingPart = trainingMatches.normalizedVotes[index] ?? 0.0;
+      if (experimentConfig.rankingMode == RetrievalRankingMode.rankBased) {
+        final semanticPart = semanticRankScores[index] ?? 0.0;
+        final lexicalPart = lexicalRankScores[index] ?? 0.0;
+        final trainingRankPart = trainingRankScores[index] ?? 0.0;
+        final corpusPart =
+            denseWeight * semanticPart + lexicalWeight * lexicalPart;
+        return (1 - trainingWeight) * corpusPart +
+            trainingWeight * trainingRankPart;
+      }
+      final dense = useDenseRetrieval
+          ? ((cosineSum[index] / variants.length - _displayFloorCosine) /
+                    (_displayCeilingCosine - _displayFloorCosine))
+                .clamp(0.0, 1.0)
+          : 0.0;
       final lexicalPart = maxLexical > 0
           ? (lexicalScore[index] ?? 0) / maxLexical
           : 0.0;
-      final corpusScore =
-          (1 - _lexicalWeight) * dense + _lexicalWeight * lexicalPart;
-      final trainingPart = trainingMatches.normalizedVotes[index] ?? 0.0;
-      return (1 - _trainingSignalWeight) * corpusScore +
-          _trainingSignalWeight * trainingPart;
+      final corpusScore = denseWeight * dense + lexicalWeight * lexicalPart;
+      return (1 - trainingWeight) * corpusScore + trainingWeight * trainingPart;
     }
 
     final blended = <int, double>{};
-    final eligible = <int>[
+    final gated = <int>[
       for (final candidate in fused)
-        if (bestCosine[candidate.index] >= _minimumCosine) candidate.index,
+        if (!useDenseRetrieval || bestCosine[candidate.index] >= _minimumCosine)
+          candidate.index,
     ];
+    final originalTerms =
+        experimentConfig.experimentalGateRecovery ||
+            experimentConfig.experimentalOverlapReranking
+        ? resources.lexicalIndex.knownTerms(originalQuery).toSet()
+        : <String>{};
+    final topLexical = experimentConfig.experimentalGateRecovery
+        ? lexical.take(3).map((hit) => hit.index).toSet()
+        : <int>{};
+    int overlapCount(int index) => originalTerms
+        .intersection(contentTerms(articles[index].articleText).toSet())
+        .length;
+    final eligible =
+        experimentConfig.experimentalGateRecovery && gated.isNotEmpty
+        ? [
+            for (final candidate in fused)
+              if (bestCosine[candidate.index] >= _minimumCosine ||
+                  (bestCosine[candidate.index] >= _minimumCosine - 0.02 &&
+                      topLexical.contains(candidate.index) &&
+                      overlapCount(candidate.index) >= 3))
+                candidate.index,
+          ]
+        : gated;
     for (final index in eligible) {
-      blended[index] = blendedScore(index);
+      blended[index] =
+          (blendedScore(index) +
+                  (experimentConfig.experimentalOverlapReranking &&
+                          originalTerms.isNotEmpty
+                      ? 0.05 * overlapCount(index) / originalTerms.length
+                      : 0))
+              .clamp(0.0, 1.0);
+    }
+    if (onDiagnosticTrace != null) {
+      String id(int index) =>
+          normalizedArticleId(articles[index].law, articles[index].article);
+      onDiagnosticTrace!(
+        RetrievalDiagnosticTrace(
+          semanticLists: [
+            for (final list in denseLists)
+              [for (final index in list) id(index)],
+          ],
+          lexicalIds: [for (final hit in lexical) id(hit.index)],
+          trainingIds: [
+            for (final index in trainingMatches.rankedIndexes) id(index),
+          ],
+          combinedIds: [for (final candidate in fused) id(candidate.index)],
+          eligibleIds: [for (final index in eligible) id(index)],
+          cosines: {
+            for (var index = 0; index < articles.length; index++)
+              id(index): bestCosine[index],
+          },
+        ),
+      );
     }
     // Stable sort: equal scores keep the fused (rank-based) order.
     final ordered = eligible.indexed.toList()
@@ -465,12 +691,100 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       });
     final seenIds = <String>{};
     final rankedIndexes = <int>[];
+    final candidateResultLimit = experimentConfig.enableCrossEncoderReranking
+        ? math.max(_resultLimit, experimentConfig.crossEncoderCandidateLimit)
+        : _resultLimit;
     for (final entry in ordered) {
       final article = articles[entry.$2];
       final id = normalizedArticleId(article.law, article.article);
       if (!seenIds.add(id)) continue;
       rankedIndexes.add(entry.$2);
-      if (rankedIndexes.length == _resultLimit) break;
+      if (rankedIndexes.length == candidateResultLimit) break;
+    }
+
+    if (kDebugMode) {
+      developer.log(
+        'Cross-encoder enabled=${experimentConfig.enableCrossEncoderReranking} '
+        'eligible=${eligible.length} '
+        'rerankCandidates=${math.min(experimentConfig.crossEncoderCandidateLimit, rankedIndexes.length)}',
+        name: 'catol.retrieval',
+      );
+    }
+
+    var finalRankedIndexes = rankedIndexes;
+    var finalRankingScores = blended;
+    if (experimentConfig.enableCrossEncoderReranking &&
+        rankedIndexes.isNotEmpty) {
+      final reranker = crossEncoderReranker ?? _defaultCrossEncoderReranker;
+      final rerankCount = math.min(
+        experimentConfig.crossEncoderCandidateLimit,
+        rankedIndexes.length,
+      );
+      final rerankIndexes = rankedIndexes.take(rerankCount).toList();
+      final rerankStopwatch = Stopwatch()..start();
+      var inferenceSucceeded = false;
+      try {
+        final logits = await reranker.score(originalQuery, [
+          for (final index in rerankIndexes)
+            CrossEncoderCandidate(
+              articleId: normalizedArticleId(
+                articles[index].law,
+                articles[index].article,
+              ),
+              articleText: articles[index].articleText,
+              hybridScore: double.parse(blended[index]!.toStringAsFixed(4)),
+            ),
+        ]);
+        if (logits.length != rerankIndexes.length ||
+            logits.any((logit) => !logit.isFinite)) {
+          throw const FormatException(
+            'The cross-encoder returned invalid candidate scores.',
+          );
+        }
+        final rerankedScores = <int, double>{
+          for (var index = 0; index < rerankIndexes.length; index++)
+            rerankIndexes[index]: _crossEncoderBlendScore(
+              logits[index],
+              blended[rerankIndexes[index]]!,
+              experimentConfig.crossEncoderWeight,
+            ),
+        };
+        final rerankedPrefix =
+            List<int>.generate(rerankIndexes.length, (index) => index)
+              ..sort((left, right) {
+                final leftScore = rerankedScores[rerankIndexes[left]]!;
+                final rightScore = rerankedScores[rerankIndexes[right]]!;
+                final byScore = rightScore.compareTo(leftScore);
+                return byScore != 0 ? byScore : left.compareTo(right);
+              });
+        inferenceSucceeded = true;
+        finalRankingScores = {...blended, ...rerankedScores};
+        finalRankedIndexes = [
+          for (final index in rerankedPrefix) rerankIndexes[index],
+          ...rankedIndexes.skip(rerankCount),
+        ];
+        rerankStopwatch.stop();
+        if (kDebugMode) {
+          developer.log(
+            'Cross-encoder inference=success fallback=false '
+            'eligible=${eligible.length} reranked=${rerankIndexes.length} '
+            'elapsedMs=${rerankStopwatch.elapsedMilliseconds}',
+            name: 'catol.retrieval',
+          );
+        }
+      } catch (error, stackTrace) {
+        rerankStopwatch.stop();
+        developer.log(
+          'Cross-encoder inference=${inferenceSucceeded ? 'success' : 'failure'} '
+          'fallback=true eligible=${eligible.length} '
+          'reranked=${rerankIndexes.length} '
+          'elapsedMs=${rerankStopwatch.elapsedMilliseconds} '
+          'error=${error.runtimeType}; retaining hybrid order.',
+          name: 'catol.retrieval',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      }
     }
 
     final queryTexts = [
@@ -482,18 +796,23 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       resources,
       index,
       bestCosine[index],
+      rawCosineScore: useDenseRetrieval ? bestCosine[index] : null,
       analysis: analysis,
       queryTexts: queryTexts,
-      blendedSimilarity: blended[index],
+      rankingScore: finalRankingScores[index],
       matchedFact: _firstConcernStatement(originalQuery),
       matchedProvision: _bestMatchingPassage(resources, index, primaryVector!),
     );
 
-    final results = rankedIndexes.take(_topResultCount).map(toResult).toList();
+    final responseIndexes = finalRankedIndexes.take(_resultLimit);
+    final results = responseIndexes
+        .take(_topResultCount)
+        .map(toResult)
+        .toList();
     return CatalystMatchResponse(
       results: List.unmodifiable(results),
       otherCandidates: List.unmodifiable(
-        rankedIndexes.skip(_topResultCount).map(toResult),
+        responseIndexes.skip(_topResultCount).map(toResult),
       ),
       originalQuery: originalQuery,
       processedQuery: processedQuery,
@@ -503,6 +822,18 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
                 'description. Try adding more detail.'
           : retrievalWarning,
     );
+  }
+
+  static double _crossEncoderBlendScore(
+    double logit,
+    double hybridScore,
+    double crossEncoderWeight,
+  ) {
+    final boundedLogit = logit.clamp(-80.0, 80.0).toDouble();
+    final crossEncoderScore = 1 / (1 + math.exp(-boundedLogit));
+    final roundedHybridScore = double.parse(hybridScore.toStringAsFixed(4));
+    return crossEncoderWeight * crossEncoderScore +
+        (1 - crossEncoderWeight) * roundedHybridScore;
   }
 
   static String _bestMatchingPassage(
@@ -561,15 +892,21 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     required _LocalRetrievalResources resources,
     required List<double> queryEmbedding,
     required QueryDomain domain,
+    required bool domainIndependent,
+    required int candidatePoolSize,
   }) {
-    if (domain == QueryDomain.unknown || resources.trainingExamples.isEmpty) {
+    if ((!domainIndependent && domain == QueryDomain.unknown) ||
+        resources.trainingExamples.isEmpty) {
       return (rankedIndexes: const [], normalizedVotes: const {});
     }
 
     final matchingExamples = <({int index, double similarity})>[];
     final vectors = resources.trainingQueryEmbeddings;
     for (var index = 0; index < resources.trainingExamples.length; index++) {
-      if (resources.trainingExamples[index].domain != domain) continue;
+      if (!domainIndependent &&
+          resources.trainingExamples[index].domain != domain) {
+        continue;
+      }
 
       var similarity = 0.0;
       final start = index * _embeddingDimensions;
@@ -624,7 +961,7 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
         return byVote != 0 ? byVote : left.compareTo(right);
       });
     final rankedIndexes = ranked
-        .take(_candidatePoolSize)
+        .take(candidatePoolSize)
         .toList(growable: false);
     return (
       rankedIndexes: rankedIndexes,
@@ -638,8 +975,10 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
   /// Best chunk cosine per article; chunks are unit vectors like the query.
   static List<double> _articleCosines(
     _LocalRetrievalResources resources,
-    List<double> vector,
-  ) {
+    List<double> vector, {
+    bool averageTopTwo = false,
+    List<double>? bestScores,
+  }) {
     if (vector.length != _embeddingDimensions) {
       throw const CatalystRetrievalException(
         CatalystRetrievalFailure.invalidEmbedding,
@@ -647,6 +986,9 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       );
     }
     final scores = List<double>.filled(resources.articles.length, -1);
+    final second = averageTopTwo
+        ? List<double>.filled(resources.articles.length, -1)
+        : null;
     final owners = resources.chunkOwners;
     for (var chunk = 0; chunk < owners.length; chunk++) {
       var score = 0.0;
@@ -660,7 +1002,21 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
           'The local model produced an invalid cosine similarity.',
         );
       }
-      if (score > scores[owners[chunk]]) scores[owners[chunk]] = score;
+      final owner = owners[chunk];
+      if (score > scores[owner]) {
+        if (second != null) second[owner] = scores[owner];
+        scores[owner] = score;
+      } else if (second != null && score > second[owner]) {
+        second[owner] = score;
+      }
+    }
+    if (bestScores != null) bestScores.setAll(0, scores);
+    if (second != null) {
+      for (var index = 0; index < scores.length; index++) {
+        if (second[index] > -1) {
+          scores[index] = (scores[index] + second[index]) / 2;
+        }
+      }
     }
     return scores;
   }
@@ -669,16 +1025,17 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     _LocalRetrievalResources resources,
     int index,
     double cosine, {
+    double? rawCosineScore,
     QueryAnalysis? analysis,
     List<String> queryTexts = const [],
-    double? blendedSimilarity,
+    double? rankingScore,
     String? matchedFact,
     String? matchedProvision,
   }) {
     final article = resources.articles[index];
     final id = normalizedArticleId(article.law, article.article);
     final similarity =
-        blendedSimilarity ??
+        rankingScore ??
         ((cosine - _displayFloorCosine) /
                 (_displayCeilingCosine - _displayFloorCosine))
             .clamp(0.0, 1.0);
@@ -690,6 +1047,7 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       description: article.articleText,
       articleText: article.articleText,
       matchScore: double.parse(similarity.toStringAsFixed(4)) * 100,
+      rawCosineScore: rawCosineScore,
       caseExplanationPoints: analysis == null
           ? const []
           : buildExplanationPoints(
@@ -1067,6 +1425,7 @@ List<LawMatchResult> rankCorpusArticles({
           description: article.articleText,
           articleText: article.articleText,
           matchScore: roundedSimilarity * 100,
+          rawCosineScore: match.score,
         );
       })
       .toList(growable: false);
@@ -1103,6 +1462,8 @@ class _TrainingQueryExample {
   final List<int> positiveArticleIndexes;
   final List<int> negativeArticleIndexes;
 }
+
+double _normalizedReciprocalRank(int rank, int k) => (k + 1) / (k + rank + 1);
 
 class _LocalRetrievalResources {
   const _LocalRetrievalResources({

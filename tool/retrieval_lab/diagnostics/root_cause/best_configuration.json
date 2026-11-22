@@ -1,0 +1,448 @@
+{
+  "selected": true,
+  "selectionRule": "Hit@3, then Hit@1, Hit@15, Precision@3; discard configurations below baseline Hit@1/Hit@15 or above baseline negative-query false positives/results, then require the existing co-ownership ranking regression to pass; break exact metric ties with the smallest change from the original settings.",
+  "configurationCount": 256,
+  "configuration": {
+    "id": "all_domains__bm25_015__training_030__rrf_20__calibratedScore",
+    "domainIndependentTraining": true,
+    "bm25Weight": 0.15,
+    "trainingQueryWeight": 0.3,
+    "rrfK": 20,
+    "rankingMode": "calibratedScore"
+  },
+  "metrics": {
+    "hitAt1": 13,
+    "hitAt3": 17,
+    "precisionAt3": 0.12318840579710146,
+    "hitAt15": 21,
+    "falsePositiveNegativeQueries": 0,
+    "negativeReturnedArticles": 0,
+    "positiveRuntimeMilliseconds": 778.413,
+    "negativeRuntimeMilliseconds": 26.52
+  },
+  "developmentMetricBest": {
+    "configuration": {
+      "id": "all_domains__bm25_015__training_045__rrf_20__rankBased",
+      "domainIndependentTraining": true,
+      "bm25Weight": 0.15,
+      "trainingQueryWeight": 0.45,
+      "rrfK": 20,
+      "rankingMode": "rankBased"
+    },
+    "metrics": {
+      "hitAt1": 15,
+      "hitAt3": 17,
+      "precisionAt3": 0.12318840579710146,
+      "hitAt15": 23,
+      "falsePositiveNegativeQueries": 0,
+      "negativeReturnedArticles": 0,
+      "positiveRuntimeMilliseconds": 798.504,
+      "negativeRuntimeMilliseconds": 28.883
+    }
+  },
+  "coownershipRegressionGate": {
+    "fixture": "coownership_ranking_regression_test.dart",
+    "expectedBehavior": "Civil Code 493 in Top 3, 1623 in Top 5, and 491 present; 1614 below 493; 1607 not in Top 2.",
+    "configurationsChecked": 256,
+    "configurationsPassing": 64,
+    "developmentMetricBestPassed": false,
+    "selectedConfigurationPassed": true
+  },
+  "baseline": {
+    "hitAt1": 11,
+    "hitAt3": 16,
+    "precisionAt3": 0.11594202898550725,
+    "hitAt15": 20,
+    "falsePositiveNegativeQueries": 0,
+    "negativeReturnedArticles": 0,
+    "positiveRuntimeMilliseconds": 945.277,
+    "negativeRuntimeMilliseconds": 32.088
+  },
+  "delta": {
+    "hitAt1": 2,
+    "hitAt3": 1,
+    "precisionAt3": 0.007246376811594207,
+    "hitAt15": 1,
+    "falsePositiveNegativeQueries": 0,
+    "negativeReturnedArticles": 0
+  },
+  "changedQueries": [
+    {
+      "datasetId": "CC-EV-005",
+      "before": [
+        "civilcode:2209",
+        "civilcode:1180",
+        "civilcode:1788",
+        "civilcode:1484",
+        "civilcode:1236",
+        "civilcode:1221",
+        "civilcode:2066",
+        "civilcode:1251",
+        "civilcode:1626",
+        "civilcode:2159",
+        "civilcode:1302",
+        "civilcode:1248",
+        "civilcode:1165",
+        "civilcode:1382",
+        "civilcode:1428"
+      ],
+      "after": [
+        "civilcode:1933",
+        "civilcode:2209",
+        "civilcode:1180",
+        "civilcode:1788",
+        "civilcode:1484",
+        "civilcode:1236",
+        "civilcode:1221",
+        "civilcode:2066",
+        "civilcode:1251",
+        "civilcode:1626",
+        "civilcode:2159",
+        "civilcode:1302",
+        "civilcode:1248",
+        "civilcode:1165",
+        "civilcode:1382"
+      ],
+      "beforeRelevantRank": null,
+      "afterRelevantRank": 1,
+      "relevantArticleIds": [
+        "civilcode:1933"
+      ]
+    },
+    {
+      "datasetId": "CC-EV-013",
+      "before": [
+        "consumeract:97",
+        "civilcode:1533",
+        "civilcode:1545",
+        "civilcode:1523",
+        "civilcode:1546",
+        "civilcode:1599",
+        "civilcode:1505",
+        "civilcode:1526",
+        "civilcode:1597",
+        "civilcode:1586",
+        "civilcode:1548",
+        "civilcode:1585",
+        "civilcode:1596",
+        "civilcode:1562",
+        "civilcode:1569"
+      ],
+      "after": [
+        "civilcode:1533",
+        "civilcode:1941",
+        "civilcode:1545",
+        "civilcode:1523",
+        "civilcode:1546",
+        "civilcode:1599",
+        "consumeract:97",
+        "civilcode:1505",
+        "civilcode:1526",
+        "civilcode:1597",
+        "civilcode:1586",
+        "civilcode:1548",
+        "civilcode:1585",
+        "civilcode:1596",
+        "civilcode:1562"
+      ],
+      "beforeRelevantRank": null,
+      "afterRelevantRank": null,
+      "relevantArticleIds": [
+        "civilcode:1561"
+      ]
+    },
+    {
+      "datasetId": "CC-EV-016",
+      "before": [
+        "civilcode:1403",
+        "civilcode:1599",
+        "civilcode:1322",
+        "civilcode:1906",
+        "civilcode:1522",
+        "civilcode:1596",
+        "civilcode:1547",
+        "civilcode:1918",
+        "civilcode:1585",
+        "civilcode:1476",
+        "civilcode:1584",
+        "civilcode:1502",
+        "consumeract:81",
+        "civilcode:1586",
+        "civilcode:1358"
+      ],
+      "after": [
+        "civilcode:1891",
+        "civilcode:1403",
+        "civilcode:1599",
+        "civilcode:1322",
+        "civilcode:1906",
+        "civilcode:1522",
+        "civilcode:1596",
+        "civilcode:1547",
+        "civilcode:1918",
+        "civilcode:1585",
+        "civilcode:1476",
+        "civilcode:1584",
+        "civilcode:1502",
+        "consumeract:81",
+        "civilcode:1586"
+      ],
+      "beforeRelevantRank": null,
+      "afterRelevantRank": null,
+      "relevantArticleIds": [
+        "civilcode:1898"
+      ]
+    },
+    {
+      "datasetId": "CC-EV-019",
+      "before": [
+        "civilcode:691",
+        "civilcode:493",
+        "civilcode:486",
+        "civilcode:494",
+        "civilcode:495",
+        "civilcode:488",
+        "civilcode:690",
+        "civilcode:492",
+        "civilcode:491",
+        "civilcode:1811",
+        "civilcode:321",
+        "civilcode:714",
+        "civilcode:689",
+        "civilcode:485",
+        "familycode:147"
+      ],
+      "after": [
+        "familycode:176",
+        "civilcode:691",
+        "familycode:109",
+        "civilcode:493",
+        "civilcode:486",
+        "civilcode:494",
+        "civilcode:495",
+        "civilcode:488",
+        "civilcode:690",
+        "civilcode:492",
+        "civilcode:491",
+        "civilcode:1811",
+        "civilcode:321",
+        "civilcode:714",
+        "civilcode:689"
+      ],
+      "beforeRelevantRank": 4,
+      "afterRelevantRank": 6,
+      "relevantArticleIds": [
+        "civilcode:494"
+      ]
+    },
+    {
+      "datasetId": "CC-EV-021",
+      "before": [
+        "civilcode:1198",
+        "civilcode:1523",
+        "civilcode:1569",
+        "civilcode:573",
+        "civilcode:1561",
+        "civilcode:299",
+        "civilcode:2024",
+        "civilcode:1189",
+        "civilcode:1502",
+        "civilcode:2234",
+        "consumeract:165",
+        "civilcode:1984",
+        "consumeract:52",
+        "civilcode:957",
+        "civilcode:1191"
+      ],
+      "after": [
+        "civilcode:2156",
+        "consumeract:57",
+        "civilcode:1198",
+        "civilcode:1523",
+        "civilcode:1569",
+        "civilcode:573",
+        "civilcode:1561",
+        "civilcode:299",
+        "civilcode:2024",
+        "civilcode:1189",
+        "civilcode:1502",
+        "civilcode:2234",
+        "consumeract:165",
+        "civilcode:1984",
+        "consumeract:52"
+      ],
+      "beforeRelevantRank": null,
+      "afterRelevantRank": null,
+      "relevantArticleIds": [
+        "civilcode:1256"
+      ]
+    },
+    {
+      "datasetId": "FC-EV-001",
+      "before": [
+        "civilcode:1814",
+        "civilcode:1840",
+        "civilcode:1839",
+        "civilcode:1241",
+        "civilcode:1835",
+        "civilcode:1769",
+        "civilcode:1819",
+        "civilcode:1830",
+        "civilcode:136",
+        "civilcode:1918",
+        "civilcode:1857",
+        "familycode:122",
+        "civilcode:660",
+        "civilcode:1837",
+        "civilcode:1844"
+      ],
+      "after": [
+        "familycode:109",
+        "civilcode:1814",
+        "civilcode:1840",
+        "civilcode:1839",
+        "civilcode:1241",
+        "civilcode:1835",
+        "civilcode:1769",
+        "civilcode:1819",
+        "civilcode:1830",
+        "civilcode:136",
+        "civilcode:1918",
+        "civilcode:1857",
+        "familycode:122",
+        "civilcode:660",
+        "civilcode:1837"
+      ],
+      "beforeRelevantRank": null,
+      "afterRelevantRank": null,
+      "relevantArticleIds": [
+        "familycode:123"
+      ]
+    },
+    {
+      "datasetId": "FC-EV-002",
+      "before": [
+        "civilcode:143",
+        "civilcode:178",
+        "familycode:124",
+        "civilcode:173",
+        "familycode:116",
+        "civilcode:166",
+        "civilcode:153",
+        "civilcode:191",
+        "familycode:118",
+        "civilcode:155",
+        "civilcode:142",
+        "familycode:106",
+        "familycode:136",
+        "familycode:117",
+        "civilcode:195"
+      ],
+      "after": [
+        "familycode:109",
+        "civilcode:143",
+        "civilcode:178",
+        "familycode:124",
+        "civilcode:173",
+        "familycode:116",
+        "civilcode:166",
+        "civilcode:153",
+        "familycode:75",
+        "civilcode:191",
+        "familycode:118",
+        "civilcode:155",
+        "civilcode:142",
+        "familycode:106",
+        "familycode:136"
+      ],
+      "beforeRelevantRank": 3,
+      "afterRelevantRank": 4,
+      "relevantArticleIds": [
+        "familycode:124"
+      ]
+    },
+    {
+      "datasetId": "CA-EV-009",
+      "before": [
+        "consumeract:112",
+        "consumeract:100",
+        "consumeract:15",
+        "consumeract:111",
+        "consumeract:110",
+        "consumeract:12",
+        "consumeract:115",
+        "consumeract:68",
+        "consumeract:165",
+        "consumeract:122",
+        "consumeract:124",
+        "consumeract:97",
+        "civilcode:255",
+        "consumeract:72",
+        "civilcode:1578"
+      ],
+      "after": [
+        "consumeract:110",
+        "consumeract:112",
+        "consumeract:100",
+        "consumeract:15",
+        "consumeract:111",
+        "consumeract:12",
+        "consumeract:115",
+        "consumeract:68",
+        "consumeract:165",
+        "consumeract:122",
+        "consumeract:124",
+        "consumeract:97",
+        "civilcode:255",
+        "consumeract:72",
+        "civilcode:1578"
+      ],
+      "beforeRelevantRank": 5,
+      "afterRelevantRank": 1,
+      "relevantArticleIds": [
+        "consumeract:110"
+      ]
+    }
+  ],
+  "negativeResults": [
+    {
+      "query": "What is the best recipe for chicken adobo?",
+      "returnedArticleIds": []
+    },
+    {
+      "query": "Who won the basketball game last night?",
+      "returnedArticleIds": []
+    },
+    {
+      "query": "asdf qwer zxcv uiop",
+      "returnedArticleIds": []
+    },
+    {
+      "query": "How do I install a graphics driver on my laptop?",
+      "returnedArticleIds": []
+    },
+    {
+      "query": "Ano ang magandang lugar para mag-bakasyon sa Palawan?",
+      "returnedArticleIds": []
+    },
+    {
+      "query": "Anong oras magbubukas ang mall bukas?",
+      "returnedArticleIds": []
+    }
+  ],
+  "productionDefaultParity": {
+    "positiveTop15Matches": 46,
+    "positiveQueryCount": 46,
+    "positiveMismatches": [],
+    "negativeResultsMatchSelectedConfig": true,
+    "negativeProbeCount": 6,
+    "negativeMismatches": []
+  },
+  "runtime": {
+    "positiveMilliseconds": 778.413,
+    "negativeMilliseconds": 26.52,
+    "cachedVectorCount": 67,
+    "embeddingCacheNote": "The cached Stage 1 ONNX vector fixture serves repeated tokenizer inputs; no ONNX inference was rerun during the batch."
+  },
+  "heldoutDataUsed": false
+}

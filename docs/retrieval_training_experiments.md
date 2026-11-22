@@ -15,6 +15,7 @@ pipeline.
 
 Experiment B, selected at epoch 10, was the strongest MiniLM run by Evaluation
 Hit@3 (8/46). It did not match the production E5 hybrid baseline (16/46 Hit@3).
+Rerunning C with training capped at 10 epochs reproduced B's result (8/46).
 Experiment C reduced its training pair loss to 0.0087 by epoch 30, but its
 final sampled retrieval checkpoint fell to 5/46 Hit@3. Its best sampled
 retrieval checkpoint was epoch 10, not epoch 30. Lower training or validation
@@ -58,17 +59,18 @@ support conclusions about negative rejection.
 ## Configurations and results
 
 All runs used seed 42 and batch size 8. B and C started from the same cached
-base MiniLM checkpoint, not from each other's weights. B used 25 warmup steps;
-C used 75 because its training schedule was longer. A reuses the clean prior
-three-epoch run with the same baseline training hyperparameters; its retrieval
-was evaluated after the final epoch, rather than at per-epoch retrieval
-checkpoints.
+base MiniLM checkpoint, not from each other's weights. B and the new 10-epoch
+C confirmation used 25 warmup steps; the original 30-epoch C used 75 because
+its training schedule was longer. A reuses the clean prior three-epoch run
+with the same baseline training hyperparameters; its retrieval was evaluated
+after the final epoch, rather than at per-epoch retrieval checkpoints.
 
 | Experiment | Epochs | Learning rate | Retrieval checks | Selected epoch |
 | --- | ---: | ---: | --- | ---: |
 | A — baseline | 3 | 2e-5 | Final epoch (prior clean run) | 3 |
 | B — extended | 10 | 1e-5 | 5, 10 | 10 |
 | C — intentional overfit diagnostic | 30 | 1e-5 | 10, 20, 30 | 10 |
+| C — confirmation stopped at 10 | 10 | 1e-5 | 10 | 10 |
 
 Validation results below are on the same 46 positive Evaluation query groups.
 Train Hit@3 uses the 171 positive Training query groups. `n/r` means the
@@ -82,6 +84,7 @@ was 0.0816.
 | A — epoch 3 | 0.0850 | 0.0309 | n/r | 2/46 (0.0435) | 5/46 (0.1087) | n/r | n/r | 0.1002 |
 | B — epoch 10 | 0.0620 | 0.0331 | 30/171 (0.1754) | 4/46 (0.0870) | 8/46 (0.1739) | 0.0652 | 0.1739 | 0.1412 |
 | C — selected epoch 10 | 0.0514 | 0.0298 | 32/171 (0.1871) | 5/46 (0.1087) | 7/46 (0.1522) | 0.0507 | 0.1413 | 0.1450 |
+| C — 10-epoch confirmation | 0.0620 | 0.0331 | 30/171 (0.1754) | 4/46 (0.0870) | 8/46 (0.1739) | 0.0652 | 0.1739 | 0.1412 |
 | Production E5 hybrid | n/r | n/r | n/r | 11/46 (0.2391) | 16/46 (0.3478) | 0.116 | 0.320 | MRR@15 0.304 |
 
 Production E5 results are included as an operational reference, not a
@@ -110,6 +113,12 @@ relevance or applicability.
   32/171. The experiment demonstrates that pair loss can continue decreasing
   without retrieval gains; it does not demonstrate strong retrieval
   memorization.
+- **C stopped at epoch 10:** A fresh run from the base checkpoint reproduced
+  B's 10-epoch metrics exactly: Hit@3 8/46, Top-1 4/46, and MRR@10 0.1412.
+  Its 25-step warmup schedule differs from the first ten epochs of the
+  30-epoch C run, which used 75 warmup steps. Against the current production
+  E5 hybrid, the confirmation still retrieved a labeled article in the top 3
+  for only 8/46 cases versus 16/46 for E5.
 
 ## Weaknesses, conclusions, and next step
 
@@ -144,14 +153,17 @@ Configurations:
 - [Experiment A](../tool/retrieval_lab/configs/experiment_a_baseline.json)
 - [Experiment B](../tool/retrieval_lab/configs/experiment_b_extended.json)
 - [Experiment C](../tool/retrieval_lab/configs/experiment_c_overfit.json)
+- [Experiment C, stopped at epoch 10](../tool/retrieval_lab/configs/experiment_c_epoch10.json)
 
 Detailed machine-readable reports are saved separately:
 
 - A: `tool/retrieval_lab/out/sbert_finetune/20261110_003421/evaluation_report.json`
 - B: `tool/retrieval_lab/out/controlled_experiments/B-extended/20261113_093529/evaluation_report.json`
 - C: `tool/retrieval_lab/out/controlled_experiments/C-intentional-overfit/20261113_100806/evaluation_report.json`
+- C, 10-epoch confirmation: `tool/retrieval_lab/out/controlled_experiments/C-epoch10-confirmation/20261113_115805/evaluation_report.json`
 
 Best experimental checkpoint (B, epoch 10):
 `tool/retrieval_lab/out/controlled_experiments/B-extended/20261113_093529/candidate_model/`.
-It is not the production model and must not be used as evidence of legal
-accuracy.
+The confirming C run is saved separately at
+`tool/retrieval_lab/out/controlled_experiments/C-epoch10-confirmation/20261113_115805/candidate_model/`.
+Neither checkpoint is the production model or evidence of legal accuracy.

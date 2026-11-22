@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:catol/services/catalyst_local_retrieval_service.dart';
-import 'package:catol/services/legal_query_preprocessor.dart';
+import ;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 

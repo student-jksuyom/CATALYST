@@ -1,0 +1,35 @@
+{
+  "candidateCount": 20,
+  "documentTokenCache": false,
+  "cacheEntries": 0,
+  "metrics": {
+    "hitAt1": 1,
+    "hitAt3": 1,
+    "hitAt15": 1,
+    "precisionAt3": 0.1111111111111111
+  },
+  "negativeQueriesWithResults": 0,
+  "coownershipPassed": true,
+  "exactTop15Matches": 3,
+  "meanRerankSeconds": 3.5074538000044413,
+  "medianRerankSeconds": 3.7576914000092074,
+  "p95RerankSeconds": 4.859196699981112,
+  "minRerankSeconds": 1.9054733000230044,
+  "maxRerankSeconds": 4.859196699981112,
+  "totalRerankSeconds": 10.522361400013324,
+  "meanWindows": 37.0,
+  "modelLoadSeconds": 1.897133099992061,
+  "memory": {
+    "before_load_working_set_bytes": 77627392,
+    "after_load_working_set_bytes": 479125504,
+    "after_load_peak_working_set_bytes": 568217600,
+    "endWorkingSetBytes": 560570368,
+    "peakWorkingSetBytes": 568217600
+  },
+  "secondsPerQuery": {
+    "CC-EV-001": 1.9054733000230044,
+    "FC-EV-001": 3.7576914000092074,
+    "CA-EV-001": 4.859196699981112
+  },
+  "note": "Windows CPU, 4 threads by default, cached E5 queries; excludes E5 inference and mobile overhead."
+}
