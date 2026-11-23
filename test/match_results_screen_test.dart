@@ -1,5 +1,6 @@
 import 'package:catol/match_results_screen.dart';
 import 'package:catol/models/law_match_result.dart';
+import 'package:catol/services/gemma_article_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -76,6 +77,77 @@ void main() {
     expect(find.text('No matching results yet.'), findsOneWidget);
   });
 
+  testWidgets('Gemma results can be switched to baseline', (tester) async {
+    const gemmaResult = LawMatchResult(
+      lawName: 'Civil Code',
+      articleNumber: 'Article 1308',
+      title: 'Binding effect',
+      description: 'The contract must bind both parties.',
+      matchScore: 90,
+      contextualExplanation: 'It says the contract binds both parties.',
+      supportingQuote: 'must bind both parties',
+      hasAiExplanation: true,
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: MatchResultsScreen(
+          results: results,
+          aiCandidates: results,
+          onGemmaAssessment: () async => GemmaArticleAssessment(
+            decision: GemmaArticleDecision.select,
+            results: const [gemmaResult],
+            explanation: 'This article directly addresses the contract.',
+            elapsed: Duration.zero,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('run-gemma-assessment')));
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    expect(find.text('AI #1'), findsOneWidget);
+    expect(find.textContaining('Supporting text:'), findsOneWidget);
+    await tester.tap(find.text('Baseline'));
+    await tester.pumpAndSettle();
+    expect(find.text('96%'), findsOneWidget);
+  });
+
+  testWidgets('Gemma abstention leaves the comparison controls visible', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: MatchResultsScreen(
+          results: results,
+          aiCandidates: results,
+          onGemmaAssessment: () async => GemmaArticleAssessment(
+            decision: GemmaArticleDecision.abstain,
+            results: const [],
+            explanation: 'No supplied article directly addresses the concern.',
+            elapsed: Duration.zero,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('run-gemma-assessment')));
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('No supplied article directly addresses the concern.'),
+      findsNWidgets(2),
+    );
+    expect(find.text('Baseline'), findsOneWidget);
+    expect(find.text('Gemma'), findsOneWidget);
+    await tester.tap(find.text('Baseline'));
+    await tester.pumpAndSettle();
+    expect(find.text('96%'), findsOneWidget);
+  });
+
   testWidgets('shows an AI explanation linking a result to the concern', (
     tester,
   ) async {
@@ -106,8 +178,7 @@ void main() {
     expect(find.text('Why this may relate'), findsOneWidget);
     expect(
       find.text(
-        'You described your sibling changing co-owned land without asking; '
-        'Article 491 requires co-owner consent for alterations.',
+        'You said your sibling changed the jointly owned land without asking you.',
       ),
       findsOneWidget,
     );

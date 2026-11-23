@@ -22,6 +22,7 @@ const int _embeddingDimensions = 384;
 const int _topResultCount = 3;
 const int _allResultCount = 15;
 const int _candidatePoolSize = 50;
+const int _aiCandidatePoolSize = 50;
 
 // Reciprocal-rank-fusion constant; 10-30 performed equivalently on the lab set.
 const int _fusionK = 20;
@@ -197,6 +198,7 @@ class CatalystMatchResponse {
     this.warning = retrievalWarning,
     this.clarifyingQuestion,
     this.otherCandidates = const [],
+    this.aiCandidates = const [],
     this.analysis,
   });
 
@@ -210,6 +212,7 @@ class CatalystMatchResponse {
 
   /// Next-best distinct provisions after the Top-3, for "other laws" requests.
   final List<LawMatchResult> otherCandidates;
+  final List<LawMatchResult> aiCandidates;
   final QueryAnalysis? analysis;
 }
 
@@ -805,6 +808,10 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     );
 
     final responseIndexes = finalRankedIndexes.take(_resultLimit);
+    final aiCandidates = finalRankedIndexes
+        .take(_aiCandidatePoolSize)
+        .map(toResult)
+        .toList(growable: false);
     final results = responseIndexes
         .take(_topResultCount)
         .map(toResult)
@@ -814,6 +821,7 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       otherCandidates: List.unmodifiable(
         responseIndexes.skip(_topResultCount).map(toResult),
       ),
+      aiCandidates: List.unmodifiable(aiCandidates),
       originalQuery: originalQuery,
       processedQuery: processedQuery,
       analysis: analysis,

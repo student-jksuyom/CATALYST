@@ -82,6 +82,42 @@ experiments. The Training Dataset is used offline to build the compact query
 example index; the app packages only its normalized vectors and article labels,
 not the source narratives or workbooks.
 
+## Optional local Gemma comparison
+
+The results screen can optionally compare the normal E5/BM25/training-example
+ranking with Gemma 4 E4B. Gemma receives the concern and up to 50
+already-retrieved, cross-encoder-ranked articles; it may select up to three or
+abstain. Its proposed article IDs must be in that candidate set, and its short
+supporting quotes must exactly occur in the corresponding article text. This
+is a second-stage experiment: baseline retrieval remains available and is
+unchanged. The Gemma model is not packaged in the APK.
+
+To try it on Android, run a llama.cpp `llama-server` build that supports the
+Gemma 4 E4B GGUF model on the development PC. Keep the server bound to
+loopback, then use a USB-debugging connection and reverse the port:
+
+```powershell
+llama-server -m C:\models\gemma-4-e4b-QAT-Q4_0.gguf --alias gemma4-e4b --host 127.0.0.1 --port 8081 --ctx-size 32768 --n-gpu-layers 0
+adb reverse tcp:8081 tcp:8081
+flutter build apk --debug --dart-define=CATALYST_GEMMA_BASE_URL=http://localhost:8081
+adb install -r build\app\outputs\flutter-apk\app-debug.apk
+```
+
+The model path is an example; obtain the model and compatible runtime
+separately. The app sends the concern and candidate article texts over the
+local USB reverse connection to that server; it does not use a cloud AI
+endpoint. Cleartext networking is allowed only for localhost. Without the
+build-time `CATALYST_GEMMA_BASE_URL`, the normal baseline remains the only
+available mode.
+
+In the earlier 46-query development experiment, Hit@1 changed from 13/46 to
+20/46 and Hit@3 from 17/46 to 25/46 after Gemma re-ranked the same retrieved
+candidates. Local CPU inference averaged about 377 seconds per query on the
+tested development PC. The development split has sparse labels and this small
+experiment is not evidence of legal accuracy or general quality; inference
+may take several minutes. Compare the baseline and Gemma outputs in the app
+before drawing conclusions.
+
 ## Offline explanation and limitations
 
 The app compares the narrative with precomputed article passages using the

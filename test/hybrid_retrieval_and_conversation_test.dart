@@ -105,6 +105,25 @@ void main() {
         expect(response.originalQuery, concern);
         expect(response.results.length, lessThanOrEqualTo(3));
         expect(response.results, isNotEmpty);
+        expect(response.aiCandidates, isNotEmpty);
+        expect(response.aiCandidates.length, lessThanOrEqualTo(50));
+        expect(
+          normalizedArticleId(
+            response.aiCandidates.first.lawName,
+            response.aiCandidates.first.articleNumber,
+          ),
+          normalizedArticleId(
+            response.results.first.lawName,
+            response.results.first.articleNumber,
+          ),
+        );
+        expect(
+          {
+            for (final result in response.aiCandidates)
+              normalizedArticleId(result.lawName, result.articleNumber),
+          },
+          hasLength(response.aiCandidates.length),
+        );
         final ids = {
           for (final r in response.results)
             normalizedArticleId(r.lawName, r.articleNumber),

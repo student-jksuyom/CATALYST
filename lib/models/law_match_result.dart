@@ -28,6 +28,7 @@ class LawMatchResult {
     this.chapterTitle,
     this.articleText,
     this.contextualExplanation,
+    this.supportingQuote,
     this.hasAiExplanation = false,
     this.caseExplanationPoints,
     this.explanationVariants,
@@ -45,6 +46,7 @@ class LawMatchResult {
     chapterTitle: json['chapterTitle'] as String?,
     articleText: json['articleText'] as String?,
     contextualExplanation: json['contextualExplanation'] as String?,
+    supportingQuote: json['supportingQuote'] as String?,
     hasAiExplanation: json['hasAiExplanation'] as bool,
     caseExplanationPoints: (json['caseExplanationPoints'] as List?)
         ?.cast<String>(),
@@ -81,6 +83,9 @@ class LawMatchResult {
   /// Language-model explanation connecting this provision to the user's facts.
   final String? contextualExplanation;
 
+  /// Exact article text used as support by the optional Gemma assessment.
+  final String? supportingQuote;
+
   /// Whether an online model supplied a query-specific relevance explanation.
   final bool hasAiExplanation;
 
@@ -105,6 +110,7 @@ class LawMatchResult {
     'chapterTitle': chapterTitle,
     'articleText': articleText,
     'contextualExplanation': contextualExplanation,
+    'supportingQuote': supportingQuote,
     'hasAiExplanation': hasAiExplanation,
     'caseExplanationPoints': caseExplanationPoints,
     'explanationVariants': explanationVariants?.map(
