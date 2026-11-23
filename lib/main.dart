@@ -14,7 +14,6 @@ import 'models/law_match_result.dart';
 import 'processing_screen.dart';
 import 'services/case_conversation.dart';
 import 'services/catalyst_local_retrieval_service.dart';
-import 'services/gemma_article_selector.dart';
 import 'services/followup_service.dart';
 import 'services/history_store.dart';
 import 'services/query_analysis.dart';
@@ -30,17 +29,29 @@ class CatalystApp extends StatelessWidget {
     CatalystRetrievalService? retrievalService,
     FollowUpAnswerer? followUp,
     HistoryStore? historyStore,
-    GemmaArticleAssessor? gemmaAssessor,
   }) : retrievalService =
-           retrievalService ?? const LocalSemanticRetrievalService(),
+           retrievalService ?? const LocalSemanticRetrievalService(
+            enableBilingualLegalLexicalExpansion: true,
+            enableLegalIssueLexicalExpansion: true,
+            enableArticleIssueProfiles: true,
+            enableIssueAwareLexicalWeight: true,
+            enableCorroboratedGate: true,
+            enableTopBm25BorderlineGate: true,
+            enableCorpusWideConceptIndex: true,
+            enableCorpusConceptGate: true,
+            disableTrainingExampleVotes: false,
+            corpusConceptRerankWeight: 0.30,
+            useDiscriminativeConceptEvidence: false,
+            useClauseLocalEvidence: true,
+            useTagalogWordForms: false,
+            enableV51ConservativeFusion: true,
+          ),
        followUp = followUp ?? createDefaultFollowUpAnswerer(),
-       historyStore = historyStore ?? HistoryStore(),
-       gemmaAssessor = gemmaAssessor ?? _defaultGemmaAssessor();
+       historyStore = historyStore ?? HistoryStore();
 
   final CatalystRetrievalService retrievalService;
   final FollowUpAnswerer? followUp;
   final HistoryStore historyStore;
-  final GemmaArticleAssessor? gemmaAssessor;
 
   @override
   Widget build(BuildContext context) {
@@ -121,21 +132,6 @@ class CatalystApp extends StatelessWidget {
                           userConcern: concern,
                           retrievalWarning: response.warning,
                           emptyMessage: response.clarifyingQuestion,
-                          aiCandidates: response.aiCandidates,
-                          gemmaUnavailableReason: gemmaAssessor == null
-                              ? 'Gemma is not configured. Start the app with '
-                                  'CATALYST_GEMMA_BASE_URL set to the local server.'
-                              : response.aiCandidates.isEmpty
-                                  ? 'Gemma is unavailable because retrieval '
-                                      'returned no AI candidate articles.'
-                                  : null,
-                          onGemmaAssessment: gemmaAssessor == null ||
-                                  response.aiCandidates.isEmpty
-                              ? null
-                              : () => gemmaAssessor!.assess(
-                                  concern: concern,
-                                  candidates: response.aiCandidates,
-                                ),
                           onResultSelected: (result) => _openLawResult(
                             resultsContext,
                             result,
@@ -149,7 +145,6 @@ class CatalystApp extends StatelessWidget {
                         processingNavigator.mounted) {
                       processingNavigator.pop(true);
                     }
-
                   } catch (error, stackTrace) {
                     developer.log(
                       'Navigation to match results failed (${error.runtimeType})',
@@ -219,10 +214,4 @@ class CatalystApp extends StatelessWidget {
       ),
     );
   }
-}
-
-GemmaArticleAssessor? _defaultGemmaAssessor() {
-  const baseUrl = String.fromEnvironment('CATALYST_GEMMA_BASE_URL');
-  if (baseUrl.trim().isEmpty) return null;
-  return LocalGemmaArticleAssessor.fromEnvironment();
 }

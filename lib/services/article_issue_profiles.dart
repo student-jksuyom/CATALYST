@@ -1,0 +1,50 @@
+// Human-readable search profiles of statutory legal issues.
+// NOT query-to-answer routing. Each profile describes the provision itself;
+// the article ID only identifies which corpus article receives the descriptors.
+// These are development annotations and need lawyer review before deployment.
+const Map<String, String> _articleProfiles = <String, String>{
+  'civilcode:1159': 'Contractual obligations force of law parties bound comply agreement good faith',
+  'civilcode:1169': 'Delay debtor obligation due payment demand overdue loan debt installments creditor',
+  'civilcode:1170': 'Fraud negligence delay breach obligations liable damages',
+  'civilcode:1174': 'Unforeseen inevitable event natural disaster flood storm fortuitous event impossibility of performance obligation not responsible',
+  'civilcode:1191': 'Reciprocal contract obligations nonperformance failure to perform breach rescission termination fulfillment damages',
+  'civilcode:1256': 'Creditor refuses to accept proper payment tender of payment consignation obligation',
+  'civilcode:1258': 'Consignation debtor deposit due amount creditor tender payment',
+  'civilcode:1305': 'Contract agreement meeting minds two persons mutually bind give render service',
+  'civilcode:1306': 'Contracting parties conditions terms stipulations agreement freedom to contract',
+  'civilcode:1308': 'Contract binding both contracting parties validity compliance will of one party mutual obligation',
+  'civilcode:1319': 'Contract offer acceptance consent meeting minds agreed price purchase agreement',
+  'civilcode:1544': 'Double sale same land property sold two buyers ownership registration good faith',
+  'civilcode:1561': 'Used car machinery hidden defects seller warranty defects not disclosed buyer',
+  'civilcode:1566': 'Warranty hidden defects seller responsible buyer rescission price reduction',
+  'civilcode:1599': 'Seller breach warranty goods damages remedy rescission defective product',
+  'civilcode:1654': 'Landlord lessor leased house apartment necessary repair plumbing maintenance tenant use suitable condition',
+  'civilcode:1658': 'Lessee suspend payment of rent lessor repairs tenant',
+  'civilcode:1659': 'Lessee rent lease rescission damages nonperformance lessor obligations',
+  'civilcode:1660': 'Dangerous unsafe leased house dwelling habitation tenant lessee terminate lease serious imminent danger life health',
+  'civilcode:1687': 'Lease term period rent monthly yearly rural urban property',
+  'civilcode:1898': 'Agent exceeds principal authority unauthorized sale below price principal liability ratification',
+  'civilcode:1933': 'Loan borrower lent money mutuum commodatum borrowed money repay',
+  'civilcode:1956': 'Interest on a loan money express agreement in writing agreed verbal oral interest not due',
+  'civilcode:2176': 'Quasi delict negligence fault omission accident injured person damages liability',
+  'civilcode:2177': 'Quasi delict liability civil damages negligence',
+  'civilcode:2180': 'Employer liable for employee negligent acts during work course of employment business responsibility',
+  'civilcode:2209': 'Debtor late payment interest damages money obligation delay',
+  'civilcode:494': 'Co-owner demand division partition common property inherited land siblings',
+  'civilcode:495': 'Coownership partition division property co-owner',
+  'civilcode:493': 'Coowner transfer own undivided interest sale property',
+  'civilcode:749': 'Donation of immovable property land gift valid public document notarized acceptance donor donee',
+  'civilcode:694': 'Property drainage dirty water outlet nuisance interferes use property harm neighbor',
+  'civilcode:649': 'Surrounded land no access public road right of way easement through neighboring land outlet highway',
+  'civilcode:1137': 'Ownership acquired thirty years possession real property land acquisitive prescription',
+  'civilcode:887': 'Compulsory heirs children inheritance legitimate child legitime will estate',
+  'familycode:211': 'Parental authority father mother disagreement education choice school children',
+  'familycode:213': 'Child custody parents separated minor best interest child below seven years',
+  'familycode:194': 'Child support school expenses education medical care transportation sustenance',
+  'consumeract:23': 'Adulterated spoiled contaminated canned food unfit consumption food safety',
+  'consumeract:53': 'Pyramid sales recruitment selling products membership payment scheme financial reward recruiting',
+  'consumeract:99': 'Repair services consumer damage caused by repair shop technician liability',
+};
+
+String legalArticleIssueProfile(String law, String article) =>
+    _articleProfiles['${law.toLowerCase()}:$article'] ?? '';

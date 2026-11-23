@@ -1,0 +1,227 @@
+[
+  {
+    "id": "FRESH-01-EN",
+    "language": "English",
+    "narrative": "The café owner paid a sign painter to finish a wall menu before opening day. The painter left the job halfway done, stopped answering calls, and kept the advance payment. Can the owner hire someone else to finish the promised work at the first painter's expense?"
+  },
+  {
+    "id": "FRESH-01-TL",
+    "language": "Tagalog",
+    "narrative": "Nagpagawa kami ng bakal na rehas ayon sa napagkasunduang disenyo. Iba ang ikinabit ng gumagawa at baluktot pa ang pagkakayari. Ayaw niya itong itama. Maaari ba naming ipagawa ang pag-aayos sa iba at singilin siya?"
+  },
+  {
+    "id": "FRESH-01-TG",
+    "language": "Taglish",
+    "narrative": "Nag-order kami ng custom invitations with gold embossing, and clearly nakasulat iyon sa agreement. Plain print lang ang dineliver, tapos ayaw na nilang ulitin. Puwede ba naming ipa-redo sa ibang shop at ipasagot sa original supplier?"
+  },
+  {
+    "id": "FRESH-02-EN",
+    "language": "English",
+    "narrative": "A print supplier agreed in writing to deliver numbered examination booklets before our training session. They negligently prepared the wrong files and missed the deadline, forcing us to pay for emergency printing. Can we claim the extra expense?"
+  },
+  {
+    "id": "FRESH-02-TL",
+    "language": "Tagalog",
+    "narrative": "Kumuha kami ng tagalipat ng antigong aparador at malinaw na napag-usapan na babalutin ito nang maayos. Hindi nila nilagyan ng proteksiyon kaya nagasgas at nabasag ang salamin. Maaari ba kaming humingi ng kabayaran sa pinsala?"
+  },
+  {
+    "id": "FRESH-02-TG",
+    "language": "Taglish",
+    "narrative": "May contract kami with a storage company to keep our event equipment in a dry, secured room. Naiwan nilang bukas ang bintana during heavy rain and nasira ang speakers. Can we hold them responsible for the damage?"
+  },
+  {
+    "id": "FRESH-03-EN",
+    "language": "English",
+    "narrative": "I paid half the agreed amount for custom costumes that a supplier promised to deliver for a school play. The supplier later said it would deliver nothing but refused to return the deposit. Can I cancel the agreement and request my payment back?"
+  },
+  {
+    "id": "FRESH-03-TL",
+    "language": "Tagalog",
+    "narrative": "Nagbayad kami ng paunang halaga sa kumpanyang magdadala ng mga upuan at mesa para sa pagtitipon. Sa mismong araw, sinabi nilang hindi sila tutupad at ayaw ibalik ang bayad. Maaari ba naming ipawalang-bisa ang kasunduan?"
+  },
+  {
+    "id": "FRESH-03-TG",
+    "language": "Taglish",
+    "narrative": "We booked a photo booth for our recognition day and paid the required deposit. Biglang nag-message ang provider na wala silang ipadadalang equipment, pero non-refundable daw kahit sila ang umatras. Can we end the deal and recover the deposit?"
+  },
+  {
+    "id": "FRESH-04-EN",
+    "language": "English",
+    "narrative": "I rent a small recording studio. Water has been leaking through the ceiling for weeks, damaging the room's electrical outlets. I have notified the landlord several times, but no repairs have been made. What responsibility does the landlord have?"
+  },
+  {
+    "id": "FRESH-04-TL",
+    "language": "Tagalog",
+    "narrative": "Umuupa ako ng silid para sa patahian. Sira ang pangunahing kable ng kuryente kaya hindi ko magamit ang mga makina. Ilang ulit ko nang sinabi sa nagpapaupa ngunit ayaw niyang ayusin. May pananagutan ba siya sa pagpapanatiling magagamit ang lugar?"
+  },
+  {
+    "id": "FRESH-04-TG",
+    "language": "Taglish",
+    "narrative": "I lease a stall for my flower business. Nasira ang tubo ng tubig sa loob at palaging nababasa ang tindahan. Alam na ng landlord, but they refuse necessary repairs kahit walang kasunduang ako ang gagastos. Ano ang obligasyon nila?"
+  },
+  {
+    "id": "FRESH-05-EN",
+    "language": "English",
+    "narrative": "A neighbor left loose roof tiles stacked beside a public footpath without securing them. The tiles fell and struck me while I was walking past. I had no agreement with the neighbor. Can I ask for compensation for my injuries?"
+  },
+  {
+    "id": "FRESH-05-TL",
+    "language": "Tagalog",
+    "narrative": "May naghukay sa gilid ng daanang ginagamit ng mga tao at hindi naglagay ng anumang babala o harang. Nahulog doon ang kapatid ko at nabalian. Wala kaming kasunduan sa may gawa ng hukay. Maaari ba kaming humingi ng danyos?"
+  },
+  {
+    "id": "FRESH-05-TG",
+    "language": "Taglish",
+    "narrative": "A cyclist was texting habang dumaraan sa sidewalk and hit my mother who was walking there. Hindi naman sila magkakilala at wala silang kontrata. She needed treatment after the collision. Can the cyclist be made to pay for the harm?"
+  },
+  {
+    "id": "FRESH-06-EN",
+    "language": "English",
+    "narrative": "My spouse and I own our home as part of our absolute community property. Without asking me or getting court authority, my spouse signed a document mortgaging it to secure someone else's loan. Can that transaction be questioned?"
+  },
+  {
+    "id": "FRESH-06-TL",
+    "language": "Tagalog",
+    "narrative": "Nabili namin ng asawa ko ang isang sasakyan habang umiiral ang aming ganap na pamayanan ng ari-arian. Ipinagbili niya ito nang walang pahintulot ko at hindi man lang ako pinapirma. Maaari ko bang kuwestiyunin ang bentahan?"
+  },
+  {
+    "id": "FRESH-06-TG",
+    "language": "Taglish",
+    "narrative": "Our house is part of the community property namin as spouses. Bigla kong nalaman na ginamit iyon ng asawa ko as collateral for a friend's debt without my written consent or court approval. Valid ba iyon?"
+  },
+  {
+    "id": "FRESH-07-EN",
+    "language": "English",
+    "narrative": "My child's other parent sends money for food but says school transportation, medicine, and required uniforms should never be included in support. Are those needs considered part of the support a child may receive?"
+  },
+  {
+    "id": "FRESH-07-TL",
+    "language": "Tagalog",
+    "narrative": "Labinsiyam na taong gulang na ang anak namin ngunit nag-aaral pa para sa isang hanapbuhay. Sabi ng ama niya, pagkain na lang ang maaari niyang sagutin dahil lampas na sa labingwalong taong gulang ang bata. Kasama pa ba sa suporta ang pag-aaral?"
+  },
+  {
+    "id": "FRESH-07-TG",
+    "language": "Taglish",
+    "narrative": "My daughter needs regular trips to school and prescribed medicine. Sabi ng parent niya, 'support' means meals lang, not transport or medical expenses. Included ba dapat ang mga iyon sa family support?"
+  },
+  {
+    "id": "FRESH-08-EN",
+    "language": "English",
+    "narrative": "My mother is elderly and has no income for her basic needs. Her adult children have work and some resources, but they insist that grown children never have a duty to support a parent. Does family law impose any obligation?"
+  },
+  {
+    "id": "FRESH-08-TL",
+    "language": "Tagalog",
+    "narrative": "Kinilala ng ama ang anak niya kahit hindi sila kasal ng ina. Ngayon ay ayaw niyang magbigay ng pangangailangan ng bata dahil wala raw silang kasal. May tungkulin ba siyang sumuporta?"
+  },
+  {
+    "id": "FRESH-08-TG",
+    "language": "Taglish",
+    "narrative": "My wife temporarily stopped working because of illness and needs basic living expenses. May income ako, pero someone told me spouses aren't legally required to support one another. Is that correct?"
+  },
+  {
+    "id": "FRESH-09-EN",
+    "language": "English",
+    "narrative": "Two parents are discussing monthly support for their child. One earns a modest salary while the child has documented school and medical needs. How should the amount be assessed so it reflects both the parent's means and the child's actual needs?"
+  },
+  {
+    "id": "FRESH-09-TL",
+    "language": "Tagalog",
+    "narrative": "Humihingi ng malaking halagang buwanang suporta para sa aming anak ang dating kasama ko. May regular akong sahod ngunit maliit lamang ito at may iba pa akong pangunahing gastusin. Paano dapat isaalang-alang ang aking kakayahan at pangangailangan ng bata?"
+  },
+  {
+    "id": "FRESH-09-TG",
+    "language": "Taglish",
+    "narrative": "We are setting child support for the first time. My co-parent wants a fixed amount na mas mataas pa sa monthly income ko, while our child has real school expenses. Should the amount depend on both resources and needs?"
+  },
+  {
+    "id": "FRESH-10-EN",
+    "language": "English",
+    "narrative": "My child's parents have separated. Our nine-year-old says she prefers living with her father, but the court has not decided who should exercise parental authority. Will the child's preference be considered?"
+  },
+  {
+    "id": "FRESH-10-TL",
+    "language": "Tagalog",
+    "narrative": "Hiwalay na ang mga magulang ng limang taong gulang kong pamangkin. Gusto siyang kunin ng ama mula sa ina kahit wala namang sinasabing matinding dahilan. Ano ang tuntunin sa pangangalaga ng batang wala pang pitong taong gulang?"
+  },
+  {
+    "id": "FRESH-10-TG",
+    "language": "Taglish",
+    "narrative": "Separated na ang parents of an eleven-year-old. Sabi ng bata, sa isang parent siya gustong tumira, but relatives are worried that parent may neglect school and meals. How does the court decide custody?"
+  },
+  {
+    "id": "FRESH-11-EN",
+    "language": "English",
+    "narrative": "An online store advertised a phone as factory-new and unused. When it arrived, I found evidence that it had been refurbished and fitted with replacement parts. The seller admitted knowing its condition. Could this be a deceptive sales practice?"
+  },
+  {
+    "id": "FRESH-11-TL",
+    "language": "Tagalog",
+    "narrative": "Bumili ako ng blender dahil sinabi ng tindero na ligtas at kaya nitong durugin ang yelo. Nang mabasa ko ang mismong etiketa, nakasaad na hindi ito maaaring gamitin sa yelo. Nilinlang ba ako sa pagbebenta?"
+  },
+  {
+    "id": "FRESH-11-TG",
+    "language": "Taglish",
+    "narrative": "I bought sneakers advertised as original limited-edition stock. Pagdating, inamin ng seller na imitation pala and knew it from the start. May consumer protection ba against this kind of misrepresentation?"
+  },
+  {
+    "id": "FRESH-12-EN",
+    "language": "English",
+    "narrative": "A seller pressured my grandfather, who could not understand the contract's language, into signing for a basic appliance at several times its usual price with very costly installments. Can this kind of one-sided transaction be challenged?"
+  },
+  {
+    "id": "FRESH-12-TL",
+    "language": "Tagalog",
+    "narrative": "May nagbenta ng karaniwang ilaw na naire-recharge sa nanay kong nagmamadali habang may malawakang pagkawala ng kuryente. Sinamantala raw ang kagipitan niya at siningil siya ng halos sampung ulit ng karaniwang halaga. May batas ba laban sa ganitong bentahan?"
+  },
+  {
+    "id": "FRESH-12-TG",
+    "language": "Taglish",
+    "narrative": "A salesperson kept my elderly aunt inside the showroom until she signed a water-purifier installment plan. Hirap siyang intindihin ang agreement, and the total price is far above comparable units. Is that an unfair consumer transaction?"
+  },
+  {
+    "id": "FRESH-13-EN",
+    "language": "English",
+    "narrative": "I bought a rice cooker that stopped heating after two weeks of ordinary use. The shop accepted it for repair, but more than thirty days have passed and it still does not work. Can I seek a replacement or reimbursement?"
+  },
+  {
+    "id": "FRESH-13-TL",
+    "language": "Tagalog",
+    "narrative": "Bumili ako ng radyong may bateryang muling nasisingil, ngunit hindi na ito nagbubukas kahit tama ang paggamit. Isinauli ko sa tindahan para ayusin at lumipas na ang mahigit tatlumpung araw na hindi naitama ang sira. Maaari ba akong humingi ng kapalit o balik-bayad?"
+  },
+  {
+    "id": "FRESH-13-TG",
+    "language": "Taglish",
+    "narrative": "We bought a water-filter unit that keeps leaking kahit normal use lang. The supplier tried to repair it, pero after more than 30 days hindi pa rin nagagamit nang maayos. Can we request a refund or replacement?"
+  },
+  {
+    "id": "FRESH-14-EN",
+    "language": "English",
+    "narrative": "I paid a cleaning service to remove stains from several formal uniforms. They returned the clothes with the same stains and admitted they had skipped the agreed treatment. Can I ask them to redo the work without another fee or refund me?"
+  },
+  {
+    "id": "FRESH-14-TL",
+    "language": "Tagalog",
+    "narrative": "Nagbayad ako para linisin nang mabuti ang alpombra sa sala, ngunit ibinalik itong marumi at mabaho pa rin. Hindi natupad ang serbisyong ipinangako. Maaari ba akong humiling na ulitin nila ang paglilinis o ibalik ang bayad?"
+  },
+  {
+    "id": "FRESH-14-TG",
+    "language": "Taglish",
+    "narrative": "We hired a party-decoration service based on its displayed package. Half of the promised decorations were missing when the team arrived, but full payment was demanded. Can we ask for a price reduction or proper completion?"
+  },
+  {
+    "id": "FRESH-15-EN",
+    "language": "English",
+    "narrative": "A repair shop replaced the pump inside my espresso machine with an old, previously used component that did not meet the machine's specifications. I never authorized reused or inferior parts. Is the shop allowed to do that?"
+  },
+  {
+    "id": "FRESH-15-TL",
+    "language": "Tagalog",
+    "narrative": "Nagpagawa ako ng sirang bomba ng tubig at pumayag akong bayaran ang naaangkop na bagong piyesa. Luma at hindi akmang motor pala ang ikinabit ng gumagawa nang hindi ako tinatanong. May tungkulin ba silang gumamit ng wastong piyesa?"
+  },
+  {
+    "id": "FRESH-15-TG",
+    "language": "Taglish",
+    "narrative": "The bike shop charged me for a proper replacement gear, pero gumamit pala sila ng worn-out part below the maker's specifications. Hindi ako pumayag sa substitute na iyon. Is this allowed for repair services?"
+  }
+]

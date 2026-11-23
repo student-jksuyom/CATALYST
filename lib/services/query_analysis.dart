@@ -192,30 +192,6 @@ List<String> expandLegalWording(String query) =>
     {for (final token in wordTokens(query)) ...?_legalWording[token]}
         .toList(growable: false);
 
-// Experimental synonyms broaden search only; they do not establish that a
-// legal concept applies to the concern.
-const _experimentalLegalConcepts = <String, List<String>>{
-  'agreement': ['contract', 'consent'],
-  'contract': ['agreement', 'obligation'],
-  'breach': ['nonperformance', 'obligation'],
-  'borrowed': ['loan', 'debtor', 'creditor'],
-  'lent': ['loan', 'debtor', 'creditor'],
-  'debt': ['debtor', 'creditor', 'obligation'],
-  'landlord': ['lessor', 'lease'],
-  'tenant': ['lessee', 'lease'],
-  'lease': ['lessor', 'lessee'],
-  'seller': ['vendor', 'sale'],
-  'buyer': ['vendee', 'sale'],
-  'inheritance': ['succession', 'estate', 'heir'],
-  'negligence': ['fault', 'damage'],
-  'donation': ['donor', 'donee'],
-  'mortgage': ['mortgagor', 'mortgagee'],
-};
-
-List<String> expandExperimentalLegalConcepts(String query) => {
-  for (final token in wordTokens(query)) ...?_experimentalLegalConcepts[token],
-}.toList(growable: false);
-
 const _familyCues = {
   'asawa',
   'kasal',
@@ -342,15 +318,15 @@ final List<RegExp> _unsupportedLegalAreaPatterns = [
     caseSensitive: false,
   ),
   RegExp(
-    r'\b(overtime pay|overtime rate|separation pay|minimum wage|labor arbiter|labor law|wage deduction|workplace compensation|dole)\b',
+    r'\b(overtime pay|overtime rate|overtime hours|extra hours|separation pay|minimum wage|labor arbiter|labor law|wage deduction|wage deductions|workplace compensation|independent contractors?|clock out|unpaid hours|payslips?|kaltas|kaltasan|ipinakaltas|labor benefits?|warehouse supervisor)\b',
     caseSensitive: false,
   ),
   RegExp(
-    r'\b(vat refund|tax refund|income tax|tax assessment|tax deduction|customs duty|import duty|bir)\b',
+    r'\b(vat refund|vat|tax refund|income tax|tax assessment|tax deduction|customs duty|import duty|bir|tax office|back taxes|expense deductions?|tax objection|tax remedies|tax registration|declaration of income|multa at interes)\b',
     caseSensitive: false,
   ),
   RegExp(
-    r'\b(work visa|visa category|visa extension|immigration|work authorization|residency requirement)\b',
+    r'\b(work visa|student visa|spouse visa|visa category|visa extension|visa application|visa denial|immigration|work authorization|residency requirement|permission to stay|regularization process|expire(s|d)? while waiting)\b',
     caseSensitive: false,
   ),
   RegExp(
@@ -358,7 +334,7 @@ final List<RegExp> _unsupportedLegalAreaPatterns = [
     caseSensitive: false,
   ),
   RegExp(
-    r'\b(data privacy|personal data|data subject|privacy compliance)\b',
+    r'\b(data privacy|personal data|data subject|privacy compliance|patient names|appointment list|staff id numbers?|home contact details?|marketing messages|sharing (?:the )?(?:call|text|personal) (?:details|information)|published (?:a )?spreadsheet|public page)\b',
     caseSensitive: false,
   ),
   RegExp(

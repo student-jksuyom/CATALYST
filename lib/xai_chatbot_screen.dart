@@ -32,10 +32,10 @@ class _XaiChatbotScreenState extends State<XaiChatbotScreen> {
   final List<String> _sentQuestions = [];
 
   static const _liveSuggestions = [
-    'Are there already similar cases of mine',
     'Why is this relevant?',
     'Explain it in simpler words',
     'What other law might apply?',
+    'What facts should I clarify?',
   ];
 
   @override
@@ -840,7 +840,7 @@ class _ExpandedLawResult extends StatelessWidget {
         ],
         const SizedBox(height: 10),
         Text(
-          'Relevance score: ${result.matchScore.round()}%',
+          'Match score: ${result.matchScore.round()}%',
           style: const TextStyle(
             fontFamily: 'Inter',
             fontSize: 11,

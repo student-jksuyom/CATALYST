@@ -23,12 +23,10 @@ class LawMatchResult {
     required this.title,
     required this.description,
     required this.matchScore,
-    this.rawCosineScore,
     this.detailsReference,
     this.chapterTitle,
     this.articleText,
     this.contextualExplanation,
-    this.supportingQuote,
     this.hasAiExplanation = false,
     this.caseExplanationPoints,
     this.explanationVariants,
@@ -41,12 +39,10 @@ class LawMatchResult {
     title: json['title'] as String,
     description: json['description'] as String,
     matchScore: (json['matchScore'] as num).toDouble(),
-    rawCosineScore: (json['rawCosineScore'] as num?)?.toDouble(),
     detailsReference: json['detailsReference'],
     chapterTitle: json['chapterTitle'] as String?,
     articleText: json['articleText'] as String?,
     contextualExplanation: json['contextualExplanation'] as String?,
-    supportingQuote: json['supportingQuote'] as String?,
     hasAiExplanation: json['hasAiExplanation'] as bool,
     caseExplanationPoints: (json['caseExplanationPoints'] as List?)
         ?.cast<String>(),
@@ -65,11 +61,8 @@ class LawMatchResult {
   final String title;
   final String description;
 
-  /// Final displayed retrieval relevance score from 0 to 100, not a probability.
+  /// A similarity score from 0 to 100, not a probability of legal correctness.
   final double matchScore;
-
-  /// Raw semantic cosine similarity, when dense retrieval produced one.
-  final double? rawCosineScore;
 
   /// Optional identifier or payload understood by a future Law Details screen.
   final Object? detailsReference;
@@ -82,9 +75,6 @@ class LawMatchResult {
 
   /// Language-model explanation connecting this provision to the user's facts.
   final String? contextualExplanation;
-
-  /// Exact article text used as support by the optional Gemma assessment.
-  final String? supportingQuote;
 
   /// Whether an online model supplied a query-specific relevance explanation.
   final bool hasAiExplanation;
@@ -105,12 +95,10 @@ class LawMatchResult {
     'title': title,
     'description': description,
     'matchScore': matchScore,
-    'rawCosineScore': rawCosineScore,
     'detailsReference': detailsReference,
     'chapterTitle': chapterTitle,
     'articleText': articleText,
     'contextualExplanation': contextualExplanation,
-    'supportingQuote': supportingQuote,
     'hasAiExplanation': hasAiExplanation,
     'caseExplanationPoints': caseExplanationPoints,
     'explanationVariants': explanationVariants?.map(

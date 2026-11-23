@@ -249,15 +249,6 @@ void main() {
     expect(find.text('See more'), findsNothing);
   });
 
-  testWidgets('score is labelled as relevance, not confidence', (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: LawDetailsScreen(result: result)),
-    );
-
-    expect(find.byTooltip('Relevance score'), findsOneWidget);
-    expect(find.byTooltip('Confidence'), findsNothing);
-  });
-
   testWidgets('bookmark states use separate images without layout movement', (
     tester,
   ) async {

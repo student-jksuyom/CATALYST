@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:catol/main.dart';
 import 'package:catol/services/catalyst_local_retrieval_service.dart';
 import 'package:catol/services/explanation_builder.dart';
 import 'package:catol/services/legal_query_preprocessor.dart';
-import 'package:catol/services/local_cross_encoder_reranker.dart';
 import 'package:catol/services/local_tokenizer.dart';
 import 'package:catol/services/query_analysis.dart';
 import 'package:flutter/services.dart';
@@ -53,120 +51,11 @@ void main() {
     expect(scores, everyElement(inInclusiveRange(0, 100)));
   });
 
-  test(
-    'cross-encoder flag reranks candidates and preserves hybrid fallback',
-    () async {
-      const concern = 'defective phone';
-      expect(
-        RetrievalExperimentConfig
-            .selectedProduction
-            .enableCrossEncoderReranking,
-        isTrue,
-      );
-      final config = RetrievalExperimentConfig(
-        domainIndependentTraining: true,
-        enableCrossEncoderReranking: true,
-        crossEncoderCandidateLimit: 15,
-        crossEncoderWeight: 0.5,
-      );
-      final reranker = _TargetLastCandidateReranker();
-      RetrievalDiagnosticTrace? trace;
-      final baseline = await LocalSemanticRetrievalService(
-        queryEncoder: _FixedEncoder(_basisVector()),
-        queryPreprocessor: const _PassthroughPreprocessor(),
-        minimumCosine: -1,
-        experimentConfig: RetrievalExperimentConfig.originalProduction,
-        crossEncoderReranker: reranker,
-      ).matchConcern(concern);
-      expect(reranker.calls, 0);
-
-      final reranked = await LocalSemanticRetrievalService(
-        queryEncoder: _FixedEncoder(_basisVector()),
-        queryPreprocessor: const _PassthroughPreprocessor(),
-        minimumCosine: -1,
-        experimentConfig: config,
-        crossEncoderReranker: reranker,
-        onDiagnosticTrace: (value) => trace = value,
-      ).matchConcern(concern);
-
-      expect(config.enableCrossEncoderReranking, isTrue);
-      expect(trace?.eligibleIds, isNotEmpty);
-      expect(reranker.calls, 1);
-      expect(reranker.candidates, hasLength(15));
-      expect(
-        normalizedArticleId(
-          reranked.results.first.lawName,
-          reranked.results.first.articleNumber,
-        ),
-        reranker.candidates.last.articleId,
-      );
-      expect(
-        normalizedArticleId(
-          baseline.results.first.lawName,
-          baseline.results.first.articleNumber,
-        ),
-        isNot(reranker.candidates.last.articleId),
-      );
-      final expectedFinalScore =
-          0.5 * (1 / (1 + math.exp(-10))) +
-          0.5 * reranker.candidates.last.hybridScore;
-      expect(
-        reranked.results.first.matchScore,
-        double.parse(expectedFinalScore.toStringAsFixed(4)) * 100,
-      );
-      expect(reranked.results.first.rawCosineScore, isNotNull);
-      expect(reranked.results.first.rawCosineScore, inInclusiveRange(-1, 1));
-    },
-  );
-
-  test('cross-encoder inference failure retains hybrid ranking', () async {
-    const concern = 'defective phone';
-    const config = RetrievalExperimentConfig(
-      domainIndependentTraining: true,
-      enableCrossEncoderReranking: true,
-      crossEncoderCandidateLimit: 15,
-    );
-    final baseline = await LocalSemanticRetrievalService(
-      queryEncoder: _FixedEncoder(_basisVector()),
-      queryPreprocessor: const _PassthroughPreprocessor(),
-      minimumCosine: -1,
-    ).matchConcern(concern);
-    final fallback = await LocalSemanticRetrievalService(
-      queryEncoder: _FixedEncoder(_basisVector()),
-      queryPreprocessor: const _PassthroughPreprocessor(),
-      minimumCosine: -1,
-      experimentConfig: config,
-      crossEncoderReranker: _FailingCrossEncoderReranker(),
-    ).matchConcern(concern);
-
-    expect(
-      fallback.results.map(
-        (result) => normalizedArticleId(result.lawName, result.articleNumber),
-      ),
-      baseline.results.map(
-        (result) => normalizedArticleId(result.lawName, result.articleNumber),
-      ),
-    );
-    for (var index = 0; index < baseline.results.length; index++) {
-      expect(
-        fallback.results[index].matchScore,
-        baseline.results[index].matchScore,
-      );
-      expect(
-        fallback.results[index].rawCosineScore,
-        baseline.results[index].rawCosineScore,
-      );
-    }
-  });
-
   test('abstains early for explicit unsupported legal topics', () async {
     final encoder = _FixedEncoder(_basisVector());
-    final reranker = _TargetLastCandidateReranker();
     final service = LocalSemanticRetrievalService(
       queryEncoder: encoder,
       queryPreprocessor: const _PassthroughPreprocessor(),
-      experimentConfig: RetrievalExperimentConfig.developmentCrossEncoder,
-      crossEncoderReranker: reranker,
     );
 
     final response = await service.matchConcern(
@@ -176,7 +65,23 @@ void main() {
     expect(response.results, isEmpty);
     expect(response.warning, contains('outside CATALYST’s local database'));
     expect(encoder.lastInputIds, isNull);
-    expect(reranker.calls, 0);
+  });
+
+  test('abstains early for held-out tax, labor, visa, and privacy topics', () {
+    const unsupportedNarratives = [
+      'My tax office assessment includes VAT and back taxes.',
+      'The warehouse supervisor makes us work extra hours and cut the payslip.',
+      'My student visa extension was denied before my permission to stay expires.',
+      'The clinic published an appointment list with patient names and phone numbers.',
+      'A former employer published a spreadsheet with staff ID numbers.',
+    ];
+    for (final narrative in unsupportedNarratives) {
+      expect(
+        isClearlyOutsideCatalystScope(narrative),
+        isTrue,
+        reason: narrative,
+      );
+    }
   });
 
   test(
@@ -419,34 +324,6 @@ class _FixedEncoder implements LocalQueryEncoder {
     allInputIds.add(inputIds);
     lastAttentionMask = attentionMask;
     return vector;
-  }
-}
-
-class _TargetLastCandidateReranker implements ArticleCrossEncoderReranker {
-  int calls = 0;
-  List<CrossEncoderCandidate> candidates = const [];
-
-  @override
-  Future<List<double>> score(
-    String query,
-    List<CrossEncoderCandidate> candidates,
-  ) async {
-    calls++;
-    this.candidates = candidates;
-    return [
-      for (var index = 0; index < candidates.length; index++)
-        index == candidates.length - 1 ? 10 : -10,
-    ];
-  }
-}
-
-class _FailingCrossEncoderReranker implements ArticleCrossEncoderReranker {
-  @override
-  Future<List<double>> score(
-    String query,
-    List<CrossEncoderCandidate> candidates,
-  ) {
-    throw StateError('test inference failure');
   }
 }
 

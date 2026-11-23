@@ -1,28 +1,19 @@
-import 'dart:async';
-import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 
 import 'data/mock_law_match_results.dart';
 import 'models/law_match_result.dart';
-import 'services/gemma_article_selector.dart';
 import 'services/explanation_builder.dart';
 
 class _RetrievalSourcePanel extends StatelessWidget {
-  const _RetrievalSourcePanel({required this.gemmaEnabled});
-
-  final bool gemmaEnabled;
+  const _RetrievalSourcePanel();
 
   @override
   Widget build(BuildContext context) {
     const color = Color(0xFF5F6B85);
-    const title = 'On-device retrieval';
-    final body = gemmaEnabled
-        ? 'The baseline runs on this device. Gemma sends your concern and up '
-              'to 50 retrieved article texts to the local model server over '
-              'USB; no cloud AI service is used.'
-        : 'Article matching and explanations run on this device. Only Near '
-              'Legal Services and XAI follow-up may use the internet.';
+    const title = 'Offline retrieval (on-device)';
+    const body =
+        'Article matching and explanations run on this device. Only Near '
+        'Legal Services and XAI follow-up may use the internet.';
     return Semantics(
       container: true,
       label: '$title. $body',
@@ -80,9 +71,6 @@ class MatchResultsScreen extends StatefulWidget {
     this.retrievalWarning = 'Similarity is a retrieval signal, not a probability or legal conclusion.',
     this.onResultSelected,
     this.emptyMessage,
-    this.aiCandidates = const [],
-    this.onGemmaAssessment,
-    this.gemmaUnavailableReason,
   });
 
   /// Shown instead of the default text when there are no results.
@@ -94,9 +82,6 @@ class MatchResultsScreen extends StatefulWidget {
 
   /// Connect this callback to a Law Details route when that screen is ready.
   final ValueChanged<LawMatchResult>? onResultSelected;
-  final List<LawMatchResult> aiCandidates;
-  final Future<GemmaArticleAssessment> Function()? onGemmaAssessment;
-  final String? gemmaUnavailableReason;
 
   @override
   State<MatchResultsScreen> createState() => _MatchResultsScreenState();
@@ -108,15 +93,8 @@ class _MatchResultsScreenState extends State<MatchResultsScreen> {
   static const _muted = Color(0xFFA6A6A6);
 
   var _showAllResults = false;
-  var _showGemmaResults = false;
-  var _isAssessingWithGemma = false;
-  String? _gemmaError;
-  GemmaArticleAssessment? _gemmaAssessment;
 
   List<LawMatchResult> get _sortedResults {
-    if (_showGemmaResults) {
-      return _gemmaAssessment?.results ?? const [];
-    }
     // Stable: equal scores keep the retrieval order.
     final indexed = widget.results.indexed.toList()
       ..sort((a, b) {
@@ -142,60 +120,60 @@ class _MatchResultsScreenState extends State<MatchResultsScreen> {
                 .clamp(20.0, 24.0)
                 .toDouble();
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: _buildHeader(context),
-                ),
-                Expanded(
-                  child: ListView(
-                    key: const PageStorageKey<String>('match-results-scroll'),
-                    padding: EdgeInsets.fromLTRB(
-                      horizontalInset,
-                      18,
-                      horizontalInset,
-                      32,
-                    ),
-                    children: [
-                      _buildInformationBox(),
-                      if (displayedResults.isNotEmpty ||
-                          widget.onGemmaAssessment != null ||
-                          widget.gemmaUnavailableReason != null) ...[
-                        const SizedBox(height: 12),
-                        _RetrievalSourcePanel(
-                          gemmaEnabled: widget.onGemmaAssessment != null,
-                        ),
-                        if (widget.onGemmaAssessment != null ||
-                            widget.gemmaUnavailableReason != null) ...[
-                          const SizedBox(height: 10),
-                          _buildGemmaPanel(),
-                        ],
-                      ],
-                      const SizedBox(height: 24),
-                      _buildTabs(),
-                      const SizedBox(height: 16),
-                      if (displayedResults.isEmpty)
-                        _buildEmptyState()
-                      else
-                        for (
-                          var index = 0;
-                          index < displayedResults.length;
-                          index++
-                        ) ...[
-                          if (index > 0) const SizedBox(height: 14),
-                          _ResultCard(
-                            result: displayedResults[index],
-                            rank: index + 1,
-                            onTap: () =>
-                                _handleResultTap(displayedResults[index]),
-                          ),
-                        ],
-                    ],
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _buildHeader(context),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 18),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+                    child: _buildInformationBox(),
+                  ),
+                  if (displayedResults.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: horizontalInset,
+                      ),
+                      child: const _RetrievalSourcePanel(),
+                    ),
+                  ],
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: horizontalInset),
+                    child: _buildTabs(),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: horizontalInset,
+                      ),
+                      child: displayedResults.isEmpty
+                          ? _buildEmptyState()
+                          : ListView.separated(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              itemCount: displayedResults.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 14),
+                              itemBuilder: (context, index) {
+                                final result = displayedResults[index];
+                                return _ResultCard(
+                                  result: result,
+                                  rank: index + 1,
+                                  onTap: () => _handleResultTap(result),
+                                );
+                              },
+                            ),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -363,9 +341,7 @@ class _MatchResultsScreenState extends State<MatchResultsScreen> {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Text(
-          (_showGemmaResults && _gemmaAssessment != null
-                  ? _gemmaAssessment!.explanation
-                  : widget.emptyMessage) ??
+          widget.emptyMessage ??
               (widget.userConcern.trim().isEmpty
                   ? 'No matching results yet.'
                   : 'The retrieval service returned no matching articles.'),
@@ -378,175 +354,6 @@ class _MatchResultsScreenState extends State<MatchResultsScreen> {
         ),
       ),
     );
-  }
-
-  Widget _buildGemmaPanel() {
-    final assessment = _gemmaAssessment;
-    return Container(
-      key: const ValueKey('gemma-comparison-panel'),
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF8E8),
-        border: Border.all(color: const Color(0xFFE7D39E)),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Gemma 4 E4B — local experiment',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: _navy,
-            ),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'Optional AI selection from the top 50 retrieved articles. '
-            'The local CPU model can take several minutes.',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 11,
-              height: 1.35,
-              color: Color(0xFF4A5470),
-            ),
-          ),
-          if (widget.onGemmaAssessment == null &&
-              widget.gemmaUnavailableReason != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              widget.gemmaUnavailableReason!,
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 12,
-                height: 1.35,
-                color: Color(0xFF8A4B08),
-              ),
-            ),
-          ],
-          if (assessment == null) ...[
-            const SizedBox(height: 8),
-            FilledButton.tonalIcon(
-              key: const ValueKey('run-gemma-assessment'),
-              onPressed:
-                  _isAssessingWithGemma || widget.onGemmaAssessment == null
-                  ? null
-                  : () => unawaited(_runGemmaAssessment()),
-              icon: _isAssessingWithGemma
-                  ? const SizedBox.square(
-                      dimension: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.auto_awesome, size: 18),
-              label: Text(
-                _isAssessingWithGemma ? 'Gemma is assessing...' : 'Run Gemma',
-              ),
-            ),
-          ] else ...[
-            const SizedBox(height: 8),
-            SegmentedButton<bool>(
-              segments: const [
-                ButtonSegment<bool>(value: false, label: Text('Baseline')),
-                ButtonSegment<bool>(value: true, label: Text('Gemma')),
-              ],
-              selected: {_showGemmaResults},
-              onSelectionChanged: (selection) {
-                setState(() => _showGemmaResults = selection.single);
-              },
-            ),
-            const SizedBox(height: 8),
-            Text(
-              assessment.explanation,
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 12,
-                height: 1.35,
-                color: _navy,
-              ),
-            ),
-            if (assessment.rejectedIds > 0 ||
-                assessment.rejectedQuotes > 0) ...[
-              const SizedBox(height: 4),
-              Text(
-                'Ignored ${assessment.rejectedIds} invalid ID(s) and '
-                '${assessment.rejectedQuotes} unsupported quote(s).',
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 11,
-                  color: Color(0xFF8A4B08),
-                ),
-              ),
-            ],
-            const SizedBox(height: 4),
-            Text(
-              'Gemma inference: ${assessment.elapsed.inSeconds}s. '
-              'Not legal advice.',
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 10,
-                color: Color(0xFF5F6B85),
-              ),
-            ),
-          ],
-          if (_gemmaError != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              _gemmaError!,
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 11,
-                color: Color(0xFF9B1C1C),
-              ),
-            ),
-            TextButton(
-              onPressed: _isAssessingWithGemma
-                  ? null
-                  : () => unawaited(_runGemmaAssessment()),
-              child: const Text('Retry Gemma'),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Future<void> _runGemmaAssessment() async {
-    final assess = widget.onGemmaAssessment;
-    if (assess == null || _isAssessingWithGemma) return;
-    setState(() {
-      _isAssessingWithGemma = true;
-      _gemmaError = null;
-    });
-    try {
-      final assessment = await assess();
-      if (!mounted) return;
-      setState(() {
-        _gemmaAssessment = assessment;
-        _showGemmaResults = true;
-        _showAllResults = false;
-      });
-    } on GemmaArticleAssessmentException catch (error) {
-      if (mounted) setState(() => _gemmaError = error.message);
-    } catch (error, stackTrace) {
-      developer.log(
-        'Gemma article assessment failed (${error.runtimeType})',
-        name: 'catol.gemma',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      if (mounted) {
-        setState(
-          () => _gemmaError =
-              'Gemma assessment failed unexpectedly. The baseline results '
-              'are unchanged.',
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isAssessingWithGemma = false);
-    }
   }
 
   void _handleResultTap(LawMatchResult result) {
@@ -647,11 +454,7 @@ class _ResultCard extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _ScoreBadge(
-                            score: result.matchScore,
-                            rank: rank,
-                            gemmaRank: result.hasAiExplanation,
-                          ),
+                          _ScoreBadge(score: result.matchScore, rank: rank),
                           const Icon(
                             Icons.chevron_right_rounded,
                             color: Color(0xFF737373),
@@ -672,7 +475,6 @@ class _ResultCard extends StatelessWidget {
 
   Widget _buildRelevanceExplanation(LawMatchResult result) {
     final explanation = _contextualExplanation(result);
-    final quote = result.supportingQuote;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 9),
@@ -704,30 +506,12 @@ class _ResultCard extends StatelessWidget {
               color: _navy,
             ),
           ),
-          if (quote != null && quote.isNotEmpty) ...[
-            const SizedBox(height: 6),
-            Text(
-              'Supporting text: “$quote”',
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 10,
-                height: 1.35,
-                color: _navy,
-              ),
-            ),
-          ],
         ],
       ),
     );
   }
 
   String? _contextualExplanation(LawMatchResult result) {
-    // AI-selected articles must show Gemma's own explanation, not a
-    // pre-existing baseline explanation variant.
-    if (result.hasAiExplanation) {
-      final reason = result.contextualExplanation?.trim();
-      if (reason != null && reason.isNotEmpty) return stripEmphasis(reason);
-    }
     final variants = result.explanationVariants;
     if (variants != null && variants.isNotEmpty) {
       final preferred = result.defaultExplanationLanguage;
@@ -748,15 +532,10 @@ class _ResultCard extends StatelessWidget {
 }
 
 class _ScoreBadge extends StatelessWidget {
-  const _ScoreBadge({
-    required this.score,
-    required this.rank,
-    this.gemmaRank = false,
-  });
+  const _ScoreBadge({required this.score, required this.rank});
 
   final double score;
   final int rank;
-  final bool gemmaRank;
 
   @override
   Widget build(BuildContext context) {
@@ -768,34 +547,22 @@ class _ScoreBadge extends StatelessWidget {
     };
     final foreground = rank <= 2 ? Colors.white : const Color(0xFF3E86F8);
 
-    return Tooltip(
-      message: gemmaRank ? 'Gemma-selected rank' : 'Relevance score',
-      excludeFromSemantics: true,
-      child: Semantics(
-        container: true,
-        label: gemmaRank
-            ? 'Gemma-selected rank: $rank'
-            : 'Relevance score: ${score.round()}%',
-        child: ExcludeSemantics(
-          child: Container(
-            width: 44,
-            height: 19,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: background,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              gemmaRank ? 'AI #$rank' : '${score.round()}%',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                height: 1,
-                color: foreground,
-              ),
-            ),
-          ),
+    return Container(
+      width: 44,
+      height: 19,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        '${score.round()}%',
+        style: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          height: 1,
+          color: foreground,
         ),
       ),
     );

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:math' as math;
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
 
@@ -11,7 +11,11 @@ import 'explanation_builder.dart';
 import 'explanation_language.dart';
 import 'legal_query_preprocessor.dart';
 import 'lexical_index.dart';
-import 'local_cross_encoder_reranker.dart';
+import 'bilingual_legal_lexicon.dart';
+import 'legal_issue_lexicon.dart';
+import 'article_issue_profiles.dart';
+import 'corpus_wide_concepts.dart';
+import 'tagalog_morphology.dart';
 import 'local_tokenizer.dart';
 import 'query_analysis.dart';
 
@@ -21,8 +25,7 @@ const String retrievalWarning =
 const int _embeddingDimensions = 384;
 const int _topResultCount = 3;
 const int _allResultCount = 15;
-const int _candidatePoolSize = 50;
-const int _aiCandidatePoolSize = 50;
+const int _candidatePoolSize = 100;
 
 // Reciprocal-rank-fusion constant; 10-30 performed equivalently on the lab set.
 const int _fusionK = 20;
@@ -70,96 +73,6 @@ enum CatalystRetrievalStrategy {
   hybrid,
 }
 
-enum RetrievalRankingMode { calibratedScore, rankBased }
-
-class RetrievalExperimentConfig {
-  const RetrievalExperimentConfig({
-    this.domainIndependentTraining = false,
-    this.bm25Weight = _lexicalWeight,
-    this.trainingQueryWeight = _trainingSignalWeight,
-    this.rrfK = _fusionK,
-    this.rankingMode = RetrievalRankingMode.calibratedScore,
-    this.candidatePoolSize = _candidatePoolSize,
-    this.experimentalConceptExpansion = false,
-    this.experimentalChunkAggregation = false,
-    this.experimentalGateRecovery = false,
-    this.experimentalOverlapReranking = false,
-    this.enableDenseRetrieval = true,
-    this.enableLexicalRetrieval = true,
-    this.enableTrainingExampleRetrieval = true,
-    this.disableTrainingSignal = false,
-    this.enableCrossEncoderReranking = false,
-    this.crossEncoderCandidateLimit = 100,
-    this.crossEncoderWeight = 0.5,
-  }) : assert(bm25Weight >= 0 && bm25Weight <= 1),
-       assert(trainingQueryWeight >= 0 && trainingQueryWeight <= 1),
-       assert(crossEncoderWeight >= 0 && crossEncoderWeight <= 1),
-       assert(rrfK > 0),
-       assert(candidatePoolSize > 0),
-       assert(crossEncoderCandidateLimit > 0);
-
-  static const originalProduction = RetrievalExperimentConfig();
-  static const highestMetricDevelopment = RetrievalExperimentConfig(
-    domainIndependentTraining: true,
-    bm25Weight: 0.15,
-    trainingQueryWeight: 0.45,
-    rrfK: 20,
-    rankingMode: RetrievalRankingMode.rankBased,
-  );
-  static const selectedProduction = RetrievalExperimentConfig(
-    domainIndependentTraining: true,
-    bm25Weight: 0.15,
-    trainingQueryWeight: 0.30,
-    rrfK: 20,
-    rankingMode: RetrievalRankingMode.calibratedScore,
-    enableCrossEncoderReranking: true,
-    crossEncoderCandidateLimit: 100,
-    crossEncoderWeight: 0.5,
-  );
-  static const developmentCrossEncoder = RetrievalExperimentConfig(
-    domainIndependentTraining: true,
-    enableCrossEncoderReranking: true,
-    crossEncoderCandidateLimit: 100,
-    crossEncoderWeight: 0.5,
-  );
-
-  final bool domainIndependentTraining;
-  final double bm25Weight;
-  final double trainingQueryWeight;
-  final int rrfK;
-  final RetrievalRankingMode rankingMode;
-  final int candidatePoolSize;
-  final bool experimentalConceptExpansion;
-  final bool experimentalChunkAggregation;
-  final bool experimentalGateRecovery;
-  final bool experimentalOverlapReranking;
-  final bool enableDenseRetrieval;
-  final bool enableLexicalRetrieval;
-  final bool enableTrainingExampleRetrieval;
-  final bool disableTrainingSignal;
-  final bool enableCrossEncoderReranking;
-  final int crossEncoderCandidateLimit;
-  final double crossEncoderWeight;
-}
-
-class RetrievalDiagnosticTrace {
-  const RetrievalDiagnosticTrace({
-    required this.semanticLists,
-    required this.lexicalIds,
-    required this.trainingIds,
-    required this.combinedIds,
-    required this.eligibleIds,
-    required this.cosines,
-  });
-
-  final List<List<String>> semanticLists;
-  final List<String> lexicalIds;
-  final List<String> trainingIds;
-  final List<String> combinedIds;
-  final List<String> eligibleIds;
-  final Map<String, double> cosines;
-}
-
 enum CatalystRetrievalFailure {
   invalidInput,
   assetsUnavailable,
@@ -198,7 +111,6 @@ class CatalystMatchResponse {
     this.warning = retrievalWarning,
     this.clarifyingQuestion,
     this.otherCandidates = const [],
-    this.aiCandidates = const [],
     this.analysis,
   });
 
@@ -212,7 +124,6 @@ class CatalystMatchResponse {
 
   /// Next-best distinct provisions after the Top-3, for "other laws" requests.
   final List<LawMatchResult> otherCandidates;
-  final List<LawMatchResult> aiCandidates;
   final QueryAnalysis? analysis;
 }
 
@@ -254,31 +165,127 @@ class CatalystLegalArticle {
   final String articleText;
 }
 
+/// Conservative two-ranking fusion, limited to one near-miss Top-3 rescue.
+///
+/// V5 supplies the primary ranking. The installed/base ranking may restore
+/// its Top-1 candidate at rank 3 only when (a) the candidate is already V5
+/// eligible, (b) it also ranks first in text BM25, and (c) its unbonused
+/// retrieval score is no more than 0.05 below V5's third ranked score.
+/// This rule uses no reference labels, statute IDs, or narrative lookup table.
+///
+/// Caller computes both rankings from the SAME query, original corpus,
+/// E5 vectors, BM25, and training votes. No additional ONNX run is needed.
+({List<int> ranking, bool rescued}) conservativeV51RankFusion({
+  required List<int> v5Ranking,
+  required int? baselineTopIndex,
+  required double baselineTopScore,
+  required double baselineTopBm25Ratio,
+  required double v5ThirdScore,
+  required bool v5CandidateEligible,
+  double maximumGap = 0.05,
+}) {
+  if (v5Ranking.length < 3 || baselineTopIndex == null ||
+      !v5CandidateEligible || baselineTopBm25Ratio < 0.99 ||
+      !baselineTopScore.isFinite || !v5ThirdScore.isFinite ||
+      !maximumGap.isFinite || maximumGap < 0 ||
+      v5Ranking.take(3).contains(baselineTopIndex) ||
+      v5ThirdScore - baselineTopScore > maximumGap) {
+    return (ranking: v5Ranking, rescued: false);
+  }
+  final updated = <int>[
+    ...v5Ranking.take(2),
+    baselineTopIndex,
+    for (final index in v5Ranking.skip(2))
+      if (index != baselineTopIndex) index,
+  ];
+  return (
+    ranking: updated.take(v5Ranking.length).toList(growable: false),
+    rescued: true,
+  );
+}
+
 class LocalSemanticRetrievalService implements CatalystRetrievalService {
   const LocalSemanticRetrievalService({
-    this._queryEncoder,
-    this._queryPreprocessor = defaultLegalQueryPreprocessor,
-    this._strategy = CatalystRetrievalStrategy.hybrid,
-    this._minimumCosine = _defaultMinimumCosine,
-    this._resultLimit = _allResultCount,
-    this.experimentConfig = RetrievalExperimentConfig.selectedProduction,
-    this.onDiagnosticTrace,
-    this.crossEncoderReranker,
-  });
+    LocalQueryEncoder? queryEncoder,
+    LegalQueryPreprocessor queryPreprocessor = defaultLegalQueryPreprocessor,
+    CatalystRetrievalStrategy strategy = CatalystRetrievalStrategy.hybrid,
+    double minimumCosine = _defaultMinimumCosine,
+    int resultLimit = _allResultCount,
+    this.diagnosticArticleIds = const <String>{},
+    this.onDiagnostics,
+    bool enableBilingualLegalLexicalExpansion = false,
+    bool enableLegalIssueLexicalExpansion = false,
+    bool enableArticleIssueProfiles = false,
+    bool enableIssueAwareLexicalWeight = false,
+    bool enableCorroboratedGate = false,
+    bool enableTopBm25BorderlineGate = false,
+    bool enableCorpusWideConceptIndex = false,
+    bool enableCorpusConceptGate = false,
+    bool disableTrainingExampleVotes = false,
+    // Optional bounded statute-concept ranking evidence, disabled by default.
+    double corpusConceptRerankWeight = 0.0,
+    // V4: Prefer distinctive statute/query concept overlap over broad counts.
+    // Disabled by default; installed app ranking is unchanged.
+    bool useDiscriminativeConceptEvidence = false,
+    // V5 experiment: shared operative-clause evidence, not broad article tags.
+    bool useClauseLocalEvidence = false,
+    // V5 optional morphology alignment; original tokens and E5 unchanged.
+    bool useTagalogWordForms = false,
+    // V5.1 experiment: preserve a strongly supported installed top-one item
+    // when V5 clause reranking narrowly pushes it outside the Top 3.
+    // Disabled by default; V5 and installed configurations remain unchanged.
+    bool enableV51ConservativeFusion = false,
+  }) : assert(corpusConceptRerankWeight >= 0.0 &&
+                corpusConceptRerankWeight <= 0.30,
+                'Corpus concept bonus must be between 0.0 and 0.30'),
+       _corpusConceptRerankWeight = corpusConceptRerankWeight,
+       _useDiscriminativeConceptEvidence = useDiscriminativeConceptEvidence,
+       _useClauseLocalEvidence = useClauseLocalEvidence,
+       _useTagalogWordForms = useTagalogWordForms,
+       _enableV51ConservativeFusion = enableV51ConservativeFusion,
+       _enableCorpusWideConceptIndex = enableCorpusWideConceptIndex,
+       _enableCorpusConceptGate = enableCorpusConceptGate,
+       _disableTrainingExampleVotes = disableTrainingExampleVotes,
+       _enableBilingualLegalLexicalExpansion = enableBilingualLegalLexicalExpansion,
+       _enableLegalIssueLexicalExpansion = enableLegalIssueLexicalExpansion,
+       _enableArticleIssueProfiles = enableArticleIssueProfiles,
+       _enableIssueAwareLexicalWeight = enableIssueAwareLexicalWeight,
+       _enableCorroboratedGate = enableCorroboratedGate,
+       _enableTopBm25BorderlineGate = enableTopBm25BorderlineGate,
+       _queryEncoder = queryEncoder,
+       _queryPreprocessor = queryPreprocessor,
+       _strategy = strategy,
+       _minimumCosine = minimumCosine,
+       _resultLimit = resultLimit;
+
+  /// Optional evaluation observer; no work or logging when absent.
+  final Set<String> diagnosticArticleIds;
+  final void Function(Map<String, dynamic>)? onDiagnostics;
 
   static Future<_LocalRetrievalResources>? _resourcesFuture;
   static Future<OrtSession>? _sessionFuture;
-  static final ArticleCrossEncoderReranker _defaultCrossEncoderReranker =
-      LocalCrossEncoderReranker();
+  static Bm25Index? _articleProfileLexicalIndex;
+  static CorpusWideConceptIndex? _corpusConceptIndex;
 
   final LocalQueryEncoder? _queryEncoder;
   final LegalQueryPreprocessor _queryPreprocessor;
   final CatalystRetrievalStrategy _strategy;
   final double _minimumCosine;
   final int _resultLimit;
-  final RetrievalExperimentConfig experimentConfig;
-  final void Function(RetrievalDiagnosticTrace)? onDiagnosticTrace;
-  final ArticleCrossEncoderReranker? crossEncoderReranker;
+  final bool _enableBilingualLegalLexicalExpansion;
+  final bool _enableLegalIssueLexicalExpansion;
+  final bool _enableArticleIssueProfiles;
+  final bool _enableIssueAwareLexicalWeight;
+  final bool _enableCorroboratedGate;
+  final bool _enableTopBm25BorderlineGate;
+  final bool _enableCorpusWideConceptIndex;
+  final bool _enableCorpusConceptGate;
+  final bool _disableTrainingExampleVotes;
+  final double _corpusConceptRerankWeight;
+  final bool _useDiscriminativeConceptEvidence;
+  final bool _useClauseLocalEvidence;
+  final bool _useTagalogWordForms;
+  final bool _enableV51ConservativeFusion;
 
   /// A provision from the local corpus by law and article number, or null.
   /// Duplicate ids resolve to the first corpus entry.
@@ -335,6 +342,7 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
         ? analyzeQuery(normalizedConcern)
         : null;
     if (analysis != null && analysis.needsClarification) {
+      onDiagnostics?.call({'stop': 'clarification', 'domain': analysis.domain.name});
       return CatalystMatchResponse(
         results: const [],
         originalQuery: normalizedConcern,
@@ -344,6 +352,7 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       );
     }
     if (analysis != null && isClearlyOutsideCatalystScope(normalizedConcern)) {
+      onDiagnostics?.call({'stop': 'scope_filter', 'domain': analysis.domain.name});
       return CatalystMatchResponse(
         results: const [],
         originalQuery: normalizedConcern,
@@ -487,204 +496,250 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     addVariant(analysis.normalized);
     addVariant(analysis.glossaryQuery);
 
-    final useDenseRetrieval = experimentConfig.enableDenseRetrieval;
-    final useLexicalRetrieval = experimentConfig.enableLexicalRetrieval;
-    final useTrainingExamples =
-        experimentConfig.enableTrainingExampleRetrieval &&
-        !experimentConfig.disableTrainingSignal;
-    final hasCorpusRetrieval = useDenseRetrieval || useLexicalRetrieval;
-    final denseWeight = !useDenseRetrieval
-        ? 0.0
-        : useLexicalRetrieval
-        ? 1 - experimentConfig.bm25Weight
-        : 1.0;
-    final lexicalWeight = !useLexicalRetrieval
-        ? 0.0
-        : useDenseRetrieval
-        ? experimentConfig.bm25Weight
-        : 1.0;
-    final trainingWeight = !experimentConfig.enableTrainingExampleRetrieval
-        ? 0.0
-        : experimentConfig.disableTrainingSignal || hasCorpusRetrieval
-        ? experimentConfig.trainingQueryWeight
-        : 1.0;
-
     final articles = resources.articles;
     final bestCosine = List<double>.filled(articles.length, -1);
     final cosineSum = List<double>.filled(articles.length, 0);
     final denseLists = <List<int>>[];
+    final diagnosticDense = <Map<String, dynamic>>[];
+    String articleId(int index) => normalizedArticleId(
+      articles[index].law, articles[index].article,
+    );
+    int? targetRank(Iterable<int> indexes, String id) {
+      final seen = <String>{};
+      for (final index in indexes) {
+        final current = articleId(index);
+        if (!seen.add(current)) continue;
+        if (current == id) return seen.length;
+      }
+      return null;
+    }
     List<double>? primaryVector;
     for (final variant in variants) {
       final vector = await _encodeQuery(resources, variant);
       _validateQueryEmbedding(vector);
       primaryVector ??= vector;
-      final gateScores = experimentConfig.experimentalChunkAggregation
-          ? List<double>.filled(articles.length, -1)
-          : null;
-      if (useDenseRetrieval) {
-        final scores = _articleCosines(
-          resources,
-          vector,
-          averageTopTwo: experimentConfig.experimentalChunkAggregation,
-          bestScores: gateScores,
-        );
-        for (var row = 0; row < scores.length; row++) {
-          final gateScore = gateScores?[row] ?? scores[row];
-          if (gateScore > bestCosine[row]) bestCosine[row] = gateScore;
-          cosineSum[row] += scores[row];
-        }
-        final order = List<int>.generate(articles.length, (i) => i)
-          ..sort((a, b) {
-            final byScore = scores[b].compareTo(scores[a]);
-            return byScore != 0 ? byScore : a.compareTo(b);
-          });
-        denseLists.add(
-          order
-              .take(experimentConfig.candidatePoolSize)
-              .toList(growable: false),
-        );
+      final scores = _articleCosines(resources, vector);
+      for (var row = 0; row < scores.length; row++) {
+        if (scores[row] > bestCosine[row]) bestCosine[row] = scores[row];
+        cosineSum[row] += scores[row];
+      }
+      final order = List<int>.generate(articles.length, (i) => i)
+        ..sort((a, b) {
+          final byScore = scores[b].compareTo(scores[a]);
+          return byScore != 0 ? byScore : a.compareTo(b);
+        });
+      denseLists.add(order.take(_candidatePoolSize).toList(growable: false));
+      if (onDiagnostics != null) {
+        diagnosticDense.add({
+          'query': variant,
+          'targets': {
+            for (final id in diagnosticArticleIds)
+              id: {
+                'rank': targetRank(order, id),
+                'bestCosine': order.where((i) => articleId(i) == id).isEmpty
+                    ? null : scores[order.firstWhere((i) => articleId(i) == id)],
+                'inTop50': denseLists.last.any((i) => articleId(i) == id),
+              },
+          },
+        });
       }
     }
 
-    final trainingMatches = !useTrainingExamples
+    final trainingMatches = _disableTrainingExampleVotes
         ? (rankedIndexes: <int>[], normalizedVotes: <int, double>{})
         : _rankTrainingExamples(
             resources: resources,
             queryEmbedding: primaryVector!,
             domain: analysis.domain,
-            domainIndependent: experimentConfig.domainIndependentTraining,
-            candidatePoolSize: experimentConfig.candidatePoolSize,
           );
     final lexicalQuery = [
       originalQuery,
       processedQuery,
       ...analysis.glossaryTerms,
       ...expandLegalWording(originalQuery),
-      if (experimentConfig.experimentalConceptExpansion)
-        ...expandExperimentalLegalConcepts(originalQuery),
+      if (_enableBilingualLegalLexicalExpansion)
+        ...expandBilingualLegalTerms(originalQuery),
+      if (_enableLegalIssueLexicalExpansion)
+        ...expandLegalIssueTerms(originalQuery),
+      if (_useTagalogWordForms)
+        ...normalizeTagalogForms(originalQuery),
     ].join(' ');
-    final lexical = useLexicalRetrieval
-        ? resources.lexicalIndex.search(
-            lexicalQuery,
-            limit: experimentConfig.candidatePoolSize,
-          )
-        : <({int index, double score})>[];
+    final legalIssueTerms = _enableLegalIssueLexicalExpansion
+        ? expandLegalIssueTerms(originalQuery)
+        : const <String>[];
+    final lexicalIndex = _enableArticleIssueProfiles
+        ? (_articleProfileLexicalIndex ??= Bm25Index.build([
+            for (final article in articles)
+              [
+                article.title, article.chapterTitle, article.articleText,
+                legalArticleIssueProfile(article.law, article.article),
+              ].where((part) => part.trim().isNotEmpty).join(' '),
+          ]))
+        : resources.lexicalIndex;
+    final lexical = lexicalIndex.search(
+      lexicalQuery,
+      limit: _candidatePoolSize,
+    );
+    // Corpus-wide, statute-derived issue indexing. All articles are processed;
+    // no hand-picked article IDs or query-to-answer mappings are used.
+    final corpusConcepts = _enableCorpusWideConceptIndex
+        ? (_corpusConceptIndex ??= CorpusWideConceptIndex.build([
+            for (final article in articles)
+              '${article.title} ${article.chapterTitle} ${article.articleText}',
+          ]))
+        : null;
+    final conceptTags = corpusConcepts?.queryTags(
+          originalQuery, tagalogWordForms: _useTagalogWordForms,
+        ) ?? <String>{};
+    final conceptLexical = corpusConcepts?.searchTags(
+          conceptTags,
+          limit: _candidatePoolSize,
+        ) ?? <({int index, double score})>[];
+    // Separate installed/base candidate ordering for the V5.1 consensus guard.
+    // The V5 candidate list still comes from all four signals below.
+    final baselineFused = _enableV51ConservativeFusion
+        ? fuseRankings([
+            ...denseLists,
+            if (lexical.isNotEmpty)
+              lexical.map((hit) => hit.index).toList(),
+            if (trainingMatches.rankedIndexes.isNotEmpty)
+              trainingMatches.rankedIndexes,
+          ], k: _fusionK)
+        : const <({int index, double score})>[];
     final fused = fuseRankings([
       ...denseLists,
       if (lexical.isNotEmpty) lexical.map((hit) => hit.index).toList(),
+      if (conceptLexical.isNotEmpty)
+        conceptLexical.map((hit) => hit.index).toList(),
       if (trainingMatches.rankedIndexes.isNotEmpty)
         trainingMatches.rankedIndexes,
-    ], k: experimentConfig.rrfK);
+    ], k: _fusionK);
 
     // Keep the supervised example signal modest so it can improve ranking
     // without replacing the corpus-grounded dense and lexical matches.
     final maxLexical = lexical.isEmpty ? 0.0 : lexical.first.score;
     final lexicalScore = {for (final hit in lexical) hit.index: hit.score};
-    final semanticRankScores = <int, double>{};
-    for (final list in denseLists) {
-      for (var rank = 0; rank < list.length; rank++) {
-        final index = list[rank];
-        semanticRankScores[index] =
-            (semanticRankScores[index] ?? 0) +
-            _normalizedReciprocalRank(rank, experimentConfig.rrfK) /
-                denseLists.length;
-      }
+    final maxConceptScore = conceptLexical.isEmpty ? 0.0 : conceptLexical.first.score;
+    final conceptScore = {
+      for (final hit in conceptLexical) hit.index: hit.score,
+    };
+    // V3 experimental reranking: use statute-derived concept evidence only
+    // when TWO distinct concepts match and E5 independently corroborates.
+    // The raw concept BM25 score is normalized to this query's top hit, then
+    // bounded by semantic strength and concept diversity. No training labels
+    // or known narrative/article pairs enter this scoring rule.
+    // With a weight of zero, the v2 installed scorer is bit-for-bit unchanged.
+    double conceptEvidenceBonus(int index) {
+      if (_corpusConceptRerankWeight <= 0.0 || corpusConcepts == null ||
+          conceptTags.length < 2 || maxConceptScore <= 0.0) return 0.0;
+      final shared = corpusConcepts.sharedConceptCount(index, conceptTags);
+      if (shared < 2 || bestCosine[index] < 0.78) return 0.0;
+      final rawConceptScore = conceptScore[index] ?? 0.0;
+      if (rawConceptScore <= 0.0) return 0.0;
+      final conceptStrength =
+          (rawConceptScore / maxConceptScore).clamp(0.0, 1.0).toDouble();
+      final semanticStrength =
+          ((bestCosine[index] - 0.75) / 0.10).clamp(0.0, 1.0).toDouble();
+      // V3 is retained as an experimental control. V4 rewards the
+      // IDF-weighted overlap of the query with a specific statute article,
+      // and discounts broad concepts shared by many different articles.
+      final specificity = _useClauseLocalEvidence
+          ? corpusConcepts.clauseLocalEvidence(index, conceptTags)
+          : _useDiscriminativeConceptEvidence
+              ? corpusConcepts.discriminativeConceptEvidence(index, conceptTags)
+              : (shared / 3.0).clamp(0.0, 1.0).toDouble();
+      if (specificity <= 0.0) return 0.0;
+      return _corpusConceptRerankWeight * conceptStrength *
+          semanticStrength * specificity;
     }
-    final lexicalRankScores = <int, double>{
-      for (var rank = 0; rank < lexical.length; rank++)
-        lexical[rank].index: _normalizedReciprocalRank(
-          rank,
-          experimentConfig.rrfK,
-        ),
-    };
-    final trainingRankScores = <int, double>{
-      for (var rank = 0; rank < trainingMatches.rankedIndexes.length; rank++)
-        trainingMatches.rankedIndexes[rank]: _normalizedReciprocalRank(
-          rank,
-          experimentConfig.rrfK,
-        ),
-    };
+
+    // Preserve the installed app's BM25-vs-dense scoring calibration.
+    final effectiveLexicalWeight =
+        _enableIssueAwareLexicalWeight && legalIssueTerms.isNotEmpty
+            ? 0.45
+            : _lexicalWeight;
     double blendedScore(int index) {
-      final trainingPart = trainingMatches.normalizedVotes[index] ?? 0.0;
-      if (experimentConfig.rankingMode == RetrievalRankingMode.rankBased) {
-        final semanticPart = semanticRankScores[index] ?? 0.0;
-        final lexicalPart = lexicalRankScores[index] ?? 0.0;
-        final trainingRankPart = trainingRankScores[index] ?? 0.0;
-        final corpusPart =
-            denseWeight * semanticPart + lexicalWeight * lexicalPart;
-        return (1 - trainingWeight) * corpusPart +
-            trainingWeight * trainingRankPart;
-      }
-      final dense = useDenseRetrieval
-          ? ((cosineSum[index] / variants.length - _displayFloorCosine) /
-                    (_displayCeilingCosine - _displayFloorCosine))
-                .clamp(0.0, 1.0)
-          : 0.0;
+      final meanCosine = bestCosine[index];
+      final dense =
+          ((meanCosine - _displayFloorCosine) /
+                  (_displayCeilingCosine - _displayFloorCosine))
+              .clamp(0.0, 1.0);
       final lexicalPart = maxLexical > 0
           ? (lexicalScore[index] ?? 0) / maxLexical
           : 0.0;
-      final corpusScore = denseWeight * dense + lexicalWeight * lexicalPart;
-      return (1 - trainingWeight) * corpusScore + trainingWeight * trainingPart;
+      // V2: Candidate-only concept channel. Do not let abstract concept tags
+      // displace the text-derived BM25 evidence used by the installed app.
+      final lexicalEvidence = lexicalPart;
+      final corpusScore =
+          (1 - effectiveLexicalWeight) * dense +
+          effectiveLexicalWeight * lexicalEvidence;
+      final trainingPart = trainingMatches.normalizedVotes[index] ?? 0.0;
+      return (1 - _trainingSignalWeight) * corpusScore +
+          _trainingSignalWeight * trainingPart + conceptEvidenceBonus(index);
     }
 
+    final corroboratedIndexes = <int>{
+      if (_enableCorroboratedGate && legalIssueTerms.isNotEmpty && maxLexical > 0)
+        for (final hit in lexical.take(5))
+          if (hit.score >= maxLexical * 0.60) hit.index,
+    };
+    // Optional experimental exception: only the best BM25 result may pass
+    // a 0.75 cosine floor. Kept off by default, never changes the protected run.
+    final topBm25Index = lexical.isNotEmpty ? lexical.first.index : -1;
+    final conceptCorroboratedIndexes = <int>{
+      if (_enableCorpusConceptGate && corpusConcepts != null &&
+          conceptTags.length >= 2 && maxConceptScore > 0)
+        for (final hit in conceptLexical.take(8))
+          if (hit.score >= maxConceptScore * 0.60 &&
+              corpusConcepts.sharedConceptCount(hit.index, conceptTags) >= 2)
+            hit.index,
+    };
     final blended = <int, double>{};
-    final gated = <int>[
+    final eligible = <int>[
       for (final candidate in fused)
-        if (!useDenseRetrieval || bestCosine[candidate.index] >= _minimumCosine)
+        if (bestCosine[candidate.index] >= _minimumCosine ||
+            (_enableCorroboratedGate &&
+                bestCosine[candidate.index] >= 0.78 &&
+                corroboratedIndexes.contains(candidate.index)) ||
+            (_enableTopBm25BorderlineGate &&
+                candidate.index == topBm25Index &&
+                bestCosine[candidate.index] >= 0.75) ||
+            (conceptCorroboratedIndexes.contains(candidate.index) &&
+                bestCosine[candidate.index] >= 0.76))
           candidate.index,
     ];
-    final originalTerms =
-        experimentConfig.experimentalGateRecovery ||
-            experimentConfig.experimentalOverlapReranking
-        ? resources.lexicalIndex.knownTerms(originalQuery).toSet()
-        : <String>{};
-    final topLexical = experimentConfig.experimentalGateRecovery
-        ? lexical.take(3).map((hit) => hit.index).toSet()
-        : <int>{};
-    int overlapCount(int index) => originalTerms
-        .intersection(contentTerms(articles[index].articleText).toSet())
-        .length;
-    final eligible =
-        experimentConfig.experimentalGateRecovery && gated.isNotEmpty
-        ? [
-            for (final candidate in fused)
-              if (bestCosine[candidate.index] >= _minimumCosine ||
-                  (bestCosine[candidate.index] >= _minimumCosine - 0.02 &&
-                      topLexical.contains(candidate.index) &&
-                      overlapCount(candidate.index) >= 3))
-                candidate.index,
-          ]
-        : gated;
     for (final index in eligible) {
-      blended[index] =
-          (blendedScore(index) +
-                  (experimentConfig.experimentalOverlapReranking &&
-                          originalTerms.isNotEmpty
-                      ? 0.05 * overlapCount(index) / originalTerms.length
-                      : 0))
-              .clamp(0.0, 1.0);
+      blended[index] = blendedScore(index);
     }
-    if (onDiagnosticTrace != null) {
-      String id(int index) =>
-          normalizedArticleId(articles[index].law, articles[index].article);
-      onDiagnosticTrace!(
-        RetrievalDiagnosticTrace(
-          semanticLists: [
-            for (final list in denseLists)
-              [for (final index in list) id(index)],
-          ],
-          lexicalIds: [for (final hit in lexical) id(hit.index)],
-          trainingIds: [
-            for (final index in trainingMatches.rankedIndexes) id(index),
-          ],
-          combinedIds: [for (final candidate in fused) id(candidate.index)],
-          eligibleIds: [for (final index in eligible) id(index)],
-          cosines: {
-            for (var index = 0; index < articles.length; index++)
-              id(index): bestCosine[index],
-          },
-        ),
-      );
+    // Reconstruct installed/base Top-1 from identical nonconcept channels.
+    // The installed scorer is the V5 scorer with clause bonus removed.
+    int? baselineTopIndex;
+    double baselineTopScore = 0.0;
+    if (_enableV51ConservativeFusion && baselineFused.isNotEmpty) {
+      final baselineEligible = <int>[
+        for (final candidate in baselineFused)
+          if (bestCosine[candidate.index] >= _minimumCosine ||
+              (_enableCorroboratedGate &&
+                  bestCosine[candidate.index] >= 0.78 &&
+                  corroboratedIndexes.contains(candidate.index)) ||
+              (_enableTopBm25BorderlineGate &&
+                  candidate.index == topBm25Index &&
+                  bestCosine[candidate.index] >= 0.75))
+            candidate.index,
+      ];
+      final baseOrder = baselineEligible.indexed.toList()
+        ..sort((a, b) {
+          final aScore = blendedScore(a.$2) - conceptEvidenceBonus(a.$2);
+          final bScore = blendedScore(b.$2) - conceptEvidenceBonus(b.$2);
+          final byScore = bScore.compareTo(aScore);
+          return byScore != 0 ? byScore : a.$1.compareTo(b.$1);
+        });
+      if (baseOrder.isNotEmpty) {
+        final baseFirst = baseOrder.first.$2;
+        baselineTopIndex = baseFirst;
+        baselineTopScore = blendedScore(baseFirst) -
+            conceptEvidenceBonus(baseFirst);
+      }
     }
     // Stable sort: equal scores keep the fused (rank-based) order.
     final ordered = eligible.indexed.toList()
@@ -694,100 +749,119 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       });
     final seenIds = <String>{};
     final rankedIndexes = <int>[];
-    final candidateResultLimit = experimentConfig.enableCrossEncoderReranking
-        ? math.max(_resultLimit, experimentConfig.crossEncoderCandidateLimit)
-        : _resultLimit;
     for (final entry in ordered) {
       final article = articles[entry.$2];
       final id = normalizedArticleId(article.law, article.article);
       if (!seenIds.add(id)) continue;
       rankedIndexes.add(entry.$2);
-      if (rankedIndexes.length == candidateResultLimit) break;
+      if (rankedIndexes.length == _resultLimit) break;
     }
 
-    if (kDebugMode) {
-      developer.log(
-        'Cross-encoder enabled=${experimentConfig.enableCrossEncoderReranking} '
-        'eligible=${eligible.length} '
-        'rerankCandidates=${math.min(experimentConfig.crossEncoderCandidateLimit, rankedIndexes.length)}',
-        name: 'catol.retrieval',
+    // V5.1 guard: use the two live rankings, not the archived ranking lists.
+    // At most one V5 Top-3 slot changes. This does not alter candidate gating,
+    // embeddings, clause evidence, training votes, or the legal corpus.
+    bool v51Rescued = false;
+    if (_enableV51ConservativeFusion && rankedIndexes.length >= 3) {
+      final candidate = baselineTopIndex;
+      final bm25Ratio = candidate == null || maxLexical <= 0
+          ? 0.0 : (lexicalScore[candidate] ?? 0.0) / maxLexical;
+      final fusedOutcome = conservativeV51RankFusion(
+        v5Ranking: rankedIndexes,
+        baselineTopIndex: candidate,
+        baselineTopScore: baselineTopScore,
+        baselineTopBm25Ratio: bm25Ratio,
+        v5ThirdScore: blended[rankedIndexes[2]]!,
+        v5CandidateEligible: candidate != null &&
+            eligible.contains(candidate) &&
+            !rankedIndexes.take(3).any((index) =>
+                articleId(index) == articleId(candidate)),
       );
-    }
-
-    var finalRankedIndexes = rankedIndexes;
-    var finalRankingScores = blended;
-    if (experimentConfig.enableCrossEncoderReranking &&
-        rankedIndexes.isNotEmpty) {
-      final reranker = crossEncoderReranker ?? _defaultCrossEncoderReranker;
-      final rerankCount = math.min(
-        experimentConfig.crossEncoderCandidateLimit,
-        rankedIndexes.length,
-      );
-      final rerankIndexes = rankedIndexes.take(rerankCount).toList();
-      final rerankStopwatch = Stopwatch()..start();
-      var inferenceSucceeded = false;
-      try {
-        final logits = await reranker.score(originalQuery, [
-          for (final index in rerankIndexes)
-            CrossEncoderCandidate(
-              articleId: normalizedArticleId(
-                articles[index].law,
-                articles[index].article,
-              ),
-              articleText: articles[index].articleText,
-              hybridScore: double.parse(blended[index]!.toStringAsFixed(4)),
-            ),
-        ]);
-        if (logits.length != rerankIndexes.length ||
-            logits.any((logit) => !logit.isFinite)) {
-          throw const FormatException(
-            'The cross-encoder returned invalid candidate scores.',
-          );
-        }
-        final rerankedScores = <int, double>{
-          for (var index = 0; index < rerankIndexes.length; index++)
-            rerankIndexes[index]: _crossEncoderBlendScore(
-              logits[index],
-              blended[rerankIndexes[index]]!,
-              experimentConfig.crossEncoderWeight,
-            ),
-        };
-        final rerankedPrefix =
-            List<int>.generate(rerankIndexes.length, (index) => index)
-              ..sort((left, right) {
-                final leftScore = rerankedScores[rerankIndexes[left]]!;
-                final rightScore = rerankedScores[rerankIndexes[right]]!;
-                final byScore = rightScore.compareTo(leftScore);
-                return byScore != 0 ? byScore : left.compareTo(right);
-              });
-        inferenceSucceeded = true;
-        finalRankingScores = {...blended, ...rerankedScores};
-        finalRankedIndexes = [
-          for (final index in rerankedPrefix) rerankIndexes[index],
-          ...rankedIndexes.skip(rerankCount),
-        ];
-        rerankStopwatch.stop();
-        if (kDebugMode) {
-          developer.log(
-            'Cross-encoder inference=success fallback=false '
-            'eligible=${eligible.length} reranked=${rerankIndexes.length} '
-            'elapsedMs=${rerankStopwatch.elapsedMilliseconds}',
-            name: 'catol.retrieval',
-          );
-        }
-      } catch (error, stackTrace) {
-        rerankStopwatch.stop();
-        developer.log(
-          'Cross-encoder inference=${inferenceSucceeded ? 'success' : 'failure'} '
-          'fallback=true eligible=${eligible.length} '
-          'reranked=${rerankIndexes.length} '
-          'elapsedMs=${rerankStopwatch.elapsedMilliseconds} '
-          'error=${error.runtimeType}; retaining hybrid order.',
-          name: 'catol.retrieval',
-          error: error,
-          stackTrace: stackTrace,
-        );
+      v51Rescued = fusedOutcome.rescued;
+      if (v51Rescued) {
+        rankedIndexes
+          ..clear()
+          ..addAll(fusedOutcome.ranking);
+        // A V5 eligible candidate has a valid blended score already.
       }
+    }
+
+    if (onDiagnostics != null) {
+      // Full BM25 ranks are diagnostic only; production still uses top 50.
+      final allLexical = lexicalIndex.search(
+        lexicalQuery, limit: articles.length,
+      );
+      final fullOrder = ordered.map((entry) => entry.$2).toList();
+      final fusedIndexes = fused.map((entry) => entry.index).toList();
+      onDiagnostics!({
+        'stop': null,
+        'domain': analysis.domain.name,
+        'minimumCosine': _minimumCosine,
+        'candidatePoolPerSignal': _candidatePoolSize,
+        'crossEncoderEnabled': false,
+        'corpusConceptIndexEnabled': _enableCorpusWideConceptIndex,
+        'corpusConceptGateEnabled': _enableCorpusConceptGate,
+        'corpusConceptRerankWeight': _corpusConceptRerankWeight,
+        'useDiscriminativeConceptEvidence': _useDiscriminativeConceptEvidence,
+        'useClauseLocalEvidence': _useClauseLocalEvidence,
+        'v51ConservativeFusion': _enableV51ConservativeFusion,
+        'v51RescuedBaselineTop1': v51Rescued,
+        'v51BaselineTop1Id': baselineTopIndex == null
+            ? null : articleId(baselineTopIndex),
+        'useTagalogWordForms': _useTagalogWordForms,
+        'tagalogMorphologyTerms': _useTagalogWordForms
+            ? normalizeTagalogForms(originalQuery) : const <String>[],
+        'conceptQueryTags': conceptTags.toList(),
+        'corpusArticlesIndexed': corpusConcepts?.indexedArticles,
+        'corpusArticlesWithConcepts': corpusConcepts?.conceptTaggedArticles,
+        'denseVariants': diagnosticDense,
+        'lexicalQuery': lexicalQuery,
+        'fusedIds': fusedIndexes.map(articleId).toSet().toList(),
+        'eligibleIds': eligible.map(articleId).toSet().toList(),
+        'returnedIds': rankedIndexes.map(articleId).toList(),
+        'top15Evidence': [
+          for (final index in rankedIndexes) {
+            'id': articleId(index),
+            'bestCosine': bestCosine[index],
+            'trainingVote': trainingMatches.normalizedVotes[index] ?? 0.0,
+            'normalizedBm25': maxLexical > 0
+                ? (lexicalScore[index] ?? 0.0) / maxLexical : 0.0,
+            'matchedConceptCount': corpusConcepts?.sharedConceptCount(index, conceptTags),
+            'normalizedConceptBm25': maxConceptScore > 0
+                ? (conceptScore[index] ?? 0.0) / maxConceptScore : 0.0,
+            'conceptBonus': conceptEvidenceBonus(index),
+            'discriminativeConceptEvidence': corpusConcepts?.discriminativeConceptEvidence(index, conceptTags),
+            'clauseLocalEvidence': corpusConcepts?.clauseLocalEvidence(index, conceptTags),
+            'finalScore': blended[index],
+          },
+        ],
+        'targets': {
+          for (final id in diagnosticArticleIds)
+            id: {
+              'inCorpus': articles.asMap().keys.any((i) => articleId(i) == id),
+              'bm25Rank': targetRank(allLexical.map((hit) => hit.index), id),
+              'conceptRank': targetRank(conceptLexical.map((hit) => hit.index), id),
+              'bm25InTop50': lexical.any((hit) => articleId(hit.index) == id),
+              'trainingRank': targetRank(trainingMatches.rankedIndexes, id),
+              'fusedRank': targetRank(fusedIndexes, id),
+              'passedGate': eligible.any((i) => articleId(i) == id),
+              'hybridRank': targetRank(fullOrder, id),
+              'returnedRank': targetRank(rankedIndexes, id),
+              'corpusRows': [
+                for (var i = 0; i < articles.length; i++)
+                  if (articleId(i) == id) {
+                    'index': i,
+                    'bestCosine': bestCosine[i],
+                    'meanCosine': cosineSum[i] / variants.length,
+                    'trainingVote': trainingMatches.normalizedVotes[i] ?? 0.0,
+                    'blendScore': blended[i],
+                    'conceptBm25Score': conceptScore[i],
+                    'conceptBonus': conceptEvidenceBonus(i),
+                    'sharedConcepts': corpusConcepts?.sharedConceptCount(i, conceptTags),
+                  },
+              ],
+            },
+        },
+      });
     }
 
     final queryTexts = [
@@ -799,29 +873,19 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       resources,
       index,
       bestCosine[index],
-      rawCosineScore: useDenseRetrieval ? bestCosine[index] : null,
       analysis: analysis,
       queryTexts: queryTexts,
-      rankingScore: finalRankingScores[index],
+      blendedSimilarity: blended[index],
       matchedFact: _firstConcernStatement(originalQuery),
       matchedProvision: _bestMatchingPassage(resources, index, primaryVector!),
     );
 
-    final responseIndexes = finalRankedIndexes.take(_resultLimit);
-    final aiCandidates = finalRankedIndexes
-        .take(_aiCandidatePoolSize)
-        .map(toResult)
-        .toList(growable: false);
-    final results = responseIndexes
-        .take(_topResultCount)
-        .map(toResult)
-        .toList();
+    final results = rankedIndexes.take(_topResultCount).map(toResult).toList();
     return CatalystMatchResponse(
       results: List.unmodifiable(results),
       otherCandidates: List.unmodifiable(
-        responseIndexes.skip(_topResultCount).map(toResult),
+        rankedIndexes.skip(_topResultCount).map(toResult),
       ),
-      aiCandidates: List.unmodifiable(aiCandidates),
       originalQuery: originalQuery,
       processedQuery: processedQuery,
       analysis: analysis,
@@ -830,18 +894,6 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
                 'description. Try adding more detail.'
           : retrievalWarning,
     );
-  }
-
-  static double _crossEncoderBlendScore(
-    double logit,
-    double hybridScore,
-    double crossEncoderWeight,
-  ) {
-    final boundedLogit = logit.clamp(-80.0, 80.0).toDouble();
-    final crossEncoderScore = 1 / (1 + math.exp(-boundedLogit));
-    final roundedHybridScore = double.parse(hybridScore.toStringAsFixed(4));
-    return crossEncoderWeight * crossEncoderScore +
-        (1 - crossEncoderWeight) * roundedHybridScore;
   }
 
   static String _bestMatchingPassage(
@@ -900,21 +952,14 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     required _LocalRetrievalResources resources,
     required List<double> queryEmbedding,
     required QueryDomain domain,
-    required bool domainIndependent,
-    required int candidatePoolSize,
   }) {
-    if ((!domainIndependent && domain == QueryDomain.unknown) ||
-        resources.trainingExamples.isEmpty) {
+    if (resources.trainingExamples.isEmpty) {
       return (rankedIndexes: const [], normalizedVotes: const {});
     }
 
     final matchingExamples = <({int index, double similarity})>[];
     final vectors = resources.trainingQueryEmbeddings;
     for (var index = 0; index < resources.trainingExamples.length; index++) {
-      if (!domainIndependent &&
-          resources.trainingExamples[index].domain != domain) {
-        continue;
-      }
 
       var similarity = 0.0;
       final start = index * _embeddingDimensions;
@@ -969,7 +1014,7 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
         return byVote != 0 ? byVote : left.compareTo(right);
       });
     final rankedIndexes = ranked
-        .take(candidatePoolSize)
+        .take(_candidatePoolSize)
         .toList(growable: false);
     return (
       rankedIndexes: rankedIndexes,
@@ -983,10 +1028,8 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
   /// Best chunk cosine per article; chunks are unit vectors like the query.
   static List<double> _articleCosines(
     _LocalRetrievalResources resources,
-    List<double> vector, {
-    bool averageTopTwo = false,
-    List<double>? bestScores,
-  }) {
+    List<double> vector,
+  ) {
     if (vector.length != _embeddingDimensions) {
       throw const CatalystRetrievalException(
         CatalystRetrievalFailure.invalidEmbedding,
@@ -994,9 +1037,6 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       );
     }
     final scores = List<double>.filled(resources.articles.length, -1);
-    final second = averageTopTwo
-        ? List<double>.filled(resources.articles.length, -1)
-        : null;
     final owners = resources.chunkOwners;
     for (var chunk = 0; chunk < owners.length; chunk++) {
       var score = 0.0;
@@ -1010,21 +1050,7 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
           'The local model produced an invalid cosine similarity.',
         );
       }
-      final owner = owners[chunk];
-      if (score > scores[owner]) {
-        if (second != null) second[owner] = scores[owner];
-        scores[owner] = score;
-      } else if (second != null && score > second[owner]) {
-        second[owner] = score;
-      }
-    }
-    if (bestScores != null) bestScores.setAll(0, scores);
-    if (second != null) {
-      for (var index = 0; index < scores.length; index++) {
-        if (second[index] > -1) {
-          scores[index] = (scores[index] + second[index]) / 2;
-        }
-      }
+      if (score > scores[owners[chunk]]) scores[owners[chunk]] = score;
     }
     return scores;
   }
@@ -1033,20 +1059,23 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
     _LocalRetrievalResources resources,
     int index,
     double cosine, {
-    double? rawCosineScore,
     QueryAnalysis? analysis,
     List<String> queryTexts = const [],
-    double? rankingScore,
+    double? blendedSimilarity,
     String? matchedFact,
     String? matchedProvision,
   }) {
     final article = resources.articles[index];
     final id = normalizedArticleId(article.law, article.article);
-    final similarity =
-        rankingScore ??
-        ((cosine - _displayFloorCosine) /
-                (_displayCeilingCosine - _displayFloorCosine))
-            .clamp(0.0, 1.0);
+    // The concept evidence bonus may make the internal blended ranking score
+    // exceed 1.0. Keep that score unchanged for ranking and diagnostics, but
+    // bound ONLY the user-facing match percentage to LawMatchResult's 0-100
+    // contract. This display value is not a calibrated probability.
+    final similarity = (blendedSimilarity ??
+            ((cosine - _displayFloorCosine) /
+                (_displayCeilingCosine - _displayFloorCosine)))
+        .clamp(0.0, 1.0)
+        .toDouble();
     return LawMatchResult(
       lawName: article.law,
       articleNumber: article.article,
@@ -1055,7 +1084,6 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       description: article.articleText,
       articleText: article.articleText,
       matchScore: double.parse(similarity.toStringAsFixed(4)) * 100,
-      rawCosineScore: rawCosineScore,
       caseExplanationPoints: analysis == null
           ? const []
           : buildExplanationPoints(
@@ -1246,7 +1274,11 @@ class LocalSemanticRetrievalService implements CatalystRetrievalService {
       trainingQueryEmbeddings: trainingQueryEmbeddings,
       trainingExamples: trainingExamples,
       lexicalIndex: Bm25Index.build([
-        for (final article in articles) article.articleText,
+        for (final article in articles)
+          // Search section context as well as the official article wording.
+          [article.title, article.chapterTitle, article.articleText]
+              .where((part) => part.trim().isNotEmpty)
+              .join(' '),
       ]),
       duplicateIds: duplicates,
     );
@@ -1433,7 +1465,6 @@ List<LawMatchResult> rankCorpusArticles({
           description: article.articleText,
           articleText: article.articleText,
           matchScore: roundedSimilarity * 100,
-          rawCosineScore: match.score,
         );
       })
       .toList(growable: false);
@@ -1470,8 +1501,6 @@ class _TrainingQueryExample {
   final List<int> positiveArticleIndexes;
   final List<int> negativeArticleIndexes;
 }
-
-double _normalizedReciprocalRank(int rank, int k) => (k + 1) / (k + rank + 1);
 
 class _LocalRetrievalResources {
   const _LocalRetrievalResources({

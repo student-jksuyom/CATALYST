@@ -290,30 +290,20 @@ class _ScoreBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: 'Relevance score',
-      excludeFromSemantics: true,
-      child: Semantics(
-        container: true,
-        label: 'Relevance score: ${score.round()}%',
-        child: ExcludeSemantics(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-            decoration: BoxDecoration(
-              color: const Color(0xFFC0AFFC),
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Text(
-              '${score.round()}%',
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                height: 1,
-                color: Colors.white,
-              ),
-            ),
-          ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFC0AFFC),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Text(
+        '${score.round()}%',
+        style: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          height: 1,
+          color: Colors.white,
         ),
       ),
     );
